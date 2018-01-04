@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/edUserNameValue"
+        android:layout_alignBottom="@+id/edUserNameValue"
+        android:layout_alignLeft="@+id/tvUserPass"
+        android:layout_alignStart="@+id/tvUserPass"
+        android:text="@string/user"/>
+
+    <EditText
+        android:id="@+id/edUserNameValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/tvUserName"
+        android:layout_toRightOf="@id/tvUserName"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:id="@+id/tvUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/edUserPassValue"
+        android:layout_alignBottom="@+id/edUserPassValue"
+        android:text="@string/pass"/>
+
+    <EditText
+        android:id="@+id/edUserPassValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edUserNameValue"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/tvUserPass"
+        android:layout_toRightOf="@+id/tvUserPass"
+        android:inputType="textVisiblePassword"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUserPass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/update_credentials"/>
+
+    <!-- Preference should place its actual preference widget here. -->
+    <LinearLayout
+        android:id="@android:id/widget_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"/>
+
+</LinearLayout>

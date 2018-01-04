@@ -1,0 +1,95 @@
+<resources>
+    <!-- UI Elements -->
+    <string name="app_name">MobilERP</string>
+    <string name="title_activity_admin">Administración</string>
+    <string name="action_settings">Configuración</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="stock_input">Ingresar inventario</string>
+    <string name="drug_list">Lista de articulos</string>
+    <string name="depleted_stock">Medicinas agotadas</string>
+    <string name="today_sales">Corte al día</string>
+    <string name="month_sales">Corte al mes</string>
+    <string name="most_sold_products">Productos + vendidos</string>
+    <string name="least_sold_products">Productos - vendidos</string>
+    <string name="custom_statement">Corte personalizado</string>
+    <string name="pharmacy">Almacén</string>
+    <string name="sales">Ventas</string>
+    <string name="patients">Pacientes</string>
+    <string name="user">Usuario</string>
+    <string name="pass">Contraseña</string>
+    <string name="login">Entrar</string>
+    <string name="title_activity_sales">Venta</string>
+
+    <!-- User messages -->
+    <string name="user_hint">Ingrese su nombre de usuario</string>
+    <string name="pass_hint">Ingrese su contraseña</string>
+    <string name="sync_pending_operations_success">Sincronización éxitosa</string>
+    <string name="wait_string">"Espere un momento&#8230;"</string>
+    <string name="added"> agregado</string>
+    <string name="data_fail">Falló al recibir datos</string>
+    <string name="download_finished">Descarga terminada</string>
+    <string name="searching_server">Buscando servidor</string>
+    <string name="server_addr_updated">Dirección del servidor actualizada</string>
+    <string name="no_db_file">No se encontro la base de datos</string>
+    <string name="offline_mode_enabled">Modo fuera de línea activado</string>
+    <string name="offline_mode_disabled">Modo fuera de línea desactivado</string>
+    <string name="error_saving_operation">Error guardando la operación para registro
+        remoto</string>
+    <string name="disable_offline_mode_first">Deshabilite el modo fuera de línea</string>
+    <string name="sync_pending_operations_error">Un error ocurrió durante la sincronización</string>
+    <string name="not_connected">No estas conectado a ninguna red</string>
+    <string name="app_err_error">Error de applicación</string>
+
+    <!-- Server Messages -->
+    <string name="srv_err_404_not_found">Elemento no encontrado</string>
+    <string name="srv_err_500_server_error">Error del servidor</string>
+    <string name="srv_err_401_access_denied">Acceso denegado</string>
+    <string name="srv_err_unknown">Error desconocido del servidor</string>
+    <string name="srv_op_success">Respuesta del Servidor :: Éxito</string>
+    <string name="srv_op_fail">Respuesta del Servidor :: Falló</string>
+
+    <!-- App Messages -->
+    <string name="app_err_not_found">Elemnto no encontrado</string>
+    <string name="app_err_access_denied">Acceso denegdo</string>
+    <string name="app_err_unknown">Error desconocido</string>
+    <string name="app_op_success">Operación exitosa</string>
+    <string name="app_op_fail">Operación fallida</string>
+    <string name="title_activity_display_items">Lista de articulos</string>
+    <string name="item_name">Articulo</string>
+    <string name="item_price">Precio</string>
+    <string name="item_total">Existencia</string>
+    <string name="title_activity_barcode_scanner">Entrada de inventario</string>
+    <string name="item_barcode">Código de barras</string>
+    <string name="new_item">Nuevo artículo</string>
+    <string name="save">Guardar</string>
+    <string name="add_to_sale">Agregar a venta</string>
+    <string name="finish">Finalizar</string>
+    <string name="amount_items">Cantidad</string>
+    <string name="total_sale">Total a pagar</string>
+    <string name="navigation_drawer_open">Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
+    <string name="title_activity_main">MobilERP</string>
+    <string name="make_sale">Ventas</string>
+    <string name="manager">Administrar</string>
+    <string name="new_sale">Nueva venta</string>
+    <string name="settings">Preferencias</string>
+    <string name="current_net">Red actual</string>
+    <string name="scan_network">Buscar servidor en LAN</string>
+    <string name="server_addr">Direccion del servidor</string>
+    <string name="update_credentials">Actualizar datos</string>
+    <string name="server_settings">Servidor</string>
+    <string name="server_config">Configuration del servidor</string>
+    <string name="user_settings">Ajustes de usuario</string>
+    <string name="finish_sale">Terminar venta</string>
+    <string name="pdf_export">Exportar a PDF</string>
+    <string name="sales_report_filename">reporte_ventas_</string>
+    <string name="depleted_report_filename">reporte_productos_agotados_</string>
+    <string name="last_sale_date">Última fecha de venta</string>
+    <string name="preferences_file">settings</string>
+    <string name="use_offline_mode">Usar modo fuera de línea</string>
+    <string name="backup_database">Respaldar base de datos</string>
+    <string name="database_name">mobilerp.db</string>
+    <string name="logfile">upload_operations.log</string>
+    <string name="sync_pending_operations">Sincronizar con servidor</string>
+    <string name="has_pending_ops">has_pending_ops</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<Preference-->
+    <!--android:key="World"-->
+    <!--android:title="Hello"-->
+    <!--android:layout="@layout/prefs_layout"/>-->
+
+    <PreferenceCategory
+        android:title="@string/server_settings">
+
+        <Preference
+            android:key="net_config"
+            android:layout="@layout/prefs_server_layout"
+            android:summary="@string/current_net"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/user_settings">
+
+        <Preference
+            android:key="user_config"
+            android:layout="@layout/prefs_user_layout"
+            android:summary="@string/user"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

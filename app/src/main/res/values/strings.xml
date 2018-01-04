@@ -1,3 +1,97 @@
 <resources>
+    <!-- UI Elements -->
     <string name="app_name">MobilERP</string>
+    <string name="title_activity_admin">Management</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="stock_input">Update stock</string>
+    <string name="drug_list">List of products</string>
+    <string name="depleted_stock">Depleted products</string>
+    <string name="today_sales">Today\'s statement</string>
+    <string name="month_sales">Monthly statement</string>
+    <string name="most_sold_products">Most sold products</string>
+    <string name="least_sold_products">Least sold products</string>
+    <string name="custom_statement">Custom statement</string>
+    <string name="pharmacy">Stock</string>
+    <string name="sales">Sales</string>
+    <string name="patients">Patients</string>
+    <string name="user">Username</string>
+    <string name="pass">Password</string>
+    <string name="login">Login</string>
+    <string name="title_activity_display_items">List of items</string>
+    <string name="item_name">Item</string>
+    <string name="item_price">Price</string>
+    <string name="item_total">Total units</string>
+    <string name="title_activity_barcode_scanner">Stock input</string>
+    <string name="item_barcode">Barcode</string>
+    <string name="new_item">New item</string>
+    <string name="save">Save</string>
+    <string name="add_to_sale">Add to sale</string>
+    <string name="finish">Finish</string>
+    <string name="amount_items">Amount</string>
+    <string name="total_sale">Total sale</string>
+    <string name="title_activity_sales">Sale</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_main">MobilERP</string>
+    <string name="make_sale">Sales</string>
+    <string name="manager">Management</string>
+    <string name="new_sale">New Sale</string>
+    <string name="settings">Settings</string>
+    <string name="current_net">Current network</string>
+    <string name="scan_network">Scan LAN for server</string>
+    <string name="server_addr">Server address</string>
+    <string name="update_credentials">Update credentials</string>
+    <string name="server_settings">Server</string>
+    <string name="server_config">Server configuration</string>
+    <string name="user_settings">User settings</string>
+    <string name="finish_sale">Finish sale</string>
+    <string name="pdf_export">Export to PDF</string>
+    <string name="last_sale_date">Last sale date</string>
+    <string name="preferences_file">Settings</string>
+    <string name="use_offline_mode">Use offline mode</string>
+    <string name="backup_database">Backup database</string>
+
+    <!-- Misc -->
+    <string name="database_name">mobilerp.db</string>
+    <string name="logfile">upload_operations.log</string>
+    <string name="has_pending_ops">has_pending_ops</string>
+    <string name="sales_report_filename">sales_report_</string>
+    <string name="depleted_report_filename">depleted_report_</string>
+
+    <!-- User messages -->
+    <string name="user_hint">Input your username</string>
+    <string name="pass_hint">Input your password</string>
+    <string name="wait_string">"Please wait&#8230;"</string>
+    <string name="added"> added</string>
+    <string name="data_fail">"Failed to receive data"</string>
+    <string name="disable_offline_mode_first">Disable offline mode first</string>
+    <string name="sync_pending_operations">Upload pending operations</string>
+    <string name="sync_pending_operations_success">All operations uploaded successfully</string>
+    <string name="sync_pending_operations_error">An error occurred during sync</string>
+    <string name="not_connected">Not connected to a network</string>
+    <string name="searching_server">Searching for server</string>
+    <string name="server_addr_updated">Server address updated</string>
+    <string name="download_finished">Download finished</string>
+    <string name="offline_mode_enabled">Offline mode enabled</string>
+    <string name="offline_mode_disabled">Offline mode disabled</string>
+    <string name="no_db_file">No database found</string>
+    <string name="error_saving_operation">Error saving operation for remote logging</string>
+
+    <!-- Server Messages -->
+    <string name="srv_err_404_not_found">Item not found</string>
+    <string name="srv_err_500_server_error">Server error</string>
+    <string name="srv_err_401_access_denied">Server error: Access denied</string>
+    <string name="srv_err_unknown">Unknown server error</string>
+    <string name="srv_op_success">Server Response :: Success</string>
+    <string name="srv_op_fail">Server Response :: Failed</string>
+
+    <!-- Offline messages -->
+    <string name="app_err_not_found">Item not found</string>
+    <string name="app_err_error">Application error</string>
+    <string name="app_err_access_denied">Application error: Access denied</string>
+    <string name="app_err_unknown">Application error: Unknown error</string>
+    <string name="app_op_success">Operation Success</string>
+    <string name="app_op_fail">Operation Failed</string>
+
 </resources>
