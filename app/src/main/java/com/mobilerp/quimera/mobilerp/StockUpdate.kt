@@ -18,7 +18,10 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import com.mobilerp.quimera.mobilerp.offline_mode.*
+import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -47,22 +50,22 @@ import java.util.*
 class StockUpdate : Fragment(), View.OnClickListener {
 
     internal var isNewProduct: Boolean = false
-    internal var barcodeView: DecoratedBarcodeView
-    internal var beepManager: BeepManager
-    internal var lastBarcode: String
-    internal var settings: CameraSettings
-    internal var apiServer: APIServer
-    internal var URL = URLs.getInstance()
-    internal var tvBarcode: TextView
-    internal var tvBarcodeValue: TextView
-    internal var tvPrice: TextView
-    internal var tvTotal: TextView
-    internal var etName: EditText
-    internal var etPrice: EditText
-    internal var etTotal: EditText
-    internal var btnSave: Button
+    internal lateinit var barcodeView: DecoratedBarcodeView
+    internal lateinit var beepManager: BeepManager
+    internal lateinit var lastBarcode: String
+    internal lateinit var settings: CameraSettings
+    internal lateinit var apiServer: APIServer
+    internal var URL = URLs._getInstance()
+    internal lateinit var tvBarcode: TextView
+    internal lateinit var tvBarcodeValue: TextView
+    internal lateinit var tvPrice: TextView
+    internal lateinit var tvTotal: TextView
+    internal lateinit var etName: EditText
+    internal lateinit var etPrice: EditText
+    internal lateinit var etTotal: EditText
+    internal lateinit var btnSave: Button
     internal var isOfflineEnabled: Boolean = false
-    internal var log: OperationsLog
+    internal lateinit var log: OperationsLog
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -89,14 +92,15 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View?, savedInstance: Bundle?) {
         // Offline Mode
-        isOfflineEnabled = SettingsManager.getInstance(context).getBoolean(getString(R.string.use_offline_mode))
+        isOfflineEnabled = SettingsManager.getInstance(context).getBoolean(getString(R.string
+                .use_offline_mode))!!
 
         // Camera settings
         settings = CameraSettings()
         settings.focusMode = CameraSettings.FocusMode.MACRO
 
         //Barcode settings
-        barcodeView = getView()!!.findViewById(R.id.barcodePreview) as DecoratedBarcodeView
+        barcodeView = getView()!!.findViewById(R.id.barcodePreview)
         barcodeView.barcodeView.cameraSettings = settings
         barcodeView.decodeContinuous(callback)
 
@@ -106,16 +110,16 @@ class StockUpdate : Fragment(), View.OnClickListener {
         apiServer = APIServer(context)
 
         // -- INIT elements to display items
-        tvBarcode = getView()!!.findViewById(R.id.tvBarcode) as TextView
-        tvBarcodeValue = getView()!!.findViewById(R.id.tvBarcodeValue) as TextView
-        tvPrice = getView()!!.findViewById(R.id.tvPrice) as TextView
-        tvTotal = getView()!!.findViewById(R.id.tvTotal) as TextView
+        tvBarcode = getView()!!.findViewById(R.id.tvBarcode)
+        tvBarcodeValue = getView()!!.findViewById(R.id.tvBarcodeValue)
+        tvPrice = getView()!!.findViewById(R.id.tvPrice)
+        tvTotal = getView()!!.findViewById(R.id.tvTotal)
 
-        etName = getView()!!.findViewById(R.id.etName) as EditText
-        etPrice = getView()!!.findViewById(R.id.etPrice) as EditText
-        etTotal = getView()!!.findViewById(R.id.etTotal) as EditText
+        etName = getView()!!.findViewById(R.id.etName)
+        etPrice = getView()!!.findViewById(R.id.etPrice)
+        etTotal = getView()!!.findViewById(R.id.etTotal)
 
-        btnSave = getView()!!.findViewById(R.id.btnSave) as Button
+        btnSave = getView()!!.findViewById(R.id.btnSave)
 
         tvBarcode.setText(R.string.item_barcode)
         tvPrice.setText(R.string.item_price)
@@ -143,8 +147,8 @@ class StockUpdate : Fragment(), View.OnClickListener {
         tvBarcodeValue.text = barcode
         // -- FIND SCANNED PRODUCT ONLINE --
         if (!isOfflineEnabled) {
-            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + barcode, null, object : VolleyCallback() {
-                fun onSuccessResponse(result: JSONObject) {
+            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + barcode, null, object : VolleyCallback {
+                override fun onSuccessResponse(result: JSONObject) {
                     isNewProduct = false
                     try {
                         val _itms = result.getJSONArray("mobilerp")
@@ -159,7 +163,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
                 }
 
-                fun onErrorResponse(error: VolleyError) {
+                override fun onErrorResponse(error: VolleyError) {
                     val response = error.networkResponse
                     if (response.statusCode == 404) {
                         Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
@@ -174,15 +178,15 @@ class StockUpdate : Fragment(), View.OnClickListener {
             // -- FIND SCANNED PRODUCT OFFLINE --
             isNewProduct = false
             val db = SQLHandler.getInstance(context)
-            if (db.isDatabaseOpen()) {
+            if (db.isDatabaseOpen) {
                 val select = Select(context)
-                select.setQuery("SELECT name, price FROM Product WHERE barcode='$barcode'")
+                select.query = "SELECT name, price FROM Product WHERE barcode='$barcode'"
                 if (select.execute()) {
-                    if (select.results.getCount() > 0) {
+                    if (select.results.count > 0) {
                         Toast.makeText(context, getString(R
                                 .string.app_op_success), Toast.LENGTH_LONG).show()
                         etName.setText(select.results.getString(0))
-                        etPrice.setText(String.valueOf(select.results.getFloat(1)))
+                        etPrice.setText(select.results.getFloat(1).toString())
                         enableEntries()
                     } else {
                         isNewProduct = true
@@ -203,12 +207,12 @@ class StockUpdate : Fragment(), View.OnClickListener {
             if (isNewProduct) {
                 // -- NEW PRODUCT SAVED TO SERVER --
                 apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.NEW_PRODUCT,
-                        jsonObject, object : VolleyCallback() {
-                    fun onSuccessResponse(result: JSONObject) {
+                        jsonObject, object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
                         cleanEntries()
                     }
 
-                    fun onErrorResponse(error: VolleyError) {
+                    override fun onErrorResponse(error: VolleyError) {
                         Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_LONG).show()
                     }
                 })
@@ -216,12 +220,12 @@ class StockUpdate : Fragment(), View.OnClickListener {
                 // -- PRODUCT UPDATED TO SERVER --
                 apiServer.getResponse(Request.Method.PUT, URLs.BASE_URL + URLs
                         .UPDATE_PRODUCT + lastBarcode,
-                        jsonObject, object : VolleyCallback() {
-                    fun onSuccessResponse(result: JSONObject) {
+                        jsonObject, object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
                         cleanEntries()
                     }
 
-                    fun onErrorResponse(error: VolleyError) {
+                    override fun onErrorResponse(error: VolleyError) {
                         Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_LONG).show()
                     }
                 })
@@ -242,9 +246,9 @@ class StockUpdate : Fragment(), View.OnClickListener {
                             "values('%s', '%s', %s, %s);", jsonObject.getString("barcode"),
                             jsonObject.getString("name"), jsonObject.getString("price"), jsonObject
                             .getString("units"))
-                    insert.setQuery(q)
+                    insert.query = q
                     insert.execute()
-                    Log.d("SQL Query :: ", insert.getQuery())
+                    Log.d("SQL Query :: ", insert.query)
                     Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
                 } catch (e: JSONException) {
                     Log.d("JSON_EXEC", e.message)
@@ -268,7 +272,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
                             jsonObject.getString("price"),
                             jsonObject.getString("units"),
                             jsonObject.getString("barcode"))
-                    update.setQuery(q)
+                    update.query = q
                     update.execute()
                     Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
                 } catch (e: JSONException) {

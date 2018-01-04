@@ -23,7 +23,7 @@ import android.database.Cursor
 
 class Select(var context: Context) {
     var sqlHandler: SQLHandler
-    var results: Cursor
+    lateinit var results: Cursor
     var query: String? = null
 
     init {

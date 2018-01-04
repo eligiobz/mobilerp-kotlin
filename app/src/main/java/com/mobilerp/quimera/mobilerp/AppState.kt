@@ -30,18 +30,18 @@ class AppState protected constructor() {
     var isOfflineMode: Boolean
         get() = offlineMode
         set(v) {
-            SettingsManager.getInstance(context).saveBoolean(context!!.getString(R.string
+            SettingsManager.getInstance(context!!).saveBoolean(context!!.getString(R.string
                     .use_offline_mode), v)
             offlineMode = v
         }
 
     init {
-        offlineMode = SettingsManager.getInstance(context).getBoolean(context!!.getString(R.string.use_offline_mode))
-        hasPendingOperations = SettingsManager.getInstance(context).getBoolean(context!!.getString(R.string.has_pending_ops))
+        offlineMode = SettingsManager.getInstance(context!!).getBoolean(context!!.getString(R.string.use_offline_mode))!!
+        hasPendingOperations = SettingsManager.getInstance(context!!).getBoolean(context!!.getString(R.string.has_pending_ops))!!
     }
 
     fun setHasPendingOperations(v: Boolean) {
-        SettingsManager.getInstance(context).saveBoolean(context!!.getString(R.string
+        SettingsManager.getInstance(context!!).saveBoolean(context!!.getString(R.string
                 .has_pending_ops), v)
         hasPendingOperations = v
     }
@@ -64,7 +64,7 @@ class AppState protected constructor() {
             context = c
             if (instance == null)
                 instance = AppState()
-            return instance
+            return instance!!
         }
     }
 }

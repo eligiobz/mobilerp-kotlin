@@ -14,7 +14,12 @@ import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.mobilerp.quimera.mobilerp.offline_mode.Insert
+import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
+import com.mobilerp.quimera.mobilerp.offline_mode.Select
+import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -52,22 +57,22 @@ class FinishSell : Fragment() {
     internal val me: Fragment = this
     internal val appState = AppState.getInstance(context)
     // Objects
-    internal var tvTotalSale: TextView
+    internal lateinit var tvTotalSale: TextView
     internal var items: ArrayList<SalesItem>? = null
-    internal var itemListAdapter: ItemListAdapter
-    internal var lvSalesItems: ListView
-    internal var itemsListModel: ArrayList<ItemListModel>
-    internal var btnEndSale: Button
-    internal var log: OperationsLog
+    internal lateinit var itemListAdapter: ItemListAdapter
+    internal lateinit var lvSalesItems: ListView
+    internal lateinit var itemsListModel: ArrayList<ItemListModel>
+    internal lateinit var btnEndSale: Button
+    internal lateinit var log: OperationsLog
     private var mListener: OnFragmentInteractionListener? = null
 
     private fun initUI() {
         activity.setTitle(R.string.finish_sale)
         log = OperationsLog.getInstance(context)
-        tvTotalSale = view!!.findViewById(R.id.totalSale) as TextView
-        lvSalesItems = view!!.findViewById(R.id.itemSalesList) as ListView
-        btnEndSale = view!!.findViewById(R.id.finish_sale) as Button
-        itemsListModel = ArrayList<ItemListModel>()
+        tvTotalSale = view!!.findViewById(R.id.totalSale)
+        lvSalesItems = view!!.findViewById(R.id.itemSalesList)
+        btnEndSale = view!!.findViewById(R.id.finish_sale)
+        itemsListModel = ArrayList()
 
 
         btnEndSale.setOnClickListener {
@@ -93,17 +98,17 @@ class FinishSell : Fragment() {
                 Log.d("JSON ERROR", e.message)
             }
 
-            if (appState.isOfflineMode()) {
+            if (appState.isOfflineMode) {
                 // -- OFFLINE OPERATION --
                 var q = "INSERT INTO Sale(date) values(DATETIME('now','localtime'));"
                 val insert = Insert(context)
-                insert.setQuery(q)
+                insert.query = q
                 var lastID = -1
                 if (insert.execute()) {
                     val select = Select(context)
-                    select.setQuery("SELECT MAX(id) FROM Sale;")
+                    select.query = "SELECT MAX(id) FROM Sale;"
                     if (select.execute())
-                        if (select.results.getCount() > 0)
+                        if (select.results.count > 0)
                             lastID = select.results.getInt(0)
                 }
                 if (lastID != -1) {
@@ -113,7 +118,7 @@ class FinishSell : Fragment() {
                                 "idProduct," +
                                 " " +
                                 "productPrice, units) VALUES (%d, '%s', %f, %d);", lastID, items!![i].barcode, items!![i].price, items!![i].amount)
-                        insert.setQuery(q)
+                        insert.query = q
                         insert.execute()
                     }
                     log.add(Request.Method.POST, URLs.MAKE_SALE, data)
@@ -130,11 +135,11 @@ class FinishSell : Fragment() {
             } else {
                 // -- ONLINE OPERATION --
                 val apiServer = APIServer(context)
-                val URL = URLs.getInstance()
+                val URL = URLs._getInstance()
 
                 apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.MAKE_SALE,
-                        data, object : VolleyCallback() {
-                    fun onSuccessResponse(result: JSONObject) {
+                        data, object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
                         appState.flushContext()
                         Toast.makeText(context, R.string.srv_op_success, Toast
                                 .LENGTH_LONG).show()
@@ -146,7 +151,7 @@ class FinishSell : Fragment() {
 
                     }
 
-                    fun onErrorResponse(error: VolleyError) {
+                    override fun onErrorResponse(error: VolleyError) {
                         Toast.makeText(context, R.string.srv_op_fail, Toast
                                 .LENGTH_LONG).show()
                     }
@@ -176,7 +181,7 @@ class FinishSell : Fragment() {
             var total_sale = 0.0
             for (i in items!!.indices) {
                 itemsListModel.add(ItemListModel(items!![i].name, items!![i].price, items!![i].amount))
-                total_sale += items!![i].price * items!![i].amount
+                total_sale += items!![i].price!! * items!![i].amount
             }
             itemListAdapter = ItemListAdapter(context, itemsListModel, R.layout.item_sales_row)
             lvSalesItems.adapter = itemListAdapter

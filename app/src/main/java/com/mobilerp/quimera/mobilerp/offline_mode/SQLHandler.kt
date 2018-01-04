@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
 import android.widget.Toast
+import com.mobilerp.quimera.mobilerp.R
 import java.io.File
 
 /**
@@ -25,7 +26,7 @@ import java.io.File
  */
 
 class SQLHandler protected constructor() {
-    var db: SQLiteDatabase
+    lateinit var db: SQLiteDatabase
 
     val isDatabaseOpen: Boolean
         get() = databaseOpen
@@ -58,7 +59,7 @@ class SQLHandler protected constructor() {
                     instance = SQLHandler()
                 }
             }
-            return instance
+            return instance!!
         }
 
         fun checkFile(): File {

@@ -13,8 +13,7 @@ import android.widget.ListView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -30,15 +29,15 @@ import java.util.*
  */
 class ListItems : Fragment() {
 
-    internal var itemList: ListView
-    internal var itemListAdapter: ItemListAdapter
-    internal var items: ArrayList<ItemListModel>
-    internal var apiServer: APIServer
-    internal var URL = URLs.getInstance()
+    internal lateinit var itemList: ListView
+    internal lateinit var itemListAdapter: ItemListAdapter
+    internal lateinit var items: ArrayList<ItemListModel>
+    internal lateinit var apiServer: APIServer
+    internal var URL = URLs._getInstance()
     internal var endpoint: String? = null
-    internal var reportURL: String
-    internal var reportName: String
-    internal var btnDownloadPDF: Button
+    internal lateinit var reportURL: String
+    internal lateinit var reportName: String
+    internal lateinit var btnDownloadPDF: Button
     internal var count: Int = 0
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -49,7 +48,7 @@ class ListItems : Fragment() {
             endpoint = arguments.getString("ENDPOINT")
 
         apiServer = APIServer(context)
-        items = ArrayList<ItemListModel>()
+        items = ArrayList()
 
         if (endpoint == "LISTPRODUCTS") {
             listProducts()
@@ -67,13 +66,13 @@ class ListItems : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnDownloadPDF = getView()!!.findViewById(R.id.btn_download_pdf) as Button
+        btnDownloadPDF = getView()!!.findViewById(R.id.btn_download_pdf)
         btnDownloadPDF.setOnClickListener(View.OnClickListener {
             Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
             val date = SimpleDateFormat("dd-MM-yy")
             val now = Date()
-            val fileDownloader = DownloadFileFromURL(object : FileDownloadListener() {
-                fun onFileDownloaded() {
+            val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
+                override fun onFileDownloaded() {
                     Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
                 }
             })
@@ -93,17 +92,17 @@ class ListItems : Fragment() {
 
     private fun listProducts() {
         val url = URLs.BASE_URL + URLs.LIST_PRODUCTS
-        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback() {
-            fun onSuccessResponse(result: JSONObject) {
+        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
+            override fun onSuccessResponse(result: JSONObject) {
                 try {
                     items.add(ItemListModel("title"))
-                    val _itms = result.getJSONArray("mobilerp")
-                    for (i in 0 until _itms.length()) {
-                        val _itm = _itms.getJSONObject(i)
+                    val items_ = result.getJSONArray("mobilerp")
+                    for (i in 0 until items_.length()) {
+                        val item_ = items_.getJSONObject(i)
                         //name, price, total
-                        items.add(ItemListModel(_itm.getString("name"), _itm.getDouble("price"), _itm.getInt("units")))
+                        items.add(ItemListModel(item_.getString("name"), item_.getDouble("price"), item_.getInt("units")))
                     }
-                    itemList = activity.findViewById(R.id.itemList) as ListView
+                    itemList = activity.findViewById(R.id.itemList)
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {
@@ -112,7 +111,7 @@ class ListItems : Fragment() {
 
             }
 
-            fun onErrorResponse(error: VolleyError) {
+            override fun onErrorResponse(error: VolleyError) {
                 val response = error.networkResponse
                 apiServer.genericErrors(response.statusCode)
             }
@@ -121,17 +120,17 @@ class ListItems : Fragment() {
 
     fun listDepleted() {
         val url = URLs.BASE_URL + URLs.LIST_DEPLETED
-        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback() {
-            fun onSuccessResponse(result: JSONObject) {
+        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
+            override fun onSuccessResponse(result: JSONObject) {
                 try {
                     items.add(ItemListModel("title_"))
-                    val _itms = result.getJSONArray("mobilerp")
-                    for (i in 0 until _itms.length()) {
-                        val _itm = _itms.getJSONObject(i)
+                    val items_ = result.getJSONArray("mobilerp")
+                    for (i in 0 until items_.length()) {
+                        val item_ = items_.getJSONObject(i)
                         //name, price, total
-                        items.add(ItemListModel(_itm.getString("name"), _itm.getString("date")))
+                        items.add(ItemListModel(item_.getString("name"), item_.getString("date")))
                     }
-                    itemList = activity.findViewById(R.id.itemList) as ListView
+                    itemList = activity.findViewById(R.id.itemList)
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {
@@ -140,7 +139,7 @@ class ListItems : Fragment() {
 
             }
 
-            fun onErrorResponse(error: VolleyError) {
+            override fun onErrorResponse(error: VolleyError) {
                 val response = error.networkResponse
                 apiServer.genericErrors(response.statusCode)
             }

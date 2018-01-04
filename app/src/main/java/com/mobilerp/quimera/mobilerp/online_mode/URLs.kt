@@ -39,10 +39,10 @@ class URLs protected constructor() {
 
         private var instance: URLs? = null
 
-        fun getInstance(): URLs {
+        fun _getInstance(): URLs {
             if (instance == null)
                 instance = URLs()
-            return instance
+            return instance!!
         }
     }
 }

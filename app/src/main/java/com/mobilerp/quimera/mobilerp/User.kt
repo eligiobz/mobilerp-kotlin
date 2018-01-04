@@ -51,11 +51,11 @@ class User protected constructor() {
 
         private var instance: User? = null
 
-        fun getInstance(): User {
+        fun _getInstance(): User {
             if (instance == null) {
                 instance = User()
             }
-            return instance
+            return instance!!
         }
     }
 }

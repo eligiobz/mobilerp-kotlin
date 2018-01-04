@@ -35,12 +35,12 @@ import java.util.*
  */
 class AdminFragment : Fragment() {
 
-    internal var user = User.getInstance()
-    internal var host: TabHost
-    internal var pharmacyList: ListView
-    internal var salesList: ListView
-    internal var pharmacyListAdapter: OptionListAdapter
-    internal var salesListAdapter: OptionListAdapter
+    internal var user = User._getInstance()
+    internal lateinit var host: TabHost
+    internal lateinit var pharmacyList: ListView
+    internal lateinit var salesList: ListView
+    internal lateinit var pharmacyListAdapter: OptionListAdapter
+    internal lateinit var salesListAdapter: OptionListAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -50,30 +50,30 @@ class AdminFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-        user.setName("carlo")
-        user.setPass("123")
-        user.setIsLoginIn(true)
+        user.name = "carlo"
+        user.pass = "123"
+        user.isLoginIn = true
 
         tabsSetup()
 
         // Pharmacy list setup
-        pharmacyList = getView()!!.findViewById(R.id.lvPharmacyOptions) as ListView
+        pharmacyList = getView()!!.findViewById(R.id.lvPharmacyOptions)
         pharmacyListAdapter = OptionListAdapter(context, pharmacyList())
         pharmacyList.adapter = pharmacyListAdapter
         pharmacyList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             when (position) {
                 0 -> {
-                    var fragment: Fragment = StockUpdate()
-                    var manager = fragmentManager
+                    val fragment: Fragment = StockUpdate()
+                    val manager = fragmentManager
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
                 }
                 1, 2 -> {
-                    fragment = ListItems.newInstance(pharmacyListAdapter
-                            .getItem(position).getEndpoint())
-                    manager = fragmentManager
+                    val fragment = ListItems.newInstance(pharmacyListAdapter
+                            .getItem(position).endpoint!!)
+                    val manager = fragmentManager
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
@@ -86,7 +86,7 @@ class AdminFragment : Fragment() {
 
 
         // Sales list setup
-        salesList = getView()!!.findViewById(R.id.lvSalesOptions) as ListView
+        salesList = getView()!!.findViewById(R.id.lvSalesOptions)
         salesListAdapter = OptionListAdapter(context, salesList())
         salesList.adapter = salesListAdapter
         activity.setTitle(R.string.title_activity_admin)
@@ -134,7 +134,7 @@ class AdminFragment : Fragment() {
     }
 
     private fun tabsSetup() {
-        host = view!!.findViewById(R.id.tabHost) as TabHost
+        host = view!!.findViewById(R.id.tabHost)
         host.setup()
 
         // tab 1

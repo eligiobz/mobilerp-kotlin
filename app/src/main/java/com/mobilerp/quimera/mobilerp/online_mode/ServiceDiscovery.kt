@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.mobilerp.quimera.mobilerp.R
+import com.mobilerp.quimera.mobilerp.SettingsManager
 import org.json.JSONObject
 import java.io.IOException
 import java.net.InetAddress
@@ -40,7 +42,7 @@ class ServiceDiscovery(internal val context: Context?) {
     internal val server_addr: String
     internal val manager: SettingsManager
     internal var netPrefix: String
-    internal var wm: WifiManager
+    internal lateinit var wm: WifiManager
     internal var port: Int = 0
     internal var apiServer: APIServer
     var isServerFound: Boolean = false
@@ -49,8 +51,8 @@ class ServiceDiscovery(internal val context: Context?) {
     init {
         this.netPrefix = ""
         this.port = 5000
-        apiServer = APIServer(this.context)
-        prefsFile = context!!.getString(R.string.preferences_file)
+        apiServer = APIServer(this.context!!)
+        prefsFile = context.getString(R.string.preferences_file)
         server_addr = context.getString(R.string.server_addr)
         manager = SettingsManager.getInstance(context)
 
@@ -102,7 +104,7 @@ class ServiceDiscovery(internal val context: Context?) {
                     val _url = "http:/" + (inet.toString() + ":" + port.toString())
                     if (testPort(inet)) {
                         Log.d(LOG_TAG, "Successful connection to port 5000 @ " + _url)
-                        val URL = URLs.getInstance()
+                        val URL = URLs._getInstance()
                         URL.setBASE_URL(_url)
                         Log.d(LOG_TAG, "BASE_URL set to :: " + _url)
 
@@ -124,14 +126,14 @@ class ServiceDiscovery(internal val context: Context?) {
 
     private fun testServer(url: String) {
         Log.d(LOG_TAG, "Testing server response @ " + url)
-        apiServer.getResponse(false, Request.Method.GET, url, null, object : VolleyCallback() {
-            fun onSuccessResponse(result: JSONObject) {
+        apiServer.getResponse(false, Request.Method.GET, url, null, object : VolleyCallback {
+            override fun onSuccessResponse(result: JSONObject) {
                 Log.d(LOG_TAG, "VALID SERVER @ " + url)
-                val URL = URLs.getInstance()
+                val URL = URLs._getInstance()
                 URL.setBASE_URL(url)
             }
 
-            fun onErrorResponse(error: VolleyError) {
+            override fun onErrorResponse(error: VolleyError) {
                 Log.d(LOG_TAG, "Why am I here? " + url)
             }
         })
@@ -147,7 +149,7 @@ class ServiceDiscovery(internal val context: Context?) {
     //                            @Override
     //                            public void onSuccessResponse(JSONObject result) {
     //                                Log.d(LOG_TAG, "VALID SERVER @ " + url);
-    //                                URLs URL = URLs.getInstance();
+    //                                URLs URL = URLs._getInstance();
     //                                URL.setBASE_URL(url);
     //                            }
     //

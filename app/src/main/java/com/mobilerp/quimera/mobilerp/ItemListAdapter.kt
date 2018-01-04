@@ -26,47 +26,47 @@ import java.util.*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ItemListAdapter(private val context: Context, private val modelsArrayList: ArrayList<ItemListModel>, layout: Int) : ArrayAdapter<ItemListModel>(context, layout, modelsArrayList) {
+class ItemListAdapter(context: Context, private val modelsArrayList: ArrayList<ItemListModel>, layout: Int) : ArrayAdapter<ItemListModel>(context, layout, modelsArrayList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = context.getSystemService(Context
+        val inflater = context!!.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         val rowView: View
 
         if (!modelsArrayList[position].getIsGroupHeader()) {
-            if (modelsArrayList[position].getDate() == null) {
+            if (modelsArrayList[position].date == null) {
                 rowView = inflater.inflate(R.layout.item_row, parent, false)
 
-                val itemNameView = rowView.findViewById(R.id.itemName) as TextView
-                val itemPriceView = rowView.findViewById(R.id.itemPrice) as TextView
-                val itemTotalView = rowView.findViewById(R.id.itemTotal) as TextView
+                val itemNameView = rowView.findViewById<TextView>(R.id.itemName)
+                val itemPriceView = rowView.findViewById<TextView>(R.id.itemPrice)
+                val itemTotalView = rowView.findViewById<TextView>(R.id.itemTotal)
 
-                itemNameView.setText(modelsArrayList[position].getName())
-                itemPriceView.setText(modelsArrayList[position].getPriceString())
-                itemTotalView.setText(modelsArrayList[position].getTotalString())
+                itemNameView.text = modelsArrayList[position].name
+                itemPriceView.text = modelsArrayList[position].priceString
+                itemTotalView.text = modelsArrayList[position].totalString
             } else {
                 rowView = inflater.inflate(R.layout.depleted_items_layout, parent, false)
 
-                val itemNameView = rowView.findViewById(R.id.itemName) as TextView
-                val itemLastSaleDate = rowView.findViewById(R.id.itemLastSaleDate) as TextView
+                val itemNameView = rowView.findViewById<TextView>(R.id.itemName)
+                val itemLastSaleDate = rowView.findViewById<TextView>(R.id.itemLastSaleDate)
 
-                itemNameView.setText(modelsArrayList[position].getName())
-                itemLastSaleDate.setText(modelsArrayList[position].getDate().toString())
+                itemNameView.text = modelsArrayList[position].name
+                itemLastSaleDate.text = modelsArrayList[position].date.toString()
             }
         } else {
-            if (modelsArrayList[position].getName().equals("title")) {
+            if (modelsArrayList[position].name.equals("title")) {
                 rowView = inflater.inflate(R.layout.list_header_multi_items, parent, false)
-                val itemTitleView = rowView.findViewById(R.id.itemName) as TextView
-                val itemPriceView = rowView.findViewById(R.id.itemPrice) as TextView
-                val itemTotalView = rowView.findViewById(R.id.itemTotal) as TextView
+                val itemTitleView = rowView.findViewById<TextView>(R.id.itemName)
+                val itemPriceView = rowView.findViewById<TextView>(R.id.itemPrice)
+                val itemTotalView = rowView.findViewById<TextView>(R.id.itemTotal)
                 itemTitleView.setText(R.string.item_name)
                 itemPriceView.setText(R.string.item_price)
                 itemTotalView.setText(R.string.item_total)
             } else {
                 rowView = inflater.inflate(R.layout.list_header_depleted_items, parent, false)
-                val itemTitleView = rowView.findViewById(R.id.itemName) as TextView
-                val itemLastSaleDate = rowView.findViewById(R.id.itemDate) as TextView
+                val itemTitleView = rowView.findViewById<TextView>(R.id.itemName)
+                val itemLastSaleDate = rowView.findViewById<TextView>(R.id.itemDate)
                 itemTitleView.setText(R.string.item_name)
                 itemLastSaleDate.setText(R.string.last_sale_date)
             }

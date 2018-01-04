@@ -5,6 +5,11 @@ import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import com.android.volley.VolleyError
+import com.mobilerp.quimera.mobilerp.R
+import com.mobilerp.quimera.mobilerp.SettingsManager
+import com.mobilerp.quimera.mobilerp.online_mode.APIServer
+import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
@@ -33,9 +38,9 @@ class OperationsLog protected constructor() {
     var isFileOpen: Boolean = false
     internal var SDCardRoot: File
     internal var file: File
-    internal var output: FileOutputStream
+    internal lateinit var output: FileOutputStream
     internal var input: FileInputStream? = null
-    internal var apiServer: APIServer
+    internal lateinit var apiServer: APIServer
 
     init {
         filename = context.getString(R.string.logfile)
@@ -84,7 +89,7 @@ class OperationsLog protected constructor() {
 
     fun pushOperations() {
         if (SettingsManager.getInstance(context).getBoolean(context.getString(R.string
-                .use_offline_mode))) {
+                .use_offline_mode))!!) {
             Toast.makeText(context, R.string.disable_offline_mode_first, Toast.LENGTH_LONG).show()
             return
         }
@@ -98,12 +103,12 @@ class OperationsLog protected constructor() {
             val `object` = JSONObject()
             val _op = op.split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             try {
-                apiServer.getResponse(Integer.valueOf(_op[0]), URLs.BASE_URL + _op[1], JSONObject(_op[2]), object : VolleyCallback() {
-                    fun onSuccessResponse(result: JSONObject) {
+                apiServer.getResponse(Integer.valueOf(_op[0]), URLs.BASE_URL + _op[1], JSONObject(_op[2]), object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
                         Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_SHORT).show()
                     }
 
-                    fun onErrorResponse(error: VolleyError) {
+                    override fun onErrorResponse(error: VolleyError) {
                         Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -145,14 +150,14 @@ class OperationsLog protected constructor() {
     companion object {
 
         var instance: OperationsLog? = null
-        internal var context: Context
+        internal lateinit var context: Context
 
         fun getInstance(_context: Context): OperationsLog {
             if (instance == null) {
                 context = _context
                 instance = OperationsLog()
             }
-            return instance
+            return instance!!
         }
     }
 }

@@ -76,7 +76,7 @@ class SalesItem : Parcelable {
                 return SalesItem(`in`)
             }
 
-            override fun newArray(size: Int): Array<SalesItem> {
+            override fun newArray(size: Int): Array<SalesItem?> {
                 return arrayOfNulls(size)
             }
         }

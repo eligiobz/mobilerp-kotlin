@@ -1,4 +1,4 @@
-package com.mobilerp.pathwaysstudio.mobilerp
+package com.mobilerp.quimera.mobilerp
 
 import android.content.Context
 import android.net.Uri
@@ -12,11 +12,13 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.mobilerp.quimera.mobilerp.online_mode.ServiceDiscovery
+import com.mobilerp.quimera.mobilerp.online_mode.URLs
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FinishSell.OnFragmentInteractionListener {
 
-    internal var user = User.getInstance()
-    internal var ds1: ServiceDiscovery
+    internal var user = User._getInstance()
+    internal lateinit var ds1: ServiceDiscovery
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +36,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         /********************* DISABLE ON RELEASE  */
-        user.setName("carlo")
-        user.setPass("123")
-        user.setIsLoginIn(true)
+        user.name = "carlo"
+        user.pass = "123"
+        user.isLoginIn = true
 
         /*********************** SERVICE FINDER  */
         if (URLs.BASE_URL == null) {
@@ -45,12 +47,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .preferences_file), Context.MODE_PRIVATE)
             val serverAddress = sharedPrefs.getString(getString(R.string.server_addr), null)
             if (serverAddress == null) {
-                Toast.makeText(applicationContext, "Buscando servidor", Toast.LENGTH_LONG)
+                Toast.makeText(applicationContext, "Buscando servidor", Toast.LENGTH_LONG).show()
                 ds1 = ServiceDiscovery(this)
                 ds1.doScan()
             } else {
-                Toast.makeText(applicationContext, "Cargando direccion desde preferencias", Toast.LENGTH_LONG)
-                val URL = URLs.getInstance()
+                Toast.makeText(applicationContext, "Cargando direccion desde preferencias",
+                        Toast.LENGTH_LONG).show()
+                val URL = URLs._getInstance()
                 URL.setBASE_URL(serverAddress)
             }
         }
@@ -84,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
 
@@ -115,7 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    fun onFragmentInteraction(uri: Uri) {
+    override fun onFragmentInteraction(uri: Uri) {
 
     }
 }

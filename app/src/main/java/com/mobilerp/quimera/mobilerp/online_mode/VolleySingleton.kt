@@ -37,7 +37,7 @@ class VolleySingleton private constructor(context: Context) {
             // Activity or BroadcastReceiver if someone passes one in.
             requestQueue = Volley.newRequestQueue(context!!.applicationContext)
         }
-        return requestQueue
+        return requestQueue!!
     }
 
     fun <T> addToRequestQueue(request: Request<T>) {
@@ -54,7 +54,7 @@ class VolleySingleton private constructor(context: Context) {
             if (instance == null) {
                 instance = VolleySingleton(context)
             }
-            return instance
+            return instance!!
         }
     }
 }

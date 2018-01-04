@@ -18,7 +18,11 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
+import com.mobilerp.quimera.mobilerp.offline_mode.Select
+import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -46,26 +50,26 @@ import java.util.*
  */
 class SalesFragment : Fragment() {
 
-    internal var lastBarcode: String
-    internal var totalSale: Double? = null
+    internal var lastBarcode: String = ""
+    internal var totalSale: Double = 0.0
     internal var isNewProduct: Boolean = false
 
-    internal var apiServer: APIServer
-    internal var URL = URLs.getInstance()
-    internal var items: ArrayList<SalesItem>
-    internal var appState: AppState
+    internal lateinit var apiServer: APIServer
+    internal var URL = URLs._getInstance()
+    internal lateinit var items: ArrayList<SalesItem>
+    internal lateinit var appState: AppState
 
-    internal var context: Context
-    internal var barcodeView: DecoratedBarcodeView
-    internal var beepManager: BeepManager
-    internal var settings: CameraSettings
+    internal lateinit var context: Context
+    internal lateinit var barcodeView: DecoratedBarcodeView
+    internal lateinit var beepManager: BeepManager
+    internal lateinit var settings: CameraSettings
 
-    internal var tvName: TextView
-    internal var tvSale: TextView
-    internal var tvPrice: TextView
-    internal var etAmount: EditText
-    internal var btnAddSale: Button
-    internal var btnEndSale: Button
+    internal lateinit var tvName: TextView
+    internal lateinit var tvSale: TextView
+    internal lateinit var tvPrice: TextView
+    internal lateinit var etAmount: EditText
+    internal lateinit var btnAddSale: Button
+    internal lateinit var btnEndSale: Button
 
 
     private val callback = object : BarcodeCallback {
@@ -98,7 +102,7 @@ class SalesFragment : Fragment() {
         settings.focusMode = CameraSettings.FocusMode.MACRO
 
         //Barcode settings
-        barcodeView = getView()!!.findViewById(R.id.barcodePreview) as DecoratedBarcodeView
+        barcodeView = getView()!!.findViewById(R.id.barcodePreview)
         barcodeView.barcodeView.cameraSettings = settings
         barcodeView.decodeContinuous(callback)
 
@@ -106,21 +110,21 @@ class SalesFragment : Fragment() {
 
         // Get settings
         appState = AppState.getInstance(context)
-        if (appState.isOfflineMode())
+        if (appState.isOfflineMode)
             Toast.makeText(context, R.string.offline_mode_enabled, Toast.LENGTH_LONG).show()
 
         //Server init
         apiServer = APIServer(context)
 
         // Init elements to display items
-        tvPrice = getView()!!.findViewById(R.id.tvPriceValue) as TextView
-        tvName = getView()!!.findViewById(R.id.tvName) as TextView
-        tvSale = getView()!!.findViewById(R.id.tvTotalSaleValue) as TextView
+        tvPrice = getView()!!.findViewById(R.id.tvPriceValue)
+        tvName = getView()!!.findViewById(R.id.tvName)
+        tvSale = getView()!!.findViewById(R.id.tvTotalSaleValue)
 
-        etAmount = getView()!!.findViewById(R.id.tvAmountValue) as EditText
+        etAmount = getView()!!.findViewById(R.id.tvAmountValue)
 
-        btnAddSale = getView()!!.findViewById(R.id.addProduct) as Button
-        btnEndSale = getView()!!.findViewById(R.id.endSale) as Button
+        btnAddSale = getView()!!.findViewById(R.id.addProduct)
+        btnEndSale = getView()!!.findViewById(R.id.endSale)
 
         btnAddSale.setOnClickListener { addProduct() }
 
@@ -141,8 +145,8 @@ class SalesFragment : Fragment() {
         val price = java.lang.Double.parseDouble(tvPrice.text.toString())
         val name = tvName.text.toString()
         items.add(SalesItem(lastBarcode, amount, price, name))
-        totalSale += items[items.size - 1].price * amount
-        tvSale.text = totalSale!!.toString()
+        totalSale += items[items.size - 1].price!! * amount
+        tvSale.text = totalSale.toString()
         Toast.makeText(context, tvName.text.toString() + " " + getString(R.string.added), Toast.LENGTH_LONG).show()
     }
 
@@ -158,31 +162,31 @@ class SalesFragment : Fragment() {
 
     private fun findLastScannedProduct() {
         // -- OFFLINE SEARCH --
-        if (appState.isOfflineMode()) {
+        if (appState.isOfflineMode) {
             val db = SQLHandler.getInstance(getContext())
-            if (db.isDatabaseOpen()) {
+            if (db.isDatabaseOpen) {
                 val select = Select(getContext())
-                select.setQuery("SELECT name, price FROM Product WHERE barcode='$lastBarcode'")
+                select.query = "SELECT name, price FROM Product WHERE barcode='$lastBarcode'"
                 if (select.execute()) {
-                    if (select.results.getCount() > 0) {
+                    if (select.results.count > 0) {
                         Toast.makeText(getContext(), getString(R
                                 .string.app_op_success), Toast.LENGTH_LONG).show()
-                        tvName.setText(select.results.getString(0))
-                        tvPrice.setText(String.valueOf(select.results.getFloat(1)))
+                        tvName.text = select.results.getString(0)
+                        tvPrice.text = select.results.getFloat(1).toString()
                         etAmount.setText("1")
                     }
                 }
             }
         } else {
             // -- ONLINE SEARCH --
-            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + lastBarcode, null, object : VolleyCallback() {
-                fun onSuccessResponse(result: JSONObject) {
+            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + lastBarcode, null, object : VolleyCallback {
+                override fun onSuccessResponse(result: JSONObject) {
                     isNewProduct = false
                     try {
-                        val _itms = result.getJSONArray("mobilerp")
-                        val _itm = _itms.getJSONObject(0)
-                        tvName.text = _itm.getString("name")
-                        tvPrice.text = _itm.getString("price")
+                        val items_ = result.getJSONArray("mobilerp")
+                        val item_ = items_.getJSONObject(0)
+                        tvName.text = item_.getString("name")
+                        tvPrice.text = item_.getString("price")
                         etAmount.setText("1")
                     } catch (e: JSONException) {
                         Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
@@ -191,7 +195,7 @@ class SalesFragment : Fragment() {
 
                 }
 
-                fun onErrorResponse(error: VolleyError) {
+                override fun onErrorResponse(error: VolleyError) {
                     apiServer.genericErrors(error.networkResponse.statusCode)
                 }
             })

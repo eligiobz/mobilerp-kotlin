@@ -24,6 +24,7 @@ import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
+import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.User
 import org.json.JSONObject
 import java.util.*
@@ -31,16 +32,16 @@ import java.util.*
 class APIServer(internal var context: Context) {
     private var queue: VolleySingleton? = null
 
-    fun getResponse(method: Int, url: String, jsonValues: JSONObject, callback: VolleyCallback) {
+    fun getResponse(method: Int, url: String, jsonValues: JSONObject?, callback: VolleyCallback) {
 
         queue = VolleySingleton.getInstance(context)
 
-        val request = object : JsonObjectRequest(method, url, jsonValues, object : Response.Listener<JSONObject>() {
-            fun onResponse(response: JSONObject) {
+        val request = object : JsonObjectRequest(method, url, jsonValues, object : Response.Listener<JSONObject> {
+            override fun onResponse(response: JSONObject) {
                 callback.onSuccessResponse(response)
             }
-        }, object : Response.ErrorListener() {
-            fun onErrorResponse(error: VolleyError) {
+        }, object : Response.ErrorListener {
+            override fun onErrorResponse(error: VolleyError) {
                 val response = error.networkResponse
                 if (response != null) {
                     callback.onErrorResponse(error)
@@ -70,15 +71,16 @@ class APIServer(internal var context: Context) {
             Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
     }
 
-    fun getResponse(no_auth: Boolean, method: Int, url: String, jsonValues: JSONObject, callback: VolleyCallback) {
+    fun getResponse(no_auth: Boolean, method: Int, url: String, jsonValues: JSONObject?,
+                    callback: VolleyCallback) {
         queue = VolleySingleton.getInstance(context)
 
-        val request = JsonObjectRequest(method, url, jsonValues, object : Response.Listener<JSONObject>() {
-            fun onResponse(response: JSONObject) {
+        val request = JsonObjectRequest(method, url, jsonValues, object : Response.Listener<JSONObject> {
+            override fun onResponse(response: JSONObject) {
                 callback.onSuccessResponse(response)
             }
-        }, object : Response.ErrorListener() {
-            fun onErrorResponse(error: VolleyError) {
+        }, object : Response.ErrorListener {
+            override fun onErrorResponse(error: VolleyError) {
                 val response = error.networkResponse
                 if (response != null) {
                     callback.onErrorResponse(error)
@@ -91,7 +93,7 @@ class APIServer(internal var context: Context) {
     companion object {
 
 
-        private val USER = User.getInstance()
-        private val URL = URLs.getInstance()
+        private val USER = User._getInstance()
+        private val URL = URLs._getInstance()
     }
 }

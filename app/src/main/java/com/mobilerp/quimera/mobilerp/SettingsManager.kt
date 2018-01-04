@@ -23,8 +23,8 @@ import android.content.SharedPreferences
 
 class SettingsManager protected constructor() {
     internal val fileMode = Context.MODE_PRIVATE
-    internal var sharedPrefs: SharedPreferences
-    internal var editor: SharedPreferences.Editor
+    var sharedPrefs: SharedPreferences
+    internal lateinit var editor: SharedPreferences.Editor
 
     init {
 
@@ -58,7 +58,7 @@ class SettingsManager protected constructor() {
          */
         var instance: SettingsManager? = null
         internal var fileName: String? = null
-        internal var context: Context
+        internal lateinit var context: Context
 
         fun getInstance(_context: Context): SettingsManager {
             context = _context
@@ -68,7 +68,7 @@ class SettingsManager protected constructor() {
             if (instance == null) {
                 instance = SettingsManager()
             }
-            return instance
+            return instance!!
         }
     }
 }

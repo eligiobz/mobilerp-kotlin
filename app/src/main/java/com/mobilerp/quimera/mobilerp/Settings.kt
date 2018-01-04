@@ -16,6 +16,11 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
+import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
+import com.mobilerp.quimera.mobilerp.online_mode.DownloadFileFromURL
+import com.mobilerp.quimera.mobilerp.online_mode.FileDownloadListener
+import com.mobilerp.quimera.mobilerp.online_mode.ServiceDiscovery
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 
 /**
@@ -41,13 +46,13 @@ import com.mobilerp.quimera.mobilerp.online_mode.URLs
  */
 class Settings : Fragment() {
 
-    internal var etServerAddr: EditText
-    internal var btnScanServer: Button
-    internal var btnBackupDB: Button
-    internal var btnUpladPendingOps: Button
-    internal var cbOfflineMode: CheckBox
-    internal var ablMainBar: AppBarLayout
-    internal var manager: SettingsManager
+    internal lateinit var etServerAddr: EditText
+    internal lateinit var btnScanServer: Button
+    internal lateinit var btnBackupDB: Button
+    internal lateinit var btnUpladPendingOps: Button
+    internal lateinit var cbOfflineMode: CheckBox
+    internal lateinit var ablMainBar: AppBarLayout
+    internal lateinit var manager: SettingsManager
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -64,8 +69,8 @@ class Settings : Fragment() {
         val serverAddress = manager.getString(getString(R.string.server_addr))
         val useOfflineMode = manager.getBoolean(getString(R.string.use_offline_mode))
 
-        ablMainBar = getView()!!.findViewById(R.id.ablMainBar) as AppBarLayout
-        etServerAddr = getView()!!.findViewById(R.id.etServerAddr) as EditText
+        ablMainBar = getView()!!.findViewById(R.id.ablMainBar)
+        etServerAddr = getView()!!.findViewById(R.id.etServerAddr)
         etServerAddr.setText(serverAddress)
 
         etServerAddr.setOnEditorActionListener { v, actionId, event ->
@@ -84,7 +89,7 @@ class Settings : Fragment() {
             false
         }
 
-        btnScanServer = getView()!!.findViewById(R.id.btnScanServer) as Button
+        btnScanServer = getView()!!.findViewById(R.id.btnScanServer)
         btnScanServer.setOnClickListener {
             val context = getContext()
 
@@ -95,11 +100,11 @@ class Settings : Fragment() {
             etServerAddr.setText(serverAddress)
         }
 
-        btnBackupDB = getView()!!.findViewById(R.id.btnBackupDB) as Button
+        btnBackupDB = getView()!!.findViewById(R.id.btnBackupDB)
         btnBackupDB.setOnClickListener(View.OnClickListener {
             Toast.makeText(getContext(), "Download db started", Toast.LENGTH_LONG).show()
-            val fileDownloader = DownloadFileFromURL(object : FileDownloadListener() {
-                fun onFileDownloaded() {
+            val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
+                override fun onFileDownloaded() {
                     Toast.makeText(getContext(), R.string.download_finished, Toast.LENGTH_LONG).show()
                 }
             })
@@ -110,7 +115,7 @@ class Settings : Fragment() {
             }
         })
 
-        cbOfflineMode = getView()!!.findViewById(R.id.cbOfflineMode) as CheckBox
+        cbOfflineMode = getView()!!.findViewById(R.id.cbOfflineMode)
         cbOfflineMode.isChecked = useOfflineMode!!
         Toast.makeText(getContext(), if (useOfflineMode) getString(R.string.offline_mode_enabled) else getString(R.string.offline_mode_disabled), Toast.LENGTH_LONG).show()
         cbOfflineMode.setOnClickListener {
@@ -120,7 +125,7 @@ class Settings : Fragment() {
             useOfflineMode = cbOfflineMode.isChecked
             if (useOfflineMode) {
                 val handler = SQLHandler.getInstance(context)
-                if (handler.isDatabaseOpen())
+                if (handler.isDatabaseOpen)
                     Toast.makeText(context, if (useOfflineMode) R.string.offline_mode_enabled else R.string.offline_mode_disabled, Toast.LENGTH_LONG).show()
                 else {
                     Toast.makeText(context, R.string.no_db_file, Toast.LENGTH_LONG).show()
@@ -133,7 +138,7 @@ class Settings : Fragment() {
             manager.saveBoolean(getString(R.string.use_offline_mode), useOfflineMode)
         }
 
-        btnUpladPendingOps = getView()!!.findViewById(R.id.btnUploadPendingOps) as Button
+        btnUpladPendingOps = getView()!!.findViewById(R.id.btnUploadPendingOps)
         btnUpladPendingOps.setOnClickListener {
             val log = OperationsLog.getInstance(context)
             log.pushOperations()

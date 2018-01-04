@@ -10,8 +10,9 @@ import android.widget.EditText
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
-import com.mobilerp.pathwaysstudio.mobilerp.MainActivity
+import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -35,13 +36,13 @@ import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
-    internal var context: Context
-    internal var pd: ProgressDialog
-    internal var apiServer: APIServer
-    internal var user_txt: EditText
-    internal var pass_txt: EditText
-    internal var user = User.getInstance()
-    internal var URL = URLs.getInstance()
+    internal lateinit var context: Context
+    internal lateinit var pd: ProgressDialog
+    internal lateinit var apiServer: APIServer
+    internal lateinit var user_txt: EditText
+    internal lateinit var pass_txt: EditText
+    internal var user = User._getInstance()
+    internal var URL = URLs._getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,19 +51,19 @@ class LoginActivity : AppCompatActivity() {
         pd = ProgressDialog(context, ProgressDialog.STYLE_SPINNER)
         user_txt = findViewById<EditText>(R.id.editText)
         pass_txt = findViewById<EditText>(R.id.editText2)
-        user = User.getInstance()
+        user = User._getInstance()
         apiServer = APIServer(context)
     }
 
     fun checkLogin(view: View) {
-        user.setName(user_txt.text.toString())
-        user.setPass(pass_txt.text.toString())
+        user.name = user_txt.text.toString()
+        user.pass = pass_txt.text.toString()
         val url = URLs.BASE_URL + URLs.LOGIN
-        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback() {
-            fun onSuccessResponse(result: JSONObject) {
+        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
+            override fun onSuccessResponse(result: JSONObject) {
                 try {
                     if (result.getBoolean("logged")) {
-                        user.setIsLoginIn(true)
+                        user.isLoginIn = true
                         Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
                         val intent = Intent(context, MainActivity::class.java)
                         startActivity(intent)
@@ -73,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
 
-            fun onErrorResponse(error: VolleyError) {
+            override fun onErrorResponse(error: VolleyError) {
                 val response = error.networkResponse
                 apiServer.genericErrors(response.statusCode)
             }

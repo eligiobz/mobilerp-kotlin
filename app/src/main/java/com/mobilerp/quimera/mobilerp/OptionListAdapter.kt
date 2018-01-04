@@ -34,18 +34,18 @@ class OptionListAdapter(private val contx: Context, private val modelsArrayList:
                 .LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         val rowView: View
-        if (!modelsArrayList[position].getIsGroupHeader()) {
+        if (!modelsArrayList[position].isGroupHeader) {
             rowView = inflater.inflate(R.layout.option_row, parent, false)
 
-            val imageView = rowView.findViewById(R.id.rowIcon) as ImageView
-            val titleView = rowView.findViewById(R.id.rowTextView) as TextView
+            val imageView = rowView.findViewById<ImageView>(R.id.rowIcon)
+            val titleView = rowView.findViewById<TextView>(R.id.rowTextView)
 
-            imageView.setImageResource(modelsArrayList[position].getIcon())
-            titleView.setText(modelsArrayList[position].getTitle())
+            imageView.setImageResource(modelsArrayList[position].icon)
+            titleView.text = modelsArrayList[position].title
         } else {
             rowView = inflater.inflate(R.layout.list_header, parent, false)
-            val titleView = rowView.findViewById(R.id.listTitle) as TextView
-            titleView.setText(modelsArrayList[position].getTitle())
+            val titleView = rowView.findViewById<TextView>(R.id.listTitle)
+            titleView.text = modelsArrayList[position].title
         }
 
         return rowView
