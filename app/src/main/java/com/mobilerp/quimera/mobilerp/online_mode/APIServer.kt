@@ -24,6 +24,7 @@ import android.widget.Toast
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
+import com.github.kittinunf.fuel.core.FuelManager
 import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.User
 import org.json.JSONObject
@@ -31,6 +32,12 @@ import java.util.*
 
 class APIServer(internal var context: Context) {
     private var queue: VolleySingleton? = null
+
+    private var manager = FuelManager.instance
+
+//    fun getResponse(method: Int){
+//        manager.basePath =
+//    }
 
     fun getResponse(method: Int, url: String, jsonValues: JSONObject?, callback: VolleyCallback) {
 
@@ -50,7 +57,7 @@ class APIServer(internal var context: Context) {
         })
         //set headers
         {
-            val headers: Map<String, String>
+            val getParams: Map<String, String>
                 @Throws(com.android.volley.AuthFailureError::class)
                 get() {
                     val params = HashMap<String, String>()
