@@ -32,12 +32,6 @@ import org.json.JSONObject
 class APIServer(internal var context: Context) {
     private var queue: VolleySingleton? = null
 
-    private var manager = FuelManager.instance
-
-//    fun getResponse(method: Int){
-//        manager.basePath =
-//    }
-
     fun getResponse(method: Int, url: String, jsonValues: JSONObject?, callback: VolleyCallback) {
 
         queue = VolleySingleton.getInstance(context)
@@ -62,13 +56,6 @@ class APIServer(internal var context: Context) {
                 headers.put("Authorization", USER.getAuthString())
                 return headers
             }
-//            val headers: Map<String, String>
-//                @Throws(com.android.volley.AuthFailureError::class)
-//                override get() {
-//                    val params = HashMap<String, String>()
-//                    params.put("Authorization", USER.getAuthString())
-//                    return params
-//                }
         }
 
         VolleySingleton.getInstance(context).addToRequestQueue(request)

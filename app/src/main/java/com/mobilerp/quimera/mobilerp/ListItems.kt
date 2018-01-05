@@ -8,12 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.mobilerp.quimera.mobilerp.online_mode.*
+import kotlinx.android.synthetic.main.fragment_list_items.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -29,15 +28,12 @@ import java.util.*
  */
 class ListItems : Fragment() {
 
-    internal lateinit var itemList: ListView
     internal lateinit var itemListAdapter: ItemListAdapter
     internal lateinit var items: ArrayList<ItemListModel>
     internal lateinit var apiServer: APIServer
-    internal var URL = URLs._getInstance()
     internal var endpoint: String? = null
     internal lateinit var reportURL: String
     internal lateinit var reportName: String
-    internal lateinit var btnDownloadPDF: Button
     internal var count: Int = 0
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -66,8 +62,8 @@ class ListItems : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnDownloadPDF = getView()!!.findViewById(R.id.btn_download_pdf)
-        btnDownloadPDF.setOnClickListener(View.OnClickListener {
+
+        btn_download_pdf.setOnClickListener(View.OnClickListener {
             Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
             val date = SimpleDateFormat("dd-MM-yy")
             val now = Date()
@@ -102,7 +98,6 @@ class ListItems : Fragment() {
                         //name, price, total
                         items.add(ItemListModel(item_.getString("name"), item_.getDouble("price"), item_.getInt("units")))
                     }
-                    itemList = activity.findViewById(R.id.itemList)
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {
@@ -130,7 +125,6 @@ class ListItems : Fragment() {
                         //name, price, total
                         items.add(ItemListModel(item_.getString("name"), item_.getString("date")))
                     }
-                    itemList = activity.findViewById(R.id.itemList)
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {

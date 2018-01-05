@@ -8,9 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
@@ -20,6 +17,7 @@ import com.mobilerp.quimera.mobilerp.offline_mode.Select
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
+import kotlinx.android.synthetic.main.fragment_finish_sell.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -57,12 +55,9 @@ class FinishSell : Fragment() {
     internal val me: Fragment = this
     internal lateinit var appState: AppState
     // Objects
-    internal lateinit var tvTotalSale: TextView
     internal var items: ArrayList<SalesItem>? = null
     internal lateinit var itemListAdapter: ItemListAdapter
-    internal lateinit var lvSalesItems: ListView
     internal lateinit var itemsListModel: ArrayList<ItemListModel>
-    internal lateinit var btnEndSale: Button
     internal lateinit var log: OperationsLog
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -70,13 +65,10 @@ class FinishSell : Fragment() {
         activity.setTitle(R.string.finish_sale)
         appState = AppState.getInstance(context)
         log = OperationsLog.getInstance(context)
-        tvTotalSale = view!!.findViewById(R.id.totalSale)
-        lvSalesItems = view!!.findViewById(R.id.itemSalesList)
-        btnEndSale = view!!.findViewById(R.id.finish_sale)
         itemsListModel = ArrayList()
 
 
-        btnEndSale.setOnClickListener {
+        finish_sale.setOnClickListener {
             val data = JSONObject()
             try {
                 val barcode = JSONArray()
@@ -136,7 +128,6 @@ class FinishSell : Fragment() {
             } else {
                 // -- ONLINE OPERATION --
                 val apiServer = APIServer(context)
-                val URL = URLs._getInstance()
 
                 apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.MAKE_SALE,
                         data, object : VolleyCallback {
@@ -185,10 +176,10 @@ class FinishSell : Fragment() {
                 total_sale += items!![i].price!! * items!![i].amount
             }
             itemListAdapter = ItemListAdapter(context, itemsListModel, R.layout.item_sales_row)
-            lvSalesItems.adapter = itemListAdapter
-            tvTotalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
+            itemSalesList.adapter = itemListAdapter
+            totalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
         } else {
-            tvTotalSale.setText(R.string.data_fail)
+            totalSale.setText(R.string.data_fail)
         }
 
     }

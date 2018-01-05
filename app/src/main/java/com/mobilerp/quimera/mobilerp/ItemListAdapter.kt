@@ -8,6 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import java.util.*
 
+//depleted_items_layout
+//list_header_multi_items
+//list_header_depleted_items
+
 /**
  * Created by Eligio Becerra on 04/01/2018.
  * Copyright (C) 2017 Eligio Becerra

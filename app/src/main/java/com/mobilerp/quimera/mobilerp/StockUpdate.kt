@@ -6,9 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
@@ -16,12 +13,12 @@ import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.offline_mode.*
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
+import kotlinx.android.synthetic.main.fragment_stock_update.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -50,20 +47,10 @@ import java.util.*
 class StockUpdate : Fragment(), View.OnClickListener {
 
     internal var isNewProduct: Boolean = false
-    internal lateinit var barcodeView: DecoratedBarcodeView
     internal lateinit var beepManager: BeepManager
     internal var lastBarcode: String = ""
     internal lateinit var settings: CameraSettings
     internal lateinit var apiServer: APIServer
-    internal var URL = URLs._getInstance()
-    internal lateinit var tvBarcode: TextView
-    internal lateinit var tvBarcodeValue: TextView
-    internal lateinit var tvPrice: TextView
-    internal lateinit var tvTotal: TextView
-    internal lateinit var etName: EditText
-    internal lateinit var etPrice: EditText
-    internal lateinit var etTotal: EditText
-    internal lateinit var btnSave: Button
     internal var isOfflineEnabled: Boolean = false
     internal lateinit var log: OperationsLog
 
@@ -74,7 +61,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
             }
 
             lastBarcode = result.text
-            barcodeView.setStatusText(lastBarcode)
+            barcodePreview.setStatusText(lastBarcode)
             beepManager.playBeepSoundAndVibrate()
             findLastScannedProduct(result.text)
         }
@@ -100,9 +87,8 @@ class StockUpdate : Fragment(), View.OnClickListener {
         settings.focusMode = CameraSettings.FocusMode.MACRO
 
         //Barcode settings
-        barcodeView = getView()!!.findViewById(R.id.barcodePreview)
-        barcodeView.barcodeView.cameraSettings = settings
-        barcodeView.decodeContinuous(callback)
+        barcodePreview.barcodeView.cameraSettings = settings
+        barcodePreview.decodeContinuous(callback)
 
         beepManager = BeepManager(activity)
 
@@ -110,16 +96,6 @@ class StockUpdate : Fragment(), View.OnClickListener {
         apiServer = APIServer(context)
 
         // -- INIT elements to display items
-        tvBarcode = getView()!!.findViewById(R.id.tvBarcode)
-        tvBarcodeValue = getView()!!.findViewById(R.id.tvBarcodeValue)
-        tvPrice = getView()!!.findViewById(R.id.tvPrice)
-        tvTotal = getView()!!.findViewById(R.id.tvTotal)
-
-        etName = getView()!!.findViewById(R.id.etName)
-        etPrice = getView()!!.findViewById(R.id.etPrice)
-        etTotal = getView()!!.findViewById(R.id.etTotal)
-
-        btnSave = getView()!!.findViewById(R.id.btnSave)
 
         tvBarcode.setText(R.string.item_barcode)
         tvPrice.setText(R.string.item_price)
@@ -326,29 +302,29 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        barcodeView.resume()
+        barcodePreview.resume()
     }
 
     override fun onPause() {
         super.onPause()
-        barcodeView.pause()
+        barcodePreview.pause()
     }
 
     fun pause(view: View) {
-        barcodeView.pause()
+        barcodePreview.pause()
     }
 
     fun resume(view: View) {
-        barcodeView.resume()
+        barcodePreview.resume()
     }
 
     fun triggerScan(view: View) {
-        barcodeView.decodeSingle(callback)
+        barcodePreview.decodeSingle(callback)
     }
 
     //    @Override
     //    public boolean onKeyDown(int keyCode, KeyEvent event) {
-    //        return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    //        return barcodePreview.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     //    }
 
 }// Required empty public constructor

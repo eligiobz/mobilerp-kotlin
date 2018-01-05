@@ -6,9 +6,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
@@ -16,13 +13,13 @@ import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
 import com.mobilerp.quimera.mobilerp.offline_mode.Select
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
+import kotlinx.android.synthetic.main.fragment_sales.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -60,16 +57,9 @@ class SalesFragment : Fragment() {
     internal lateinit var appState: AppState
 
     internal lateinit var context: Context
-    internal lateinit var barcodeView: DecoratedBarcodeView
+
     internal lateinit var beepManager: BeepManager
     internal lateinit var settings: CameraSettings
-
-    internal lateinit var tvName: TextView
-    internal lateinit var tvSale: TextView
-    internal lateinit var tvPrice: TextView
-    internal lateinit var etAmount: EditText
-    internal lateinit var btnAddSale: Button
-    internal lateinit var btnEndSale: Button
 
 
     private val callback = object : BarcodeCallback {
@@ -79,7 +69,7 @@ class SalesFragment : Fragment() {
             }
 
             lastBarcode = result.text
-            barcodeView.setStatusText(lastBarcode)
+            barcodePreview.setStatusText(lastBarcode)
             beepManager.playBeepSoundAndVibrate()
             findLastScannedProduct()
 
@@ -102,9 +92,9 @@ class SalesFragment : Fragment() {
         settings.focusMode = CameraSettings.FocusMode.MACRO
 
         //Barcode settings
-        barcodeView = getView()!!.findViewById(R.id.barcodePreview)
-        barcodeView.barcodeView.cameraSettings = settings
-        barcodeView.decodeContinuous(callback)
+
+        barcodePreview.barcodeView.cameraSettings = settings
+        barcodePreview.decodeContinuous(callback)
 
         beepManager = BeepManager(activity)
 
@@ -117,18 +107,10 @@ class SalesFragment : Fragment() {
         apiServer = APIServer(context)
 
         // Init elements to display items
-        tvPrice = getView()!!.findViewById(R.id.tvPriceValue)
-        tvName = getView()!!.findViewById(R.id.tvName)
-        tvSale = getView()!!.findViewById(R.id.tvTotalSaleValue)
 
-        etAmount = getView()!!.findViewById(R.id.tvAmountValue)
+        addProduct.setOnClickListener { addProduct() }
 
-        btnAddSale = getView()!!.findViewById(R.id.addProduct)
-        btnEndSale = getView()!!.findViewById(R.id.endSale)
-
-        btnAddSale.setOnClickListener { addProduct() }
-
-        btnEndSale.setOnClickListener { endSale() }
+        endSale.setOnClickListener { endSale() }
 
         items = ArrayList()
         totalSale = 0.0
@@ -141,12 +123,12 @@ class SalesFragment : Fragment() {
     }
 
     private fun addProduct() {
-        val amount = Integer.parseInt(etAmount.text.toString())
-        val price = java.lang.Double.parseDouble(tvPrice.text.toString())
+        val amount = Integer.parseInt(tvAmountValue.text.toString())
+        val price = java.lang.Double.parseDouble(tvPriceValue.text.toString())
         val name = tvName.text.toString()
         items.add(SalesItem(lastBarcode, amount, price, name))
         totalSale += items[items.size - 1].price!! * amount
-        tvSale.text = totalSale.toString()
+        tvTotalSaleValue.text = totalSale.toString()
         Toast.makeText(context, tvName.text.toString() + " " + getString(R.string.added), Toast.LENGTH_LONG).show()
     }
 
@@ -172,8 +154,8 @@ class SalesFragment : Fragment() {
                         Toast.makeText(getContext(), getString(R
                                 .string.app_op_success), Toast.LENGTH_LONG).show()
                         tvName.text = select.results.getString(0)
-                        tvPrice.text = select.results.getFloat(1).toString()
-                        etAmount.setText("1")
+                        tvPriceValue.text = select.results.getFloat(1).toString()
+                        tvAmountValue.setText("1")
                     }
                 }
             }
@@ -186,8 +168,8 @@ class SalesFragment : Fragment() {
                         val items_ = result.getJSONArray("mobilerp")
                         val item_ = items_.getJSONObject(0)
                         tvName.text = item_.getString("name")
-                        tvPrice.text = item_.getString("price")
-                        etAmount.setText("1")
+                        tvPriceValue.text = item_.getString("price")
+                        tvAmountValue.setText("1")
                     } catch (e: JSONException) {
                         Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
                         e.printStackTrace()
@@ -205,18 +187,18 @@ class SalesFragment : Fragment() {
     private fun cleanEntries() {
         Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
         tvName.text = ""
-        tvPrice.text = ""
-        tvSale.text = ""
-        etAmount.setText("")
+        tvPriceValue.text = ""
+        tvTotalSaleValue.text = ""
+        tvAmountValue.setText("")
     }
 
     override fun onResume() {
         super.onResume()
-        barcodeView.resume()
+        barcodePreview.resume()
     }
 
     override fun onPause() {
         super.onPause()
-        barcodeView.pause()
+        barcodePreview.pause()
     }
 }// Required empty public constructor

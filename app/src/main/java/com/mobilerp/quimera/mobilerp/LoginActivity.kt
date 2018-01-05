@@ -6,13 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
+import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -39,25 +39,20 @@ class LoginActivity : AppCompatActivity() {
     internal lateinit var context: Context
     internal lateinit var pd: ProgressDialog
     internal lateinit var apiServer: APIServer
-    internal lateinit var user_txt: EditText
-    internal lateinit var pass_txt: EditText
     internal var user = User._getInstance()
-    internal var URL = URLs._getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         context = this
         pd = ProgressDialog(context, ProgressDialog.STYLE_SPINNER)
-        user_txt = findViewById<EditText>(R.id.editText)
-        pass_txt = findViewById<EditText>(R.id.editText2)
         user = User._getInstance()
         apiServer = APIServer(context)
     }
 
     fun checkLogin(view: View) {
-        user.name = user_txt.text.toString()
-        user.pass = pass_txt.text.toString()
+        user.name = editText.text.toString()
+        user.pass = editText2.text.toString()
         val url = URLs.BASE_URL + URLs.LOGIN
         apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
             override fun onSuccessResponse(result: JSONObject) {
