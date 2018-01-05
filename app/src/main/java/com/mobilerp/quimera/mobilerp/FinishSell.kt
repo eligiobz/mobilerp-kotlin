@@ -55,7 +55,7 @@ import java.util.*
 class FinishSell : Fragment() {
 
     internal val me: Fragment = this
-    internal val appState = AppState.getInstance(context)
+    internal lateinit var appState: AppState
     // Objects
     internal lateinit var tvTotalSale: TextView
     internal var items: ArrayList<SalesItem>? = null
@@ -68,6 +68,7 @@ class FinishSell : Fragment() {
 
     private fun initUI() {
         activity.setTitle(R.string.finish_sale)
+        appState = AppState.getInstance(context)
         log = OperationsLog.getInstance(context)
         tvTotalSale = view!!.findViewById(R.id.totalSale)
         lvSalesItems = view!!.findViewById(R.id.itemSalesList)

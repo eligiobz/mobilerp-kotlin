@@ -21,14 +21,13 @@ package com.mobilerp.quimera.mobilerp.online_mode
 
 import android.content.Context
 import android.widget.Toast
+import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
-import com.github.kittinunf.fuel.core.FuelManager
 import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.User
 import org.json.JSONObject
-import java.util.*
 
 class APIServer(internal var context: Context) {
     private var queue: VolleySingleton? = null
@@ -57,13 +56,19 @@ class APIServer(internal var context: Context) {
         })
         //set headers
         {
-            val getParams: Map<String, String>
-                @Throws(com.android.volley.AuthFailureError::class)
-                get() {
-                    val params = HashMap<String, String>()
-                    params.put("Authorization", USER.getAuthString())
-                    return params
-                }
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Authorization", USER.getAuthString())
+                return headers
+            }
+//            val headers: Map<String, String>
+//                @Throws(com.android.volley.AuthFailureError::class)
+//                override get() {
+//                    val params = HashMap<String, String>()
+//                    params.put("Authorization", USER.getAuthString())
+//                    return params
+//                }
         }
 
         VolleySingleton.getInstance(context).addToRequestQueue(request)

@@ -52,7 +52,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
     internal var isNewProduct: Boolean = false
     internal lateinit var barcodeView: DecoratedBarcodeView
     internal lateinit var beepManager: BeepManager
-    internal lateinit var lastBarcode: String
+    internal var lastBarcode: String = ""
     internal lateinit var settings: CameraSettings
     internal lateinit var apiServer: APIServer
     internal var URL = URLs._getInstance()
