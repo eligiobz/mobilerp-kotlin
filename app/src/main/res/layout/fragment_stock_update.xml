@@ -32,41 +32,42 @@
         android:id="@+id/tvBarcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvPrice"
+        android:layout_alignStart="@+id/tvPrice"
         android:layout_below="@+id/etName"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="16dp"
         android:text="@string/item_barcode"/>
 
     <TextView
         android:id="@+id/tvBarcodeValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvBarcode"
-        android:layout_below="@id/etName"
-        android:layout_marginLeft="100dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"/>
+        android:layout_alignBaseline="@+id/tvBarcode"
+        android:layout_alignBottom="@+id/tvBarcode"
+        android:layout_marginLeft="55dp"
+        android:layout_marginStart="55dp"
+        android:layout_toEndOf="@+id/tvBarcode"
+        android:layout_toRightOf="@+id/tvBarcode"/>
 
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTotal"
+        android:layout_alignStart="@+id/tvTotal"
         android:layout_below="@+id/tvBarcode"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="53dp"
         android:text="@string/item_price"/>
 
     <EditText
         android:id="@+id/etPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvPrice"
-        android:layout_below="@id/tvBarcodeValue"
-        android:layout_marginLeft="100dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_alignBaseline="@+id/tvPrice"
+        android:layout_alignBottom="@+id/tvPrice"
+        android:layout_centerHorizontal="true"
         android:inputType="numberDecimal"/>
 
     <TextView
@@ -83,11 +84,10 @@
         android:id="@+id/etTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvTotal"
-        android:layout_below="@id/etPrice"
-        android:layout_marginLeft="100dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_alignBaseline="@+id/tvTotal"
+        android:layout_alignBottom="@+id/tvTotal"
+        android:layout_alignLeft="@+id/etPrice"
+        android:layout_alignStart="@+id/etPrice"
         android:inputType="number"/>
 
 
