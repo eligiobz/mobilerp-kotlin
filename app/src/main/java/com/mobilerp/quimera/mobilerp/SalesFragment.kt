@@ -48,18 +48,17 @@ import java.util.*
 class SalesFragment : Fragment() {
 
     internal var lastBarcode: String = ""
-    internal var totalSale: Double = 0.0
+    private var totalSale: Double = 0.0
     internal var isNewProduct: Boolean = false
 
     internal lateinit var apiServer: APIServer
-    internal var URL = URLs._getInstance()
-    internal lateinit var items: ArrayList<SalesItem>
-    internal lateinit var appState: AppState
+    private lateinit var items: ArrayList<SalesItem>
+    private lateinit var appState: AppState
 
     internal lateinit var context: Context
 
     internal lateinit var beepManager: BeepManager
-    internal lateinit var settings: CameraSettings
+    private lateinit var settings: CameraSettings
 
 
     private val callback = object : BarcodeCallback {

@@ -23,7 +23,7 @@ import android.content.Context
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-class AppState protected constructor() {
+class AppState private constructor() {
     private var offlineMode: Boolean = false
     private var hasPendingOperations: Boolean = false
 

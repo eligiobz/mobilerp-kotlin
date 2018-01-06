@@ -30,7 +30,7 @@ import java.net.URL
 
 class DownloadFileFromURL(private val listener: FileDownloadListener) : AsyncTask<String, String, String>() {
 
-    override fun onPostExecute(s: String) {
+    override fun onPostExecute(s: String?) {
         super.onPostExecute(s)
         listener.onFileDownloaded()
     }
@@ -56,13 +56,11 @@ class DownloadFileFromURL(private val listener: FileDownloadListener) : AsyncTas
                 val file = File(SDCardRoot, f_url[1])
                 val output = FileOutputStream(file)
                 val data = ByteArray(1024)
-
-
-                do {
+                count = input.read(data)
+                while (count != -1) {
+                    output.write(data, 0, count)
                     count = input.read(data)
-                    if (count != 1)
-                        output.write(data, 0, count)
-                } while (count != -1)
+                }
 
                 output.flush()
                 output.close()

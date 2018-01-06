@@ -54,18 +54,18 @@ class Settings : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val context = context
+        var context = context
         manager = SettingsManager.getInstance(context)
 
-        val serverAddress = manager.getString(getString(R.string.server_addr))
-        val useOfflineMode = manager.getBoolean(getString(R.string.use_offline_mode))
+        var serverAddress = manager.getString(getString(R.string.server_addr))
+        var useOfflineMode = manager.getBoolean(getString(R.string.use_offline_mode))!!
 
         etServerAddr.setText(serverAddress)
 
         etServerAddr.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || event.keyCode == KeyEvent.KEYCODE_ENTER ||
                     event.keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
-                val context = getContext()
+                context = getContext()
                 val imm = v.context.getSystemService(Context
                         .INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(v.windowToken, 0)
@@ -79,12 +79,11 @@ class Settings : Fragment() {
         }
 
         btnScanServer.setOnClickListener {
-            val context = getContext()
-
+            context = getContext()!!
             Toast.makeText(context, R.string.searching_server, Toast.LENGTH_LONG).show()
             val ds = ServiceDiscovery(context)
             ds.doScan()
-            val serverAddress = manager.getString(getString(R.string.server_addr))
+            serverAddress = manager.getString(getString(R.string.server_addr))
             etServerAddr.setText(serverAddress)
         }
 
@@ -102,12 +101,11 @@ class Settings : Fragment() {
             }
         })
 
-        cbOfflineMode.isChecked = useOfflineMode!!
+        cbOfflineMode.isChecked = useOfflineMode
         Toast.makeText(getContext(), if (useOfflineMode) getString(R.string.offline_mode_enabled) else getString(R.string.offline_mode_disabled), Toast.LENGTH_LONG).show()
         cbOfflineMode.setOnClickListener {
-            val context = getContext()
+            context = getContext()
             val manager = SettingsManager.getInstance(context)
-            var useOfflineMode: Boolean?
             useOfflineMode = cbOfflineMode.isChecked
             if (useOfflineMode) {
                 val handler = SQLHandler.getInstance(context)

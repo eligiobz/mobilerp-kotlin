@@ -176,8 +176,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        var jsonObject = JSONObject()
-        jsonObject = prepareJSON()
+        val jsonObject = prepareJSON()
         // -- FIND SCANNED PRODUCT ONLINE --
         if (!isOfflineEnabled) {
             if (isNewProduct) {

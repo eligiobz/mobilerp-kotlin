@@ -57,10 +57,6 @@ class ServiceDiscovery(internal val context: Context?) {
         manager = SettingsManager.getInstance(context)
 
 
-
-        if (context !=
-                null) {
-
             wm = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             val connectionInfo = wm.connectionInfo
             Log.d("NET_NAME", wm.connectionInfo.ssid)
@@ -68,7 +64,6 @@ class ServiceDiscovery(internal val context: Context?) {
             val ipAddress = connectionInfo.ipAddress
             val ipString = Formatter.formatIpAddress(ipAddress)
             netPrefix = ipString.substring(0, ipString.lastIndexOf(".") + 1)
-        }
 
     }
 

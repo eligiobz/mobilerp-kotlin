@@ -57,11 +57,11 @@ class ItemListModel {
         return isGroupHeader()
     }
 
-    fun setIsGroupHeader(groupHeader: Boolean) {
+    private fun setIsGroupHeader(groupHeader: Boolean) {
         this.isGroupHeader = groupHeader
     }
 
-    fun isGroupHeader(): Boolean {
+    private fun isGroupHeader(): Boolean {
         return isGroupHeader
     }
 }

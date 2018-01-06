@@ -36,11 +36,11 @@ import java.util.*
 class AdminFragment : Fragment() {
 
     internal var user = User._getInstance()
-    internal lateinit var host: TabHost
-    internal lateinit var pharmacyList: ListView
-    internal lateinit var salesList: ListView
-    internal lateinit var pharmacyListAdapter: OptionListAdapter
-    internal lateinit var salesListAdapter: OptionListAdapter
+    private lateinit var host: TabHost
+    private lateinit var pharmacyList: ListView
+    private lateinit var salesList: ListView
+    private lateinit var pharmacyListAdapter: OptionListAdapter
+    private lateinit var salesListAdapter: OptionListAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

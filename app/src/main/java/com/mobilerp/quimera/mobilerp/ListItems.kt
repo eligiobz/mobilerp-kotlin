@@ -31,9 +31,9 @@ class ListItems : Fragment() {
     internal lateinit var itemListAdapter: ItemListAdapter
     internal lateinit var items: ArrayList<ItemListModel>
     internal lateinit var apiServer: APIServer
-    internal var endpoint: String? = null
-    internal lateinit var reportURL: String
-    internal lateinit var reportName: String
+    private var endpoint: String? = null
+    private lateinit var reportURL: String
+    private lateinit var reportName: String
     internal var count: Int = 0
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -46,17 +46,20 @@ class ListItems : Fragment() {
         apiServer = APIServer(context)
         items = ArrayList()
 
-        if (endpoint == "LISTPRODUCTS") {
-            listProducts()
-            reportURL = URLs.BASE_URL + URLs.SALES_REPORT
-            reportName = getString(R.string.sales_report_filename)
-            activity.setTitle(R.string.drug_list)
-        }
-        if (endpoint == "LISTDEPLETED") {
-            listDepleted()
-            reportURL = URLs.BASE_URL + URLs.DEPLETED_REPORT
-            reportName = getString(R.string.depleted_report_filename)
-            activity.setTitle(R.string.depleted_stock)
+        when (endpoint) {
+            "LISTPRODUCTS" -> {
+                listProducts()
+                reportURL = URLs.BASE_URL + URLs.SALES_REPORT
+                reportName = getString(R.string.sales_report_filename)
+                activity.setTitle(R.string.drug_list)
+            }
+
+            "LISTDEPLETED" -> {
+                listDepleted()
+                reportURL = URLs.BASE_URL + URLs.DEPLETED_REPORT
+                reportName = getString(R.string.depleted_report_filename)
+                activity.setTitle(R.string.depleted_stock)
+            }
         }
     }
 
@@ -93,6 +96,7 @@ class ListItems : Fragment() {
                 try {
                     items.add(ItemListModel("title"))
                     val items_ = result.getJSONArray("mobilerp")
+
                     for (i in 0 until items_.length()) {
                         val item_ = items_.getJSONObject(i)
                         //name, price, total
@@ -113,13 +117,14 @@ class ListItems : Fragment() {
         })
     }
 
-    fun listDepleted() {
+    private fun listDepleted() {
         val url = URLs.BASE_URL + URLs.LIST_DEPLETED
         apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
             override fun onSuccessResponse(result: JSONObject) {
                 try {
                     items.add(ItemListModel("title_"))
                     val items_ = result.getJSONArray("mobilerp")
+
                     for (i in 0 until items_.length()) {
                         val item_ = items_.getJSONObject(i)
                         //name, price, total

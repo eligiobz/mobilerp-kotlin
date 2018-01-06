@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-
         return if (id == R.id.action_settings) {
             true
         } else super.onOptionsItemSelected(item)
@@ -89,30 +88,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        val id = item.itemId
-
-        if (id == R.id.nav_sales) {
-            val fragment = SalesFragment()
-            val manager = supportFragmentManager
-            manager.beginTransaction()
-                    .replace(R.id.main_content, fragment)
-                    .addToBackStack("MainView")
-                    .commit()
-        } else if (id == R.id.nav_manager) {
-            val fragment = AdminFragment()
-            val manager = supportFragmentManager
-            manager.beginTransaction()
-                    .replace(R.id.main_content, fragment)
-                    .addToBackStack("MainView")
-                    .commit()
-        } else if (id == R.id.nav_settings) {
-            val fragment = Settings()
-            val manager = supportFragmentManager
-            manager.beginTransaction()
-                    .replace(R.id.main_content, fragment)
-                    .addToBackStack("MainView")
-                    .commit()
+        val manager = supportFragmentManager
+        when (item.itemId) {
+            R.id.nav_sales -> {
+                val fragment = SalesFragment()
+                manager.beginTransaction()
+                        .replace(R.id.main_content, fragment)
+                        .addToBackStack("MainView")
+                        .commit()
+            }
+            R.id.nav_manager -> {
+                val fragment = AdminFragment()
+                manager.beginTransaction()
+                        .replace(R.id.main_content, fragment)
+                        .addToBackStack("MainView")
+                        .commit()
+            }
+            R.id.nav_settings -> {
+                val fragment = Settings()
+                manager.beginTransaction()
+                        .replace(R.id.main_content, fragment)
+                        .addToBackStack("MainView")
+                        .commit()
+            }
         }
+
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true

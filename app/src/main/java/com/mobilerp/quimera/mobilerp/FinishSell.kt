@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_finish_sell.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.security.NoSuchAlgorithmException
 import java.util.*
 
 /**
@@ -55,10 +54,10 @@ class FinishSell : Fragment() {
     internal val me: Fragment = this
     internal lateinit var appState: AppState
     // Objects
-    internal var items: ArrayList<SalesItem>? = null
-    internal lateinit var itemListAdapter: ItemListAdapter
-    internal lateinit var itemsListModel: ArrayList<ItemListModel>
-    internal lateinit var log: OperationsLog
+    private var items: ArrayList<SalesItem>? = null
+    private lateinit var itemListAdapter: ItemListAdapter
+    private lateinit var itemsListModel: ArrayList<ItemListModel>
+    private lateinit var log: OperationsLog
     private var mListener: OnFragmentInteractionListener? = null
 
     private fun initUI() {
@@ -66,7 +65,6 @@ class FinishSell : Fragment() {
         appState = AppState.getInstance(context)
         log = OperationsLog.getInstance(context)
         itemsListModel = ArrayList()
-
 
         finish_sale.setOnClickListener {
             val data = JSONObject()
@@ -79,13 +77,7 @@ class FinishSell : Fragment() {
                 }
                 data.put("barcode", barcode)
                 data.put("units", units)
-                try {
-                    val md5digest = java.security.MessageDigest.getInstance("MD5")
-                    val c_time = Calendar.getInstance().time
-                    data.put("token", c_time.toString())
-                } catch (e: NoSuchAlgorithmException) {
-                    Log.d("MD5 Error", e.toString())
-                }
+                data.put("token", Calendar.getInstance().time.toString())
 
             } catch (e: JSONException) {
                 Log.d("JSON ERROR", e.message)
