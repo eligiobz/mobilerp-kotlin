@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mobilerp.quimera.mobilerp.LoginActivity">
+    tools:context="com.mobilerp.quimera.mobilerp.LoginFragment">
 
     <TextView
         android:id="@+id/textView"
@@ -21,12 +21,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
-        android:text="@string/user"
+        android:text="@string/username"
         android:textAlignment="center"
         android:textSize="24sp"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/etUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -48,14 +48,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/etUserName"
         android:layout_marginTop="23dp"
-        android:text="@string/pass"
+        android:text="@string/password"
         android:textAlignment="center"
         android:textSize="24sp"/>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/etUserPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -71,15 +71,21 @@
 
     <Button
         android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/remember_user"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/login"/>
+
+    <CheckBox
+        android:id="@+id/remember_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText2"
-        android:layout_marginTop="27dp"
-        android:onClick="checkLogin"
-        android:text="@string/login"/>
+        android:layout_below="@+id/etUserPass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:text="@string/remember_user"
+        />
 
 </RelativeLayout>

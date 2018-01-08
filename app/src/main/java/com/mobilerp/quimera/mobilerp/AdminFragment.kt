@@ -35,7 +35,6 @@ import java.util.*
  */
 class AdminFragment : Fragment() {
 
-    internal var user = User._getInstance()
     private lateinit var host: TabHost
     private lateinit var pharmacyList: ListView
     private lateinit var salesList: ListView
@@ -49,10 +48,6 @@ class AdminFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
-        user.name = "carlo"
-        user.pass = "123"
-        user.isLoginIn = true
 
         tabsSetup()
 

@@ -15,10 +15,16 @@
     <string name="pharmacy">Almacén</string>
     <string name="sales">Ventas</string>
     <string name="patients">Pacientes</string>
-    <string name="user">Usuario</string>
-    <string name="pass">Contraseña</string>
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
     <string name="login">Entrar</string>
     <string name="title_activity_sales">Venta</string>
+    <string name="remember_user">¿Recordar usuario?</string>
+    <string name="users_management">Usuarios</string>
+    <string name="server_management">Servidor</string>
+    <string name="current_user">Usuario actual</string>
+    <string name="drug_store_list">Lista de farmacias</string>
+    <string name="drugstores">Farmacias</string>
 
     <!-- User messages -->
     <string name="user_hint">Ingrese su nombre de usuario</string>

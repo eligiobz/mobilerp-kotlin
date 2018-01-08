@@ -23,7 +23,7 @@
         <Preference
             android:key="user_config"
             android:layout="@layout/prefs_user_layout"
-            android:summary="@string/user"/>
+            android:summary="@string/username"/>
 
     </PreferenceCategory>
 

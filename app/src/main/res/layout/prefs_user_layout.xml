@@ -12,7 +12,7 @@
         android:layout_alignBottom="@+id/edUserNameValue"
         android:layout_alignLeft="@+id/tvUserPass"
         android:layout_alignStart="@+id/tvUserPass"
-        android:text="@string/user"/>
+        android:text="@string/username"/>
 
     <EditText
         android:id="@+id/edUserNameValue"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/edUserPassValue"
         android:layout_alignBottom="@+id/edUserPassValue"
-        android:text="@string/pass"/>
+        android:text="@string/password"/>
 
     <EditText
         android:id="@+id/edUserPassValue"

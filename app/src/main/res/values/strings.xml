@@ -15,8 +15,8 @@
     <string name="pharmacy">Stock</string>
     <string name="sales">Sales</string>
     <string name="patients">Patients</string>
-    <string name="user">Username</string>
-    <string name="pass">Password</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="title_activity_display_items">List of items</string>
     <string name="item_name">Item</string>
@@ -51,6 +51,13 @@
     <string name="preferences_file">Settings</string>
     <string name="use_offline_mode">Use offline mode</string>
     <string name="backup_database">Backup database</string>
+    <string name="remember_user">Remember user?</string>
+    <string name="users_management">Users</string>
+    <string name="server_management">Server</string>
+    <string name="current_user">Current user</string>
+    <string name="drug_store_list">Drugstores list</string>
+    <string name="drugstores">Drugstores</string>
+
 
     <!-- Misc -->
     <string name="database_name">mobilerp.db</string>
@@ -93,5 +100,8 @@
     <string name="app_err_unknown">Application error: Unknown error</string>
     <string name="app_op_success">Operation Success</string>
     <string name="app_op_fail">Operation Failed</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

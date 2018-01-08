@@ -261,16 +261,12 @@ class StockUpdate : Fragment(), View.OnClickListener {
     private fun prepareJSON(): JSONObject {
         val `object` = JSONObject()
         try {
-            if (isNewProduct) {
-                `object`.put("barcode", lastBarcode)
-                `object`.put("name", etName.text)
-                `object`.put("price", etPrice.text)
-                `object`.put("units", etTotal.text)
-            } else {
-                `object`.put("price", etPrice.text)
-                `object`.put("units", etTotal.text)
-            }
+            `object`.put("name", etName.text)
+            `object`.put("price", etPrice.text)
+            `object`.put("units", etTotal.text)
             `object`.put("token", Calendar.getInstance().time.toString())
+            if (isNewProduct)
+                `object`.put("barcode", lastBarcode)
             return `object`
         } catch (ex: JSONException) {
             Log.d("JSON_ERROR", ex.toString())
@@ -282,10 +278,9 @@ class StockUpdate : Fragment(), View.OnClickListener {
     private fun enableEntries() {
         etPrice.isEnabled = true
         etTotal.isEnabled = true
-        if (isNewProduct) {
+        etName.isEnabled = true
+        if (isNewProduct)
             etName.setText(R.string.new_item)
-            etName.isEnabled = true
-        }
     }
 
     private fun cleanEntries() {

@@ -36,9 +36,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         /********************* DISABLE ON RELEASE  */
-        user.name = "carlo"
-        user.pass = "123"
-        user.isLoginIn = true
+//        user.name = "carlo"
+//        user.pass = "123"
+//        user.isLoginIn = true
+
+        if (!user.isLoginIn){
+            val sett_manager  = SettingsManager.getInstance(applicationContext)
+            val uname = sett_manager.getString("username")
+            if (uname == null) {
+                val fragment = LoginFragment()
+                val manager = supportFragmentManager
+                manager.beginTransaction()
+                        .replace(R.id.main_content, fragment)
+                        .addToBackStack("MainView")
+                        .commit()
+            } else
+                Toast.makeText(applicationContext, "Welcome back", Toast.LENGTH_LONG).show()
+        }
 
         /*********************** SERVICE FINDER  */
         if (URLs.BASE_URL == null) {
@@ -105,7 +119,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .commit()
             }
             R.id.nav_settings -> {
-                val fragment = Settings()
+                //val fragment = ServerSettings()
+                val fragment = AllSettings()
                 manager.beginTransaction()
                         .replace(R.id.main_content, fragment)
                         .addToBackStack("MainView")
