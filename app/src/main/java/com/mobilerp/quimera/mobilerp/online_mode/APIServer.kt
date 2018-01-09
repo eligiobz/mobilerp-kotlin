@@ -27,7 +27,11 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.User
+import org.json.JSONArray
 import org.json.JSONObject
+
+operator fun JSONArray.iterator(): Iterator<JSONObject>
+        = (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
 
 class APIServer(internal var context: Context) {
     private var queue: VolleySingleton? = null

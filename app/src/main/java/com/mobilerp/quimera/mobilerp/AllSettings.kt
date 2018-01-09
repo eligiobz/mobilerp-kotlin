@@ -13,15 +13,15 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TabHost
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.VolleyError
 import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
 import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
-import com.mobilerp.quimera.mobilerp.online_mode.DownloadFileFromURL
-import com.mobilerp.quimera.mobilerp.online_mode.FileDownloadListener
-import com.mobilerp.quimera.mobilerp.online_mode.ServiceDiscovery
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.online_mode.*
 import kotlinx.android.synthetic.main.fragment_all_settings.*
 import kotlinx.android.synthetic.main.fragment_server_settings.*
 import kotlinx.android.synthetic.main.fragment_users_settings.*
+import org.json.JSONObject
 
 
 /**
@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_users_settings.*
 class AllSettings : Fragment() {
 
     private val set_manager : SettingsManager by lazy { SettingsManager.getInstance(context) }
+    private val apiServer : APIServer by lazy { APIServer(context) }
     private var server_address: String? = null
     private var use_offline_mode: Boolean = false
 
@@ -55,6 +56,23 @@ class AllSettings : Fragment() {
         tabsSetup()
         prepareUsersTab()
         prepareServerTab()
+        prepareDrugstoreTab()
+    }
+
+    private fun prepareDrugstoreTab() {
+        loadList()
+    }
+
+    private fun loadList(){
+        apiServer.getResponse(Request.Method.GET, URLs.BASE_URL+URLs.LIST_DRUGSTORES, null, object : VolleyCallback {
+            override fun onSuccessResponse(result: JSONObject) {
+
+            }
+
+            override fun onErrorResponse(error: VolleyError) {
+
+            }
+        })
     }
 
     private fun prepareUsersTab(){

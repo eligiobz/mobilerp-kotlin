@@ -35,6 +35,7 @@ class URLs protected constructor() {
         val SALES_REPORT = "api/v1.0/getReport/salesreport.pdf"
         val DEPLETED_REPORT = "api/v1.0/getReport/depletedreport.pdf"
         val DB_BACKUP = "api/v1.0/dbBackup/"
+        val LIST_DRUGSTORES = "api/v1.0/listDrugstores/"
         var BASE_URL: String? = null
 
         private var instance: URLs? = null

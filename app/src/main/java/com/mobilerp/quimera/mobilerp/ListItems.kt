@@ -95,13 +95,11 @@ class ListItems : Fragment() {
             override fun onSuccessResponse(result: JSONObject) {
                 try {
                     items.add(ItemListModel("title"))
-                    val items_ = result.getJSONArray("mobilerp")
 
-                    for (i in 0 until items_.length()) {
-                        val item_ = items_.getJSONObject(i)
+                    for (item_: JSONObject in result.getJSONArray("mobilerp"))
                         //name, price, total
                         items.add(ItemListModel(item_.getString("name"), item_.getDouble("price"), item_.getInt("units")))
-                    }
+
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {
@@ -123,19 +121,15 @@ class ListItems : Fragment() {
             override fun onSuccessResponse(result: JSONObject) {
                 try {
                     items.add(ItemListModel("title_"))
-                    val items_ = result.getJSONArray("mobilerp")
-
-                    for (i in 0 until items_.length()) {
-                        val item_ = items_.getJSONObject(i)
+                    for (item_: JSONObject in result.getJSONArray("mobilerp"))
                         //name, price, total
                         items.add(ItemListModel(item_.getString("name"), item_.getString("date")))
-                    }
+
                     itemListAdapter = ItemListAdapter(context, items, R.layout.item_row)
                     itemList.adapter = itemListAdapter
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
-
             }
 
             override fun onErrorResponse(error: VolleyError) {
