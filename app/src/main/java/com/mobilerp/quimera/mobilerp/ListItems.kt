@@ -1,6 +1,5 @@
 package com.mobilerp.quimera.mobilerp
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,23 +16,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [ListItems.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [ListItems.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListItems : Fragment() {
 
-    internal lateinit var itemListAdapter: ItemListAdapter
     internal lateinit var items: ArrayList<ItemListModel>
     internal lateinit var apiServer: APIServer
     private var endpoint: String? = null
-    internal var count: Int = 0
-
-    private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +49,7 @@ class ListItems : Fragment() {
     }
 
     private fun listProducts() {
-        val url = URLs.BASE_URL + URLs.LIST_PRODUCTS
+        val url = URLs.BASE_URL + URLs.LIST_PRODUCTS + AppState.getInstance(context).currentStore
         apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
             override fun onSuccessResponse(result: JSONObject) {
                 try {
@@ -84,7 +71,7 @@ class ListItems : Fragment() {
     }
 
     private fun listDepleted() {
-        val url = URLs.BASE_URL + URLs.LIST_DEPLETED
+        val url = URLs.BASE_URL + URLs.LIST_DEPLETED + AppState.getInstance(context).currentStore
         apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
             override fun onSuccessResponse(result: JSONObject) {
                 try {
@@ -110,21 +97,6 @@ class ListItems : Fragment() {
         mListener = null
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
 
         fun newInstance(endpoint: String): ListItems {
@@ -135,4 +107,4 @@ class ListItems : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}

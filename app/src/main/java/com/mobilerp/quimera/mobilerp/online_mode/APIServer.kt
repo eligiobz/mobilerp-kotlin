@@ -69,6 +69,7 @@ class APIServer(internal var context: Context) {
             404 -> message = R.string.srv_err_404_not_found
             405 -> message = R.string.srv_err_405_not_allowed
             406 -> message = R.string.srv_err_406_not_accepted
+            428 -> message = R.string.srv_err_428_dup_precond
             else -> message = R.string.srv_err_unknown
         }
 
@@ -95,8 +96,6 @@ class APIServer(internal var context: Context) {
     }
 
     companion object {
-
-
         private val USER = User._getInstance()
         private val URL = URLs._getInstance()
     }

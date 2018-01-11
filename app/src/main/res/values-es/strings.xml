@@ -101,5 +101,6 @@
     <string name="has_pending_ops">has_pending_ops</string>
     <string name="srv_err_406_not_accepted">Petición inaceptable</string>
     <string name="srv_err_405_not_allowed">Metodo no permitido</string>
+    <string name="srv_err_428_dup_precond">Duplicated operation</string>
 
 </resources>

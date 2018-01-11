@@ -53,6 +53,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
     internal lateinit var apiServer: APIServer
     internal var isOfflineEnabled: Boolean = false
     internal lateinit var log: OperationsLog
+    private val appState: AppState by lazy { AppState.getInstance(context) }
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -79,8 +80,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View?, savedInstance: Bundle?) {
         // Offline Mode
-        isOfflineEnabled = SettingsManager.getInstance(context).getBoolean(getString(R.string
-                .use_offline_mode))!!
+        isOfflineEnabled = appState.isOfflineMode
 
         // Camera settings
         settings = CameraSettings()
@@ -119,160 +119,157 @@ class StockUpdate : Fragment(), View.OnClickListener {
         btnSave.setOnClickListener(this)
     }
 
+
     private fun findLastScannedProduct(barcode: String) {
         tvBarcodeValue.text = barcode
-        // -- FIND SCANNED PRODUCT ONLINE --
-        if (!isOfflineEnabled) {
-            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + barcode, null, object : VolleyCallback {
-                override fun onSuccessResponse(result: JSONObject) {
-                    isNewProduct = false
-                    try {
-                        val _itms = result.getJSONArray("mobilerp")
-                        val _itm = _itms.getJSONObject(0)
-                        etName.setText(_itm.getString("name"))
-                        etPrice.setText(_itm.getString("price"))
-                        enableEntries()
-                    } catch (e: JSONException) {
-                        Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
-                        e.printStackTrace()
+        when (isOfflineEnabled) {
+            true -> {
+                isNewProduct = false
+                val db = SQLHandler.getInstance(context)
+                if (db.isDatabaseOpen) {
+                    val select = Select(context)
+                    select.query = "SELECT name, price FROM Product WHERE barcode='$barcode'"
+                    if (select.execute()) {
+                        if (select.results.count > 0) {
+                            Toast.makeText(context, getString(R
+                                    .string.app_op_success), Toast.LENGTH_LONG).show()
+                            etName.setText(select.results.getString(0))
+                            etPrice.setText(select.results.getFloat(1).toString())
+                            enableEntries()
+                        } else {
+                            isNewProduct = true
+                            Toast.makeText(context, getString(R.string.app_err_not_found), Toast
+                                    .LENGTH_LONG).show()
+                            enableEntries()
+                        }
+                    }
+                }
+            }
+            false -> {
+                apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + barcode, null, object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
+                        isNewProduct = false
+                        try {
+                            val _itms = result.getJSONArray("mobilerp")
+                            val _itm = _itms.getJSONObject(0)
+                            etName.setText(_itm.getString("name"))
+                            etPrice.setText(_itm.getString("price"))
+                            enableEntries()
+                        } catch (e: JSONException) {
+                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
+                            e.printStackTrace()
+                        }
                     }
 
-                }
-
-                override fun onErrorResponse(error: VolleyError) {
-                    val response = error.networkResponse
-                    if (response.statusCode == 404) {
-                        Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
-                        isNewProduct = true
-                        enableEntries()
-                    } else {
-                        apiServer.genericErrors(response.statusCode)
+                    override fun onErrorResponse(error: VolleyError) {
+                        val response = error.networkResponse
+                        if (response.statusCode == 404) {
+                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
+                            isNewProduct = true
+                            enableEntries()
+                        } else {
+                            apiServer.genericErrors(response.statusCode)
+                        }
                     }
-                }
-            })
-        } else {
-            // -- FIND SCANNED PRODUCT OFFLINE --
-            isNewProduct = false
-            val db = SQLHandler.getInstance(context)
-            if (db.isDatabaseOpen) {
-                val select = Select(context)
-                select.query = "SELECT name, price FROM Product WHERE barcode='$barcode'"
-                if (select.execute()) {
-                    if (select.results.count > 0) {
-                        Toast.makeText(context, getString(R
-                                .string.app_op_success), Toast.LENGTH_LONG).show()
-                        etName.setText(select.results.getString(0))
-                        etPrice.setText(select.results.getFloat(1).toString())
-                        enableEntries()
-                    } else {
-                        isNewProduct = true
-                        Toast.makeText(context, getString(R.string.app_err_not_found), Toast
-                                .LENGTH_LONG).show()
-                        enableEntries()
-                    }
-                }
+                })
             }
         }
     }
 
     override fun onClick(v: View) {
-        val jsonObject = prepareJSON()
-        // -- FIND SCANNED PRODUCT ONLINE --
-        if (!isOfflineEnabled) {
-            if (isNewProduct) {
-                // -- NEW PRODUCT SAVED TO SERVER --
-                apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.NEW_PRODUCT,
-                        jsonObject, object : VolleyCallback {
-                    override fun onSuccessResponse(result: JSONObject) {
+        val data = prepareJSON()
+        when (isOfflineEnabled) {
+            true -> {
+                when (isNewProduct) {
+                    true -> {
+                        log.add(Request.Method.POST, URLs.NEW_PRODUCT, data)
                         cleanEntries()
+                        val insert = Insert(context)
+                        try {
+                            val q = String.format(Locale.getDefault(), "INSERT INTO Product(barcode," +
+                                    " name, " +
+                                    "price, " +
+                                    "units) " +
+                                    "values('%s', '%s', %s, %s);", data.getString("barcode"),
+                                    data.getString("name"), data.getString("price"), data
+                                    .getString("units"))
+                            insert.query = q
+                            insert.execute()
+                            Log.d("SQL Query :: ", insert.query)
+                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
+                        } catch (e: JSONException) {
+                            Log.d("JSON_EXEC", e.message)
+                        }
                     }
-
-                    override fun onErrorResponse(error: VolleyError) {
-                        Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_LONG).show()
-                    }
-                })
-            } else {
-                // -- PRODUCT UPDATED TO SERVER --
-                apiServer.getResponse(Request.Method.PUT, URLs.BASE_URL + URLs
-                        .UPDATE_PRODUCT + lastBarcode,
-                        jsonObject, object : VolleyCallback {
-                    override fun onSuccessResponse(result: JSONObject) {
+                    false -> {
+                        log.add(Request.Method.PUT, URLs
+                                .UPDATE_PRODUCT + lastBarcode, data)
                         cleanEntries()
+                        val update = Update(context)
+                        try {
+                            val q = String.format(Locale.getDefault(), "UPDATE Product " +
+                                    "SET name='%s', " +
+                                    "price=%s, " +
+                                    "units=%s " +
+                                    "WHERE barcode='%s';",
+                                    data.getString("name"),
+                                    data.getString("price"),
+                                    data.getString("units"),
+                                    data.getString("barcode"))
+                            update.query = q
+                            update.execute()
+                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
+                        } catch (e: JSONException) {
+                            Toast.makeText(context, R.string.app_op_fail, Toast.LENGTH_LONG).show()
+                        }
                     }
-
-                    override fun onErrorResponse(error: VolleyError) {
-                        Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_LONG).show()
-                    }
-                })
+                }
             }
-        } else {
-            // -- FIND PRODUCT OFFLINE --
-            if (isNewProduct) {
-                // -- NEW PRODUCT SAVED LOCALLY --
-                // -- OPERATION ADDED TO LOGFILE --
-                log.add(Request.Method.POST, URLs.NEW_PRODUCT, jsonObject)
-                cleanEntries()
-                val insert = Insert(context)
-                try {
-                    val q = String.format(Locale.getDefault(), "INSERT INTO Product(barcode," +
-                            " name, " +
-                            "price, " +
-                            "units) " +
-                            "values('%s', '%s', %s, %s);", jsonObject.getString("barcode"),
-                            jsonObject.getString("name"), jsonObject.getString("price"), jsonObject
-                            .getString("units"))
-                    insert.query = q
-                    insert.execute()
-                    Log.d("SQL Query :: ", insert.query)
-                    Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-                } catch (e: JSONException) {
-                    Log.d("JSON_EXEC", e.message)
-                }
+            false -> {
+                when (isNewProduct) {
+                    true -> apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.NEW_PRODUCT,
+                            data, object : VolleyCallback {
+                        override fun onSuccessResponse(result: JSONObject) {
+                            cleanEntries()
+                        }
 
-            } else {
-                // -- PRODUCT UPDATED LOCALLY --
-                // -- OPERATION SAVED TO LOG--
-                // TODO: ADD UPDATE TO DB -- DONE??
-                log.add(Request.Method.PUT, URLs
-                        .UPDATE_PRODUCT + lastBarcode, jsonObject)
-                cleanEntries()
-                val update = Update(context)
-                try {
-                    val q = String.format(Locale.getDefault(), "UPDATE Product " +
-                            "SET name='%s', " +
-                            "price=%s, " +
-                            "units=%s " +
-                            "WHERE barcode='%s';",
-                            jsonObject.getString("name"),
-                            jsonObject.getString("price"),
-                            jsonObject.getString("units"),
-                            jsonObject.getString("barcode"))
-                    update.query = q
-                    update.execute()
-                    Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-                } catch (e: JSONException) {
-                    Toast.makeText(context, R.string.app_op_fail, Toast.LENGTH_LONG).show()
-                }
+                        override fun onErrorResponse(error: VolleyError) {
+                            apiServer.genericErrors(error.networkResponse.statusCode)
 
+                        }
+                    })
+                    false -> apiServer.getResponse(Request.Method.PUT, URLs.BASE_URL + URLs
+                            .UPDATE_PRODUCT + lastBarcode,
+                            data, object : VolleyCallback {
+                        override fun onSuccessResponse(result: JSONObject) {
+                            cleanEntries()
+                        }
+
+                        override fun onErrorResponse(error: VolleyError) {
+                            apiServer.genericErrors(error.networkResponse.statusCode)
+                        }
+                    })
+                }
             }
         }
     }
 
     private fun prepareJSON(): JSONObject {
-        val `object` = JSONObject()
+        val data = JSONObject()
         try {
-            `object`.put("name", etName.text)
-            `object`.put("price", etPrice.text)
-            `object`.put("units", etTotal.text)
-            `object`.put("token", Calendar.getInstance().time.toString())
+            data.put("name", etName.text)
+            data.put("price", etPrice.text)
+            data.put("units", etTotal.text)
+            data.put("token", Calendar.getInstance().time.toString())
+            data.put("storeid", AppState.getInstance(context).currentStore)
             if (isNewProduct)
-                `object`.put("barcode", lastBarcode)
-            return `object`
+                data.put("barcode", lastBarcode)
+            return data
         } catch (ex: JSONException) {
             Log.d("JSON_ERROR", ex.toString())
         }
 
-        return `object`
+        return data
     }
 
     private fun enableEntries() {
@@ -316,9 +313,4 @@ class StockUpdate : Fragment(), View.OnClickListener {
         barcodePreview.decodeSingle(callback)
     }
 
-    //    @Override
-    //    public boolean onKeyDown(int keyCode, KeyEvent event) {
-    //        return barcodePreview.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    //    }
-
-}// Required empty public constructor
+}
