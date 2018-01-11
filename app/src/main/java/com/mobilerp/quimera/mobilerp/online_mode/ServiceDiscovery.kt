@@ -55,21 +55,16 @@ class ServiceDiscovery(internal val context: Context?) {
         prefsFile = context.getString(R.string.preferences_file)
         server_addr = context.getString(R.string.server_addr)
         manager = SettingsManager.getInstance(context)
-
-
-            wm = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val connectionInfo = wm.connectionInfo
-            Log.d("NET_NAME", wm.connectionInfo.ssid)
-            Log.d("NET_NAME", wm.connectionInfo.networkId.toString())
-            val ipAddress = connectionInfo.ipAddress
-            val ipString = Formatter.formatIpAddress(ipAddress)
-            netPrefix = ipString.substring(0, ipString.lastIndexOf(".") + 1)
+        wm = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val connectionInfo = wm.connectionInfo
+        val ipAddress = connectionInfo.ipAddress
+        val ipString = Formatter.formatIpAddress(ipAddress)
+        netPrefix = ipString.substring(0, ipString.lastIndexOf(".") + 1)
 
     }
 
     fun doScan() {
         if (wm.wifiState == WifiManager.WIFI_STATE_DISABLED || wm.wifiState == WifiManager.WIFI_STATE_UNKNOWN) {
-            Log.d("NET_NAME", "NOT CONNECTED")
             Toast.makeText(context, R.string.not_connected, Toast.LENGTH_LONG).show()
             return
         }
@@ -106,6 +101,7 @@ class ServiceDiscovery(internal val context: Context?) {
                         manager.saveString(server_addr, _url)
                         Log.d(LOG_TAG, "Wrote to prefs file :: " + _url)
 
+                        //TODO: Fix test server code
                         //testServer(_url);
                         //                            ExecutorService executor = Executors.newFixedThreadPool(2);
                         //                            executor.execute(testServer(_url));
@@ -134,35 +130,11 @@ class ServiceDiscovery(internal val context: Context?) {
         })
     }
 
-    //    private Runnable testServer(final String url) {
-    //        return new Runnable() {
-    //            @Override;
-    //            public void run() {
-    //                Log.d(LOG_TAG, "Testing server response @ " + url);
-    //                apiServer.getResponse(false, Request.Method.GET, url,
-    //                        null, new VolleyCallback() {
-    //                            @Override
-    //                            public void onSuccessResponse(JSONObject result) {
-    //                                Log.d(LOG_TAG, "VALID SERVER @ " + url);
-    //                                URLs URL = URLs._getInstance();
-    //                                URL.setBASE_URL(url);
-    //                            }
-    //
-    //                            @Override
-    //                            public void onErrorResponse(VolleyError error) {
-    //                                Log.d(LOG_TAG, "Why am I here? " + url);
-    //                            }
-    //                        });
-    //            }
-    //        };
-    //    }
-
     private fun testPort(ip: InetAddress): Boolean {
         try {
             val address = InetSocketAddress(ip, port)
             val socket = Socket()
             val timeout = 2000
-
             socket.connect(address, timeout)
             return true
         } catch (e: IOException) {
@@ -172,7 +144,6 @@ class ServiceDiscovery(internal val context: Context?) {
     }
 
     companion object {
-
         private val NB_THREADS = 10
     }
 }

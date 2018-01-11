@@ -12,12 +12,14 @@
         android:id="@+id/itemPrice"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="210dp"/>
+        android:layout_marginLeft="210dp"
+        android:layout_marginStart="210dp"/>
 
     <TextView
         android:id="@+id/itemTotal"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="290dp"/>
+        android:layout_marginLeft="290dp"
+        android:layout_marginStart="290dp"/>
 
 </RelativeLayout>

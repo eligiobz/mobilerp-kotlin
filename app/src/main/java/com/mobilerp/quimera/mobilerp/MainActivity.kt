@@ -1,6 +1,5 @@
 package com.mobilerp.quimera.mobilerp
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        val sett_manager = SettingsManager.getInstance(applicationContext)
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
@@ -35,40 +35,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        /********************* DISABLE ON RELEASE  */
-//        user.name = "carlo"
-//        user.pass = "123"
-//        user.isLoginIn = true
-
         if (!user.isLoginIn){
-            val sett_manager  = SettingsManager.getInstance(applicationContext)
             val uname = sett_manager.getString("username")
-            if (uname == null) {
-                val fragment = LoginFragment()
-                val manager = supportFragmentManager
-                manager.beginTransaction()
-                        .replace(R.id.main_content, fragment)
-                        .addToBackStack("MainView")
-                        .commit()
-            } else
-                Toast.makeText(applicationContext, "Welcome back", Toast.LENGTH_LONG).show()
+            when (uname) {
+                null -> {
+                    val fragment = LoginFragment()
+                    val manager = supportFragmentManager
+                    manager.beginTransaction()
+                            .replace(R.id.main_content, fragment)
+                            .addToBackStack("MainView")
+                            .commit()
+                }
+                else -> {
+                    user.name = sett_manager.getString("username")!!
+                    user.pass = sett_manager.getString("password")!!
+                    user.isLoginIn = true
+                    Toast.makeText(applicationContext, "Welcome back", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
-        /*********************** SERVICE FINDER  */
+        /*********************** SERVICE FINDER  ***********************/
         if (URLs.BASE_URL == null) {
-            val context = applicationContext
-            val sharedPrefs = context.getSharedPreferences(getString(R.string
-                    .preferences_file), Context.MODE_PRIVATE)
-            val serverAddress = sharedPrefs.getString(getString(R.string.server_addr), null)
-            if (serverAddress == null) {
-                Toast.makeText(applicationContext, "Buscando servidor", Toast.LENGTH_LONG).show()
-                ds1 = ServiceDiscovery(this)
-                ds1.doScan()
-            } else {
-                Toast.makeText(applicationContext, "Cargando direccion desde preferencias",
-                        Toast.LENGTH_LONG).show()
-                val URL = URLs._getInstance()
-                URL.setBASE_URL(serverAddress)
+            val serverAddress = sett_manager.getString(getString(R.string.server_addr))
+            when (serverAddress) {
+                null -> {
+                    Toast.makeText(applicationContext, "Buscando servidor", Toast.LENGTH_LONG).show()
+                    ds1 = ServiceDiscovery(this)
+                    ds1.doScan()
+                }
+                else -> {
+                    Toast.makeText(applicationContext, "Cargando direccion desde preferencias",
+                            Toast.LENGTH_LONG).show()
+                    val URL = URLs._getInstance()
+                    URL.setBASE_URL(serverAddress)
+                }
             }
         }
     }
@@ -119,7 +120,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .commit()
             }
             R.id.nav_settings -> {
-                //val fragment = ServerSettings()
                 val fragment = AllSettings()
                 manager.beginTransaction()
                         .replace(R.id.main_content, fragment)

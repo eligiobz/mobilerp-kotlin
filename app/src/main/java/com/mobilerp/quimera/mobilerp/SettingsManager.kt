@@ -43,12 +43,22 @@ class SettingsManager protected constructor() {
         editor.apply()
     }
 
+    fun saveInt(key: String, _value: Int) {
+        editor = sharedPrefs.edit()
+        editor.putInt(key, _value)
+        editor.apply()
+    }
+
     fun getString(key: String): String? {
         return sharedPrefs.getString(key, null)
     }
 
     fun getBoolean(key: String): Boolean? {
         return sharedPrefs.getBoolean(key, false)
+    }
+
+    fun getInt(key: String): Int {
+        return sharedPrefs.getInt(key, -1)
     }
 
     companion object {

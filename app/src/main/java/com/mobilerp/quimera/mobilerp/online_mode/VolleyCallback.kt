@@ -1,6 +1,7 @@
 package com.mobilerp.quimera.mobilerp.online_mode
 
 import com.android.volley.VolleyError
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -26,3 +27,9 @@ interface VolleyCallback {
 
     fun onErrorResponse(error: VolleyError)
 }
+
+/**
+ * Allow us to iterate using foreach
+ */
+operator fun JSONArray.iterator(): Iterator<JSONObject>
+        = (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()

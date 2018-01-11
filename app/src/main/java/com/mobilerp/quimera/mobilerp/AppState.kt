@@ -26,6 +26,14 @@ import android.content.Context
 class AppState private constructor() {
     private var offlineMode: Boolean = false
     private var hasPendingOperations: Boolean = false
+    private var current_store: Int = -1
+
+    var currentStore: Int
+        get() = current_store
+        set(v) {
+            SettingsManager.getInstance(context!!).saveInt("current_store", v)
+            current_store = v
+        }
 
     var isOfflineMode: Boolean
         get() = offlineMode
@@ -36,8 +44,11 @@ class AppState private constructor() {
         }
 
     init {
-        offlineMode = SettingsManager.getInstance(context!!).getBoolean(context!!.getString(R.string.use_offline_mode))!!
-        hasPendingOperations = SettingsManager.getInstance(context!!).getBoolean(context!!.getString(R.string.has_pending_ops))!!
+        val set_manager = SettingsManager.getInstance(context!!)
+        offlineMode = set_manager.getBoolean(context!!.getString(R.string.use_offline_mode))!!
+        hasPendingOperations = set_manager.getBoolean(context!!
+                .getString(R.string.has_pending_ops))!!
+        current_store = set_manager.getInt("current_store")
     }
 
     fun setHasPendingOperations(v: Boolean) {
