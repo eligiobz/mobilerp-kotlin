@@ -25,6 +25,7 @@
     <string name="current_user">Usuario actual</string>
     <string name="drug_store_list">Lista de farmacias</string>
     <string name="drugstores">Farmacias</string>
+    <string name="add_store">Agregar sucursal</string>
 
     <!-- User messages -->
     <string name="user_hint">Ingrese su nombre de usuario</string>
@@ -88,7 +89,7 @@
     <string name="user_settings">Ajustes de usuario</string>
     <string name="finish_sale">Terminar venta</string>
     <string name="pdf_export">Exportar a PDF</string>
-    <string name="sales_report_filename">reporte_ventas_</string>
+    <string name="daily_sales_report_filename">reporte_ventas_</string>
     <string name="depleted_report_filename">reporte_productos_agotados_</string>
     <string name="last_sale_date">Última fecha de venta</string>
     <string name="preferences_file">settings</string>
@@ -98,4 +99,7 @@
     <string name="logfile">upload_operations.log</string>
     <string name="sync_pending_operations">Sincronizar con servidor</string>
     <string name="has_pending_ops">has_pending_ops</string>
+    <string name="srv_err_406_not_accepted">Petición inaceptable</string>
+    <string name="srv_err_405_not_allowed">Metodo no permitido</string>
+
 </resources>

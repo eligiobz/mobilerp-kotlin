@@ -25,17 +25,24 @@ class URLs protected constructor() {
 
     companion object {
 
+        // v1.0
         val LOGIN = "api/v1.0/user/checkLogin/"
-        val LIST_PRODUCTS = "api/v1.0/listProducts/"
-        val LIST_DEPLETED = "api/v1.0/listDepletedProducts/"
-        val FIND_PRODUCT = "api/v1.0/findProduct/"
-        val NEW_PRODUCT = "api/v1.0/newProduct/"
-        val UPDATE_PRODUCT = "api/v1.0/updateProduct/"
-        val MAKE_SALE = "api/v1.0/makeSale/"
-        val SALES_REPORT = "api/v1.0/getReport/salesreport.pdf"
-        val DEPLETED_REPORT = "api/v1.0/getReport/depletedreport.pdf"
+        val DAILY_SALES_REPORT = "api/v1.0/dailyReport/"
+        val MONTHLY_SALES_REPORT = "api/v1.0/monthlyReport/"
+        val DEPLETED_ITEMS_REPORT = "api/v1.0/listDepletedProducts/"
+        val SALES_REPORT_PDF = "api/v1.0/getReport/salesreport.pdf"
+        val DEPLETED_REPORT_PDF = "api/v1.0/getReport/depletedreport.pdf"
         val DB_BACKUP = "api/v1.0/dbBackup/"
-        val LIST_DRUGSTORES = "api/v1.0/listDrugstores/"
+
+        // v1.1
+        val LIST_DRUGSTORES = "api/v1.1/listDrugstores/"
+        val ADD_STORE = "api/v1.1/addDrugstore/"
+        val LIST_PRODUCTS = "api/v1.1/listProducts/"
+        val LIST_DEPLETED = "api/v1.1/listDepletedProducts/"
+        val FIND_PRODUCT = "api/v1.1/findProduct/"
+        val NEW_PRODUCT = "api/v1.1/newProduct/"
+        val UPDATE_PRODUCT = "api/v1.1/updateProduct/"
+        val MAKE_SALE = "api/v1.1/makeSale/"
         var BASE_URL: String? = null
 
         private var instance: URLs? = null

@@ -62,12 +62,17 @@ class APIServer(internal var context: Context) {
     }
 
     fun genericErrors(errorCode: Int) {
-        if (errorCode == 401)
-            Toast.makeText(context, R.string.srv_err_401_access_denied, Toast.LENGTH_LONG).show()
-        if (errorCode == 500)
-            Toast.makeText(context, R.string.srv_err_500_server_error, Toast.LENGTH_LONG).show()
-        if (errorCode == 404)
-            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
+        val message: Int
+        when (errorCode) {
+            401 -> message = R.string.srv_err_401_access_denied
+            500 -> message = R.string.srv_err_500_server_error
+            404 -> message = R.string.srv_err_404_not_found
+            405 -> message = R.string.srv_err_405_not_allowed
+            406 -> message = R.string.srv_err_406_not_accepted
+            else -> message = R.string.srv_err_unknown
+        }
+
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
     fun getResponse(no_auth: Boolean, method: Int, url: String, jsonValues: JSONObject?,

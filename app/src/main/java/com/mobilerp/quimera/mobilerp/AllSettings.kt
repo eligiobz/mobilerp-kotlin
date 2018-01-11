@@ -1,9 +1,11 @@
 package com.mobilerp.quimera.mobilerp
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
+import android.text.InputType
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.EditText
 import android.widget.TabHost
 import android.widget.Toast
 import com.android.volley.Request
@@ -26,15 +29,6 @@ import kotlinx.android.synthetic.main.fragment_users_settings.*
 import org.json.JSONException
 import org.json.JSONObject
 
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [AllSettings.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [AllSettings.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AllSettings : Fragment() {
 
     private val set_manager : SettingsManager by lazy { SettingsManager.getInstance(context) }
@@ -57,6 +51,33 @@ class AllSettings : Fragment() {
         prepareUsersTab()
         prepareServerTab()
         prepareDrugstoreTab()
+        add_store.setOnClickListener {
+            val dialog = AlertDialog.Builder(context)
+            val input = EditText(context)
+            dialog.setTitle(getString(R.string.add_store))
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            dialog.setView(input)
+
+            dialog.setPositiveButton("OK") { dialog, which ->
+                var data = JSONObject()
+                data.put("name", input.text.toString())
+                apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.ADD_STORE, data,
+                        object : VolleyCallback {
+                            override fun onSuccessResponse(result: JSONObject) {
+                                Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
+                                loadList()
+                            }
+
+                            override fun onErrorResponse(error: VolleyError) {
+                                apiServer.genericErrors(error.networkResponse.statusCode)
+                            }
+                        })
+            }
+
+            dialog.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+            dialog.show()
+        }
     }
 
     private fun prepareDrugstoreTab() {

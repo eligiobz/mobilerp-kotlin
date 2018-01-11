@@ -1,7 +1,9 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +12,11 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TabHost
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.VolleyError
+import com.mobilerp.quimera.mobilerp.online_mode.*
+import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -40,6 +47,9 @@ class AdminFragment : Fragment() {
     private lateinit var salesList: ListView
     private lateinit var pharmacyListAdapter: OptionListAdapter
     private lateinit var salesListAdapter: OptionListAdapter
+    private lateinit var reportURL: String
+    private lateinit var reportName: String
+    private lateinit var genUrl: String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -48,11 +58,62 @@ class AdminFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
         tabsSetup()
+        pharmacyTabSetup()
+        salesTabSetup()
+        activity.setTitle(R.string.title_activity_admin)
+    }
 
-        // Pharmacy list setup
-        pharmacyList = getView()!!.findViewById(R.id.lvPharmacyOptions)
+    private fun salesTabSetup() {
+        // Sales list setup
+        salesList = view!!.findViewById(R.id.lvSalesOptions)
+        salesListAdapter = OptionListAdapter(context, salesList())
+        salesList.adapter = salesListAdapter
+        salesList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            when (position) {
+                0 -> {
+                    genUrl = URLs.BASE_URL + URLs.DAILY_SALES_REPORT
+                    reportURL = URLs.BASE_URL + URLs.SALES_REPORT_PDF
+                    reportName = getString(R.string.daily_sales_report_filename)
+                }
+                1 -> {
+                    genUrl = URLs.BASE_URL + URLs.MONTHLY_SALES_REPORT
+                    reportURL = URLs.BASE_URL + URLs.SALES_REPORT_PDF
+                    reportName = getString(R.string.daily_sales_report_filename)
+                }
+                2 -> {
+                    genUrl = URLs.BASE_URL + URLs.DEPLETED_ITEMS_REPORT
+                    reportURL = URLs.BASE_URL + URLs.DEPLETED_REPORT_PDF
+                    reportName = getString(R.string.depleted_report_filename)
+                }
+            }
+            val apiServer = APIServer(context)
+            apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
+                override fun onSuccessResponse(result: JSONObject) {
+                    Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
+                    val date = SimpleDateFormat("dd-MM-yy")
+                    val now = Date()
+                    val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
+                        override fun onFileDownloaded() {
+                            Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
+                        }
+                    })
+                    fileDownloader.execute(reportURL, reportName + date.format(now) + ".pdf")
+                    if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+                        Log.d("DOWN_ERR", "SD \n" + Environment.getExternalStorageState())
+                    }
+                }
+
+                override fun onErrorResponse(error: VolleyError) {
+                    apiServer.genericErrors(error.networkResponse.statusCode)
+                }
+            })
+        }
+    }
+
+    private fun pharmacyTabSetup() {
+
+        pharmacyList = view!!.findViewById(R.id.lvPharmacyOptions)
         pharmacyListAdapter = OptionListAdapter(context, pharmacyList())
         pharmacyList.adapter = pharmacyListAdapter
         pharmacyList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -78,14 +139,6 @@ class AdminFragment : Fragment() {
                         Toast.LENGTH_SHORT).show()
             }
         }
-
-
-        // Sales list setup
-        salesList = getView()!!.findViewById(R.id.lvSalesOptions)
-        salesListAdapter = OptionListAdapter(context, salesList())
-        salesList.adapter = salesListAdapter
-        activity.setTitle(R.string.title_activity_admin)
-
     }
 
     private fun pharmacyList(): ArrayList<OptionListModel> {
@@ -99,18 +152,13 @@ class AdminFragment : Fragment() {
         return models
     }
 
-    //    @Override
-    //    public boolean onCreateOptionsMenu(Menu menu) {
-    //        // inflate the menu, this adds items to th action bar if present
-    //        getMenuInflater().inflate(R.menu.menu_admin, menu);
-    //        return true;
-    //    }
-
     private fun salesList(): ArrayList<OptionListModel> {
         val models = ArrayList<OptionListModel>()
         //models.add(new OptionListModel("Acciones"));
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.today_sales), ""))
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.month_sales), ""))
+        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.depleted_stock),
+                ""))
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R
                 .string.most_sold_products), ""))
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.least_sold_products), ""))
@@ -151,4 +199,4 @@ class AdminFragment : Fragment() {
         host.addTab(spec)
     }
 
-}// Required empty public constructor
+}
