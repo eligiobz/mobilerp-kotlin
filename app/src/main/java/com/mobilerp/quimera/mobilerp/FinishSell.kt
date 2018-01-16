@@ -78,6 +78,7 @@ class FinishSell : Fragment() {
                 data.put("barcode", barcode)
                 data.put("units", units)
                 data.put("token", Calendar.getInstance().time.toString())
+                data.put("storeid", AppState.getInstance(context).currentStore)
 
             } catch (e: JSONException) {
                 Log.d("JSON ERROR", e.message)

@@ -92,11 +92,6 @@ class ListItems : Fragment() {
         })
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
     companion object {
 
         fun newInstance(endpoint: String): ListItems {
