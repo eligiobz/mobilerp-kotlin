@@ -33,7 +33,7 @@ class SettingsManager protected constructor() {
 
     fun saveString(key: String, _value: String) {
         editor = sharedPrefs.edit()
-        editor.putString(key, _value)
+        editor.putString(key, _value.replace("\\s".toRegex(), ""))
         editor.apply()
     }
 

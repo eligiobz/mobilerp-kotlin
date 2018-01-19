@@ -6,6 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="1dp"
+    android:layout_marginEnd="1dp"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="1dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mobilerp.quimera.mobilerp.MainActivity"
     tools:showIn="@layout/app_bar_main">

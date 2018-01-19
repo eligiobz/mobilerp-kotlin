@@ -121,7 +121,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
 
     private fun findLastScannedProduct(barcode: String) {
-        tvBarcodeValue.text = barcode
+        etBarcode.setText(barcode)
         when (isOfflineEnabled) {
             true -> {
                 isNewProduct = false
@@ -285,7 +285,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
         etName.setText("")
         etPrice.setText("")
         etTotal.setText("")
-        tvBarcodeValue.text = ""
+        etBarcode.setText("")
         etName.isEnabled = false
         etPrice.isEnabled = false
         etTotal.isEnabled = false

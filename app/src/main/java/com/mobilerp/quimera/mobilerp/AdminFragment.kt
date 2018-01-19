@@ -1,9 +1,7 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,11 +10,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TabHost
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
-import com.mobilerp.quimera.mobilerp.online_mode.*
-import org.json.JSONObject
-import java.text.SimpleDateFormat
+import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import java.util.*
 
 /**
@@ -72,9 +66,12 @@ class AdminFragment : Fragment() {
         salesList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
-                    genUrl = URLs.BASE_URL + URLs.DAILY_SALES_REPORT
-                    reportURL = URLs.BASE_URL + URLs.SALES_REPORT_PDF
-                    reportName = getString(R.string.daily_sales_report_filename)
+                    val fragment: Fragment = today_statement()
+                    val manager = fragmentManager
+                    manager.beginTransaction()
+                            .replace(R.id.main_content, fragment)
+                            .addToBackStack("Admin")
+                            .commit()
                 }
                 1 -> {
                     genUrl = URLs.BASE_URL + URLs.MONTHLY_SALES_REPORT
@@ -87,27 +84,27 @@ class AdminFragment : Fragment() {
                     reportName = getString(R.string.depleted_report_filename)
                 }
             }
-            val apiServer = APIServer(context)
-            apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
-                override fun onSuccessResponse(result: JSONObject) {
-                    Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
-                    val date = SimpleDateFormat("dd-MM-yy")
-                    val now = Date()
-                    val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
-                        override fun onFileDownloaded() {
-                            Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
-                        }
-                    })
-                    fileDownloader.execute(reportURL, reportName + date.format(now) + ".pdf")
-                    if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-                        Log.d("DOWN_ERR", "SD \n" + Environment.getExternalStorageState())
-                    }
-                }
-
-                override fun onErrorResponse(error: VolleyError) {
-                    apiServer.genericErrors(error.networkResponse.statusCode)
-                }
-            })
+//            val apiServer = APIServer(context)
+//            apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
+//                override fun onSuccessResponse(result: JSONObject) {
+//                    Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
+//                    val date = SimpleDateFormat("dd-MM-yy")
+//                    val now = Date()
+//                    val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
+//                        override fun onFileDownloaded() {
+//                            Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
+//                        }
+//                    })
+//                    fileDownloader.execute(reportURL, reportName + date.format(now) + ".pdf")
+//                    if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+//                        Log.d("DOWN_ERR", "SD \n" + Environment.getExternalStorageState())
+//                    }
+//                }
+//
+//                override fun onErrorResponse(error: VolleyError) {
+//                    apiServer.genericErrors(error.networkResponse.statusCode)
+//                }
+//            })
         }
     }
 
