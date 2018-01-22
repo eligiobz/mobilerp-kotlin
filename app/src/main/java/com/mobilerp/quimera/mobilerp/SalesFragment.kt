@@ -47,19 +47,17 @@ import java.util.*
  */
 class SalesFragment : Fragment() {
 
-    internal var lastBarcode: String = ""
     private var totalSale: Double = 0.0
+
+    internal var lastBarcode: String = ""
     internal var isNewProduct: Boolean = false
 
-    internal lateinit var apiServer: APIServer
     private lateinit var items: ArrayList<SalesItem>
     private lateinit var appState: AppState
-
-    internal lateinit var context: Context
-
-    internal lateinit var beepManager: BeepManager
     private lateinit var settings: CameraSettings
-
+    internal lateinit var apiServer: APIServer
+    internal lateinit var context: Context
+    internal lateinit var beepManager: BeepManager
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -71,7 +69,6 @@ class SalesFragment : Fragment() {
             barcodePreview.setStatusText(lastBarcode)
             beepManager.playBeepSoundAndVibrate()
             findLastScannedProduct()
-
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {
@@ -83,7 +80,6 @@ class SalesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         context = getContext()
-
         activity.setTitle(R.string.new_sale)
 
         // Camera settings
@@ -91,10 +87,8 @@ class SalesFragment : Fragment() {
         settings.focusMode = CameraSettings.FocusMode.MACRO
 
         //Barcode settings
-
         barcodePreview.barcodeView.cameraSettings = settings
         barcodePreview.decodeContinuous(callback)
-
         beepManager = BeepManager(activity)
 
         // Get settings
@@ -106,9 +100,7 @@ class SalesFragment : Fragment() {
         apiServer = APIServer(context)
 
         // Init elements to display items
-
         addProduct.setOnClickListener { addProduct() }
-
         endSale.setOnClickListener { endSale() }
 
         items = ArrayList()

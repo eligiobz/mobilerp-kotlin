@@ -3,6 +3,7 @@ package com.mobilerp.quimera.mobilerp
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,13 +48,14 @@ import java.util.*
 class StockUpdate : Fragment(), View.OnClickListener {
 
     internal var isNewProduct: Boolean = false
-    internal lateinit var beepManager: BeepManager
     internal var lastBarcode: String = ""
+    internal var isOfflineEnabled: Boolean = false
+    private val appState: AppState by lazy { AppState.getInstance(context) }
+    internal lateinit var log: OperationsLog
+    internal lateinit var beepManager: BeepManager
     internal lateinit var settings: CameraSettings
     internal lateinit var apiServer: APIServer
-    internal var isOfflineEnabled: Boolean = false
-    internal lateinit var log: OperationsLog
-    private val appState: AppState by lazy { AppState.getInstance(context) }
+
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -117,6 +119,15 @@ class StockUpdate : Fragment(), View.OnClickListener {
         }
 
         btnSave.setOnClickListener(this)
+
+        etBarcode.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                lastBarcode = etBarcode.text.toString()
+                findLastScannedProduct(lastBarcode)
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
 
@@ -278,6 +289,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
         etName.isEnabled = true
         if (isNewProduct)
             etName.setText(R.string.new_item)
+        etName.requestFocus()
     }
 
     private fun cleanEntries() {
