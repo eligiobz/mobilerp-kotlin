@@ -30,7 +30,6 @@ class today_statement : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val server = APIServer(context)
         val genUrl = URLs.BASE_URL + URLs.DAILY_SALES_REPORT
         val reportURL = URLs.BASE_URL + URLs.SALES_REPORT_PDF
         val reportName = getString(R.string.daily_sales_report_filename)
