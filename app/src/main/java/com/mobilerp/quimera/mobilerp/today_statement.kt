@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_today_statement.*
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class today_statement : Fragment() {
 
@@ -35,21 +34,22 @@ class today_statement : Fragment() {
         val reportName = getString(R.string.daily_sales_report_filename)
 
         val apiServer = APIServer(context)
-        apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
-            override fun onSuccessResponse(result: JSONObject) {
-                val items_data = ArrayList<ItemListModel>()
-                items_data.add(ItemListModel("title"))
-                for (item_: JSONObject in result.getJSONArray("sales"))
-                //name, price, total
-                    items_data.add(ItemListModel(item_.getString("name"), item_.getDouble
-                    ("price"), item_.getInt("units")))
-                items.adapter = ItemListAdapter(context, items_data, R.layout.item_row)
-            }
 
-            override fun onErrorResponse(error: VolleyError) {
-                apiServer.genericErrors(error.networkResponse.statusCode)
-            }
-        })
+//        apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
+//            override fun onSuccessResponse(result: JSONObject) {
+//                val items_data = ArrayList<ItemListModel>()
+//                items_data.add(ItemListModel("title"))
+//                for (item_: JSONObject in result.getJSONArray("sales"))
+//                //name, price, total
+//                    items_data.add(ItemListModel(item_.getString("name"), item_.getDouble
+//                    ("price"), item_.getInt("units")))
+//                items.adapter = ItemListAdapter(context, items_data, R.layout.item_row)
+//            }
+//
+//            override fun onErrorResponse(error: VolleyError) {
+//                apiServer.genericErrors(error.networkResponse.statusCode)
+//            }
+//        })
 
         pdf_download.setOnClickListener {
             apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {

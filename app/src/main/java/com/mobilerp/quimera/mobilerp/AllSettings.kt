@@ -33,6 +33,7 @@ class AllSettings : Fragment() {
 
     private val set_manager : SettingsManager by lazy { SettingsManager.getInstance(context) }
     private val apiServer : APIServer by lazy { APIServer(context) }
+    private val server: APIServer by lazy { APIServer(context) }
     private val appState: AppState by lazy { AppState.getInstance(context) }
     private var server_address: String? = null
     private var use_offline_mode: Boolean = false
@@ -94,6 +95,7 @@ class AllSettings : Fragment() {
     private fun loadList(){
         apiServer.getResponse(Request.Method.GET, URLs.BASE_URL+URLs.LIST_DRUGSTORES, null, object : VolleyCallback {
             override fun onSuccessResponse(result: JSONObject) {
+
                 try {
                     val store_list: ArrayList<OptionListModel> = ArrayList()
                     for (item_: JSONObject in result.getJSONArray("mobilerp")) {

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcodePreview"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1"/>
+
+    <TextView
+        android:id="@+id/tvBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/barcodePreview"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/item_barcode"/>
+
+    <EditText
+        android:id="@+id/etBarcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvBarcode"
+        android:layout_marginEnd="15dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginStart="55dp"
+        android:layout_toEndOf="@+id/tvBarcode"
+        android:layout_toRightOf="@+id/tvBarcode"
+        android:textAlignment="viewEnd"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBarcode"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/item_name"/>
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvName"
+        android:layout_alignLeft="@+id/etBarcode"
+        android:layout_alignStart="@+id/etBarcode"
+        android:layout_below="@+id/etBarcode"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/item_price"/>
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvPrice"
+        android:layout_alignLeft="@+id/etName"
+        android:layout_alignStart="@+id/etName"
+        android:layout_below="@+id/etName"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:textAlignment="viewEnd"
+        android:inputType="numberDecimal"/>
+
+    <TextView
+        android:id="@+id/tvTotalUnits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPrice"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/exiting_units"/>
+
+    <EditText
+        android:id="@+id/etTotalUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvTotalUnits"
+        android:layout_alignLeft="@+id/etPrice"
+        android:layout_alignStart="@+id/etPrice"
+        android:layout_below="@+id/etPrice"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:textAlignment="viewEnd"
+        android:focusable="false"
+        android:enabled="false"
+        android:inputType="number"/>
+
+    <TextView
+        android:id="@+id/tvNewUnits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTotalUnits"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/item_total"/>
+
+    <EditText
+        android:id="@+id/etNewUnits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvNewUnits"
+        android:layout_alignLeft="@+id/etTotalUnits"
+        android:layout_alignStart="@+id/etTotalUnits"
+        android:layout_below="@+id/etTotalUnits"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:textAlignment="viewEnd"
+        android:inputType="number"/>
+
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/save"/>
+
+</RelativeLayout>

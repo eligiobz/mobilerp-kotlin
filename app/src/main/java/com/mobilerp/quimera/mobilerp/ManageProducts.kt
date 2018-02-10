@@ -2,26 +2,23 @@ package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
+import com.beust.klaxon.JsonObject
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.offline_mode.*
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
+import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
-import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
-import kotlinx.android.synthetic.main.fragment_stock_update.*
-import org.json.JSONException
-import org.json.JSONObject
+import kotlinx.android.synthetic.main.fragment_manage_products.*
 import java.util.*
 
 /**
@@ -45,7 +42,7 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  */
-class StockUpdate : Fragment(), View.OnClickListener {
+class ManageProducts : Fragment(), View.OnClickListener {
 
     internal var isNewProduct: Boolean = false
     internal var lastBarcode: String = ""
@@ -54,7 +51,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
     internal lateinit var log: OperationsLog
     internal lateinit var beepManager: BeepManager
     internal lateinit var settings: CameraSettings
-    internal lateinit var apiServer: APIServer
+    internal lateinit var server: Server
 
 
     private val callback = object : BarcodeCallback {
@@ -77,7 +74,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_stock_update, container, false)
+        return inflater!!.inflate(R.layout.fragment_manage_products, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstance: Bundle?) {
@@ -95,17 +92,17 @@ class StockUpdate : Fragment(), View.OnClickListener {
         beepManager = BeepManager(activity)
 
         //Server init
-        apiServer = APIServer(context)
+        server = Server(context)
 
         // -- INIT elements to display items
 
         tvBarcode.setText(R.string.item_barcode)
         tvPrice.setText(R.string.item_price)
-        tvTotal.setText(R.string.item_total)
+        tvNewUnits.setText(R.string.item_total)
 
         etName.isEnabled = false
         etPrice.isEnabled = false
-        etTotal.isEnabled = false
+        etNewUnits.isEnabled = false
 
         // ----- END OF INIT -----
 
@@ -120,7 +117,7 @@ class StockUpdate : Fragment(), View.OnClickListener {
 
         btnSave.setOnClickListener(this)
 
-        etBarcode.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        etBarcode.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 lastBarcode = etBarcode.text.toString()
                 findLastScannedProduct(lastBarcode)
@@ -139,13 +136,14 @@ class StockUpdate : Fragment(), View.OnClickListener {
                 val db = SQLHandler.getInstance(context)
                 if (db.isDatabaseOpen) {
                     val select = Select(context)
-                    select.query = "SELECT name, price FROM Product WHERE barcode='$barcode'"
+                    select.query = "SELECT name, price FROM ProductModel WHERE barcode='$barcode'"
                     if (select.execute()) {
                         if (select.results.count > 0) {
                             Toast.makeText(context, getString(R
                                     .string.app_op_success), Toast.LENGTH_LONG).show()
                             etName.setText(select.results.getString(0))
                             etPrice.setText(select.results.getFloat(1).toString())
+//                            etExistingUnits.setText(select.results.gets)
                             enableEntries()
                         } else {
                             isNewProduct = true
@@ -157,31 +155,20 @@ class StockUpdate : Fragment(), View.OnClickListener {
                 }
             }
             false -> {
-                apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + barcode, null, object : VolleyCallback {
-                    override fun onSuccessResponse(result: JSONObject) {
-                        isNewProduct = false
-                        try {
-                            val _itms = result.getJSONArray("mobilerp")
-                            val _itm = _itms.getJSONObject(0)
-                            etName.setText(_itm.getString("name"))
-                            etPrice.setText(_itm.getString("price"))
+                server.getRequest(URLs.FIND_PRODUCT + "${appState.currentStore}/$barcode",
+                        success = {response ->
+                            cleanEntries()
+                            val product = response.map{ ProductModel(response.obj("mobilerp")!!) }
+                            etName.setText(product[0].name)
+                            etPrice.setText(product[0].price.toString())
+                            etTotalUnits.setText(product[0].units.toString())
+                            etBarcode.setText(product[0].barcode)
                             enableEntries()
-                        } catch (e: JSONException) {
-                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
-                            e.printStackTrace()
-                        }
-                    }
-
-                    override fun onErrorResponse(error: VolleyError) {
-                        val response = error.networkResponse
-                        if (response.statusCode == 404) {
-                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
+                        },
+                        failure = {
+                            server.genericErrors(it.response.statusCode)
                             isNewProduct = true
                             enableEntries()
-                        } else {
-                            apiServer.genericErrors(response.statusCode)
-                        }
-                    }
                 })
             }
         }
@@ -191,116 +178,106 @@ class StockUpdate : Fragment(), View.OnClickListener {
         val data = prepareJSON()
         when (isOfflineEnabled) {
             true -> {
-                when (isNewProduct) {
-                    true -> {
-                        log.add(Request.Method.POST, URLs.NEW_PRODUCT, data)
-                        cleanEntries()
-                        val insert = Insert(context)
-                        try {
-                            val q = String.format(Locale.getDefault(), "INSERT INTO Product(barcode," +
-                                    " name, " +
-                                    "price, " +
-                                    "units) " +
-                                    "values('%s', '%s', %s, %s);", data.getString("barcode"),
-                                    data.getString("name"), data.getString("price"), data
-                                    .getString("units"))
-                            insert.query = q
-                            insert.execute()
-                            Log.d("SQL Query :: ", insert.query)
-                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-                        } catch (e: JSONException) {
-                            Log.d("JSON_EXEC", e.message)
-                        }
-                    }
-                    false -> {
-                        log.add(Request.Method.PUT, URLs
-                                .UPDATE_PRODUCT + lastBarcode, data)
-                        cleanEntries()
-                        val update = Update(context)
-                        try {
-                            val q = String.format(Locale.getDefault(), "UPDATE Product " +
-                                    "SET name='%s', " +
-                                    "price=%s, " +
-                                    "units=%s " +
-                                    "WHERE barcode='%s';",
-                                    data.getString("name"),
-                                    data.getString("price"),
-                                    data.getString("units"),
-                                    data.getString("barcode"))
-                            update.query = q
-                            update.execute()
-                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-                        } catch (e: JSONException) {
-                            Toast.makeText(context, R.string.app_op_fail, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
+//                when (isNewProduct) {
+//                    true -> {
+//                        log.add(Request.Method.POST, URLs.NEW_PRODUCT, data)
+//                        cleanEntries()
+//                        val insert = Insert(context)
+//                        try {
+//                            val q = String.format(Locale.getDefault(), "INSERT INTO ProductModel(barcode," +
+//                                    " name, " +
+//                                    "price, " +
+//                                    "units) " +
+//                                    "values('%s', '%s', %s, %s);", data.getString("barcode"),
+//                                    data.getString("name"), data.getString("price"), data
+//                                    .getString("units"))
+//                            insert.query = q
+//                            insert.execute()
+//                            Log.d("SQL Query :: ", insert.query)
+//                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
+//                        } catch (e: JSONException) {
+//                            Log.d("JSON_EXEC", e.message)
+//                        }
+//                    }
+//                    false -> {
+//                        log.add(Request.Method.PUT, URLs
+//                                .UPDATE_PRODUCT + lastBarcode, data)
+//                        cleanEntries()
+//                        val update = Update(context)
+//                        try {
+//                            val q = String.format(Locale.getDefault(), "UPDATE ProductModel " +
+//                                    "SET name='%s', " +
+//                                    "price=%s, " +
+//                                    "units=%s " +
+//                                    "WHERE barcode='%s';",
+//                                    data.getString("name"),
+//                                    data.getString("price"),
+//                                    data.getString("units"),
+//                                    data.getString("barcode"))
+//                            update.query = q
+//                            update.execute()
+//                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
+//                        } catch (e: JSONException) {
+//                            Toast.makeText(context, R.string.app_op_fail, Toast.LENGTH_LONG).show()
+//                        }
+//                    }
+//                }
             }
             false -> {
                 when (isNewProduct) {
-                    true -> apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.NEW_PRODUCT,
-                            data, object : VolleyCallback {
-                        override fun onSuccessResponse(result: JSONObject) {
+                    true -> {
+                        server.postRequest(URLs.NEW_PRODUCT, data, success = {
                             cleanEntries()
-                        }
-
-                        override fun onErrorResponse(error: VolleyError) {
-                            apiServer.genericErrors(error.networkResponse.statusCode)
-
-                        }
-                    })
-                    false -> apiServer.getResponse(Request.Method.PUT, URLs.BASE_URL + URLs
-                            .UPDATE_PRODUCT + lastBarcode,
-                            data, object : VolleyCallback {
-                        override fun onSuccessResponse(result: JSONObject) {
+                        }, failure = {
+                            server.genericErrors(it.response.statusCode)
+                        })
+                        isNewProduct = false
+                    }
+                    false ->
+                        server.putRequest(URLs.UPDATE_PRODUCT + lastBarcode, data, success = {
                             cleanEntries()
-                        }
-
-                        override fun onErrorResponse(error: VolleyError) {
-                            apiServer.genericErrors(error.networkResponse.statusCode)
-                        }
-                    })
+                        }, failure = {
+                            server.genericErrors(it.response.statusCode)
+                        })
                 }
             }
         }
     }
 
-    private fun prepareJSON(): JSONObject {
-        val data = JSONObject()
-        try {
-            data.put("name", etName.text)
-            data.put("price", etPrice.text)
-            data.put("units", etTotal.text)
-            data.put("token", Calendar.getInstance().time.toString())
-            data.put("storeid", AppState.getInstance(context).currentStore)
-            if (isNewProduct)
-                data.put("barcode", lastBarcode)
-            return data
-        } catch (ex: JSONException) {
-            Log.d("JSON_ERROR", ex.toString())
-        }
-
+    private fun prepareJSON(): JsonObject {
+        val data = JsonObject()
+        data.put("name", etName.text.toString())
+        data.put("price", etPrice.text.toString())
+        data.put("units", etNewUnits.text.toString())
+        data.put("token", Calendar.getInstance().time.toString())
+        data.put("storeid", AppState.getInstance(context).currentStore)
+        if (isNewProduct)
+            data.put("barcode", lastBarcode)
         return data
     }
 
     private fun enableEntries() {
         etPrice.isEnabled = true
-        etTotal.isEnabled = true
+        etNewUnits.isEnabled = true
         etName.isEnabled = true
-        if (isNewProduct)
+        if (isNewProduct) {
             etName.setText(R.string.new_item)
-        etName.requestFocus()
+            etName.requestFocus()
+        } else{
+            etNewUnits.requestFocus()
+        }
     }
 
     private fun cleanEntries() {
         Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
         etName.setText("")
         etPrice.setText("")
-        etTotal.setText("")
+        etNewUnits.setText("")
         etBarcode.setText("")
+        etTotalUnits.setText("")
         etName.isEnabled = false
         etPrice.isEnabled = false
-        etTotal.isEnabled = false
+        etNewUnits.isEnabled = false
     }
 
     override fun onResume() {

@@ -48,9 +48,7 @@ import java.util.*
 class SalesFragment : Fragment() {
 
     private var totalSale: Double = 0.0
-
-    internal var lastBarcode: String = ""
-    internal var isNewProduct: Boolean = false
+    internal var barcode: String = ""
 
     private lateinit var items: ArrayList<SalesItem>
     private lateinit var appState: AppState
@@ -61,12 +59,12 @@ class SalesFragment : Fragment() {
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
-            if (result.text == null || result.text == lastBarcode) {
+            if (result.text == null || result.text == barcode) {
                 return
             }
 
-            lastBarcode = result.text
-            barcodePreview.setStatusText(lastBarcode)
+            barcode = result.text
+            barcodePreview.setStatusText(barcode)
             beepManager.playBeepSoundAndVibrate()
             findLastScannedProduct()
         }
@@ -114,12 +112,13 @@ class SalesFragment : Fragment() {
     }
 
     private fun addProduct() {
-        val amount = Integer.parseInt(tvAmountValue.text.toString())
-        val price = java.lang.Double.parseDouble(tvPriceValue.text.toString())
-        val name = tvName.text.toString()
-        items.add(SalesItem(lastBarcode, amount, price, name))
+        val amount = Integer.parseInt(etTotalUnits.text.toString())
+        val price = java.lang.Double.parseDouble(etPrice.text.toString())
+        val name = etName.text.toString()
+        items.add(SalesItem(barcode, amount, price, name))
         totalSale += items[items.size - 1].price!! * amount
-        tvTotalSaleValue.text = totalSale.toString()
+        etTotalSale.setText(totalSale.toString())
+        cleanEntries()
         Toast.makeText(context, tvName.text.toString() + " " + getString(R.string.added), Toast.LENGTH_LONG).show()
     }
 
@@ -135,52 +134,52 @@ class SalesFragment : Fragment() {
 
     private fun findLastScannedProduct() {
         // -- OFFLINE SEARCH --
-        if (appState.isOfflineMode) {
-            val db = SQLHandler.getInstance(getContext())
-            if (db.isDatabaseOpen) {
-                val select = Select(getContext())
-                select.query = "SELECT name, price FROM Product WHERE barcode='$lastBarcode'"
-                if (select.execute()) {
-                    if (select.results.count > 0) {
-                        Toast.makeText(getContext(), getString(R
-                                .string.app_op_success), Toast.LENGTH_LONG).show()
-                        tvName.text = select.results.getString(0)
-                        tvPriceValue.text = select.results.getFloat(1).toString()
-                        tvAmountValue.setText("1")
+        when (appState.isOfflineMode) {
+            true -> {
+                val db = SQLHandler.getInstance(getContext())
+                if (db.isDatabaseOpen) {
+                    val select = Select(getContext())
+                    select.query = "SELECT name, price FROM ProductModel WHERE barcode='$barcode'"
+                    if (select.execute()) {
+                        if (select.results.count > 0) {
+                            Toast.makeText(getContext(), getString(R
+                                    .string.app_op_success), Toast.LENGTH_LONG).show()
+                            tvName.text = select.results.getString(0)
+                            tvPrice.text = select.results.getFloat(1).toString()
+                            tvTotalUnits.text = "1"
+                        }
                     }
                 }
             }
-        } else {
-            // -- ONLINE SEARCH --
-            apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + lastBarcode, null, object : VolleyCallback {
-                override fun onSuccessResponse(result: JSONObject) {
-                    isNewProduct = false
-                    try {
-                        val items_ = result.getJSONArray("mobilerp")
-                        val item_ = items_.getJSONObject(0)
-                        tvName.text = item_.getString("name")
-                        tvPriceValue.text = item_.getString("price")
-                        tvAmountValue.setText("1")
-                    } catch (e: JSONException) {
-                        Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
-                        e.printStackTrace()
+            false -> {
+                apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + "${appState.currentStore}/$barcode", null, object : VolleyCallback {
+                    override fun onSuccessResponse(result: JSONObject) {
+                        try {
+                            val item_ = result.getJSONObject("mobilerp")
+                            etBarcode.setText(item_.getString("barcode"))
+                            etName.setText(item_.getString("name"))
+                            etPrice.setText(item_.getString("price"))
+                            etTotalUnits.setText("1")
+                        } catch (e: JSONException) {
+                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
+                            e.printStackTrace()
+                        }
                     }
 
-                }
-
-                override fun onErrorResponse(error: VolleyError) {
-                    apiServer.genericErrors(error.networkResponse.statusCode)
-                }
-            })
+                    override fun onErrorResponse(error: VolleyError) {
+                        apiServer.genericErrors(error.networkResponse.statusCode)
+                    }
+                })
+            }
         }
     }
 
     private fun cleanEntries() {
         Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
-        tvName.text = ""
-        tvPriceValue.text = ""
-        tvTotalSaleValue.text = ""
-        tvAmountValue.setText("")
+        etName.setText("")
+        etPrice.setText("")
+//        tvTotalSale.text = ""
+        etTotalUnits.setText("")
     }
 
     override fun onResume() {

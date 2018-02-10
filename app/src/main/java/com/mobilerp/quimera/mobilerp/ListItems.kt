@@ -5,22 +5,20 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.volley.Request
-import com.android.volley.VolleyError
+import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.online_mode.APIServer
+import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
-import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
-import com.mobilerp.quimera.mobilerp.online_mode.iterator
 import kotlinx.android.synthetic.main.fragment_list_items.*
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 class ListItems : Fragment() {
 
-    internal lateinit var items: ArrayList<ItemListModel>
+    internal lateinit var items: ArrayList<ProductModel>
     internal lateinit var apiServer: APIServer
     private var endpoint: String? = null
+    internal lateinit var server: Server
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +26,7 @@ class ListItems : Fragment() {
             endpoint = arguments.getString("ENDPOINT")
 
         apiServer = APIServer(context)
+        server = Server(context)
         items = ArrayList()
 
         when (endpoint) {
@@ -49,46 +48,29 @@ class ListItems : Fragment() {
     }
 
     private fun listProducts() {
-        val url = URLs.BASE_URL + URLs.LIST_PRODUCTS + AppState.getInstance(context).currentStore
-        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
-            override fun onSuccessResponse(result: JSONObject) {
-                try {
-                    items.add(ItemListModel("title"))
-                    for (item_: JSONObject in result.getJSONArray("mobilerp"))
-                        //name, price, total
-                        items.add(ItemListModel(item_.getString("name"), item_.getDouble("price"), item_.getInt("units")))
+        server.getRequest(URLs.LIST_PRODUCTS + AppState.getInstance(context).currentStore,
+                success = { response ->
+                    items.add(ProductModel("title"))
+                    for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
+                        items.add(ProductModel(item))
+                    }
 
                     itemList.adapter = ItemListAdapter(context, items, R.layout.item_row)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onErrorResponse(error: VolleyError) {
-                apiServer.genericErrors(error.networkResponse.statusCode)
-            }
+                }, failure = { error ->
+            server.genericErrors(error.response.statusCode)
         })
     }
 
     private fun listDepleted() {
-        val url = URLs.BASE_URL + URLs.LIST_DEPLETED + AppState.getInstance(context).currentStore
-        apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
-            override fun onSuccessResponse(result: JSONObject) {
-                try {
-                    items.add(ItemListModel("title_"))
-                    for (item_: JSONObject in result.getJSONArray("mobilerp"))
-                        //name, price, total
-                        items.add(ItemListModel(item_.getString("name"), item_.getString("date")))
-
+        server.getRequest(URLs.LIST_DEPLETED + AppState.getInstance(context).currentStore,
+                success = { response ->
+                    items.add(ProductModel("title"))
+                    for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
+                        items.add(ProductModel(item))
+                    }
                     itemList.adapter = ItemListAdapter(context, items, R.layout.item_row)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onErrorResponse(error: VolleyError) {
-                apiServer.genericErrors(error.networkResponse.statusCode)
-            }
+                }, failure = { error ->
+            server.genericErrors(error.response.statusCode)
         })
     }
 

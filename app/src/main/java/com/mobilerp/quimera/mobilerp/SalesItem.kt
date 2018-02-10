@@ -28,7 +28,7 @@ class SalesItem : Parcelable {
     var name: String
     var price: Double? = null
 
-    var TABLE_NAME = "Product"
+    var TABLE_NAME = "ProductModel"
     var COLUMN_NAME_BARCODE = "barcode"
     var COLUMN_NAME_AMOUNT = "amount"
     var COLUMN_NAME_PRICE = "price"

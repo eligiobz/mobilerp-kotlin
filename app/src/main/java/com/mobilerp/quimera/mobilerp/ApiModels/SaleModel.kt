@@ -1,11 +1,7 @@
-package com.mobilerp.quimera.mobilerp.online_mode
-
-import com.android.volley.VolleyError
-import org.json.JSONArray
-import org.json.JSONObject
+package com.mobilerp.quimera.mobilerp.ApiModels
 
 /**
- * Created by Eligio Becerra on 04/01/2018.
+ * Created by Eligio Becerra on 10/02/2018.
  * Copyright (C) 2017 Eligio Becerra
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,15 +17,5 @@ import org.json.JSONObject
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-interface VolleyCallback {
-    fun onSuccessResponse(result: JSONObject)
-
-    fun onErrorResponse(error: VolleyError)
+class SaleModel {
 }
-
-/**
- * Allow us to iterate using foreach
- */
-operator fun JSONArray.iterator(): Iterator<JSONObject>
-        = (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
