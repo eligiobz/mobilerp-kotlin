@@ -17,8 +17,8 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.TabHost
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
+import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.ApiModels.StoreModel
 import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
 import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
 import com.mobilerp.quimera.mobilerp.online_mode.*
@@ -26,14 +26,11 @@ import kotlinx.android.synthetic.main.fragment_all_settings.*
 import kotlinx.android.synthetic.main.fragment_drug_stores_settings.*
 import kotlinx.android.synthetic.main.fragment_server_settings.*
 import kotlinx.android.synthetic.main.fragment_users_settings.*
-import org.json.JSONException
-import org.json.JSONObject
 
 class AllSettings : Fragment() {
 
     private val set_manager : SettingsManager by lazy { SettingsManager.getInstance(context) }
-    private val apiServer : APIServer by lazy { APIServer(context) }
-    private val server: APIServer by lazy { APIServer(context) }
+    private val server: Server by lazy { Server(context) }
     private val appState: AppState by lazy { AppState.getInstance(context) }
     private var server_address: String? = null
     private var use_offline_mode: Boolean = false
@@ -60,19 +57,14 @@ class AllSettings : Fragment() {
             dialog.setView(input)
 
             dialog.setPositiveButton("OK") { dialog, which ->
-                var data = JSONObject()
+                val data = JsonObject()
                 data.put("name", input.text.toString())
-                apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.ADD_STORE, data,
-                        object : VolleyCallback {
-                            override fun onSuccessResponse(result: JSONObject) {
-                                Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
-                                loadList()
-                            }
-
-                            override fun onErrorResponse(error: VolleyError) {
-                                apiServer.genericErrors(error.networkResponse.statusCode)
-                            }
-                        })
+                server.postRequest(URLs.ADD_STORE, data, success = {
+                    Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
+                    loadList()
+                }, failure = {
+                    server.genericErrors(it.response.statusCode)
+                })
             }
 
             dialog.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
@@ -93,30 +85,21 @@ class AllSettings : Fragment() {
     }
 
     private fun loadList(){
-        apiServer.getResponse(Request.Method.GET, URLs.BASE_URL+URLs.LIST_DRUGSTORES, null, object : VolleyCallback {
-            override fun onSuccessResponse(result: JSONObject) {
-
-                try {
-                    val store_list: ArrayList<OptionListModel> = ArrayList()
-                    for (item_: JSONObject in result.getJSONArray("mobilerp")) {
-                        var icon: Int = -1
-                        when (item_.getInt("id")) {
-                            appState.currentStore -> icon = R.mipmap.ic_launcher_round
-                            else -> icon = R.mipmap.ic_launcher
-                        }
-                        store_list.add(OptionListModel(icon, item_.getString("name"), item_
-                                .getString("id")))
-
-                        drug_store_list.adapter = OptionListAdapter(context, store_list)
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
+        server.getRequest(URLs.LIST_DRUGSTORES, success = { model ->
+            val storeList : ArrayList<OptionListModel> = ArrayList()
+            for (store_data : JsonObject in model.array<JsonObject>("mobilerp")!!){
+                val store = StoreModel(store_data)
+                var icon: Int = -1
+                when (store.id) {
+                    appState.currentStore -> icon = R.mipmap.ic_launcher_round
+                    else -> icon = R.mipmap.ic_launcher
                 }
-            }
+                storeList.add(OptionListModel(icon, store.name!!, store.id.toString()))
 
-            override fun onErrorResponse(error: VolleyError) {
-                apiServer.genericErrors(error.networkResponse.statusCode)
+                drug_store_list.adapter = OptionListAdapter(context, storeList)
             }
+        }, failure = {
+            server.genericErrors(it.response.statusCode)
         })
     }
 

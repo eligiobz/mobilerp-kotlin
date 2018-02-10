@@ -17,5 +17,6 @@ package com.mobilerp.quimera.mobilerp.ApiModels
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-class SaleModel {
+class SaleModel (var products : List<ProductModel>) {
+
 }

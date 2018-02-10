@@ -3,8 +3,8 @@ package com.mobilerp.quimera.mobilerp.ApiModels
 import com.beust.klaxon.JsonObject
 
 /**
- * Created by Eligio Becerra on 08/02/2018.
- * Copyright (C) 2018 Eligio Becerra
+ * Created by Eligio Becerra on 10/02/2018.
+ * Copyright (C) 2017 Eligio Becerra
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,28 +20,14 @@ import com.beust.klaxon.JsonObject
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ProductModel {
+class StoreModel {
 
-    var barcode: String? = null
-    var name: String? = null
-    var price: Double? = null
-    var units: Int? = null
-    var storeid: Int? = null
-    var date: String? = null
+    var id : Int? = null
+    var name : String? = null
 
-    var isGroupHeader = false
-
-    constructor(title: String)  {
-        this.name = title
-        this.isGroupHeader = true
-    }
-
-    constructor (jsonObject: JsonObject) {
-        this.barcode = jsonObject.string("barcode")
+    constructor(jsonObject : JsonObject){
+        this.id = jsonObject.int("id")
         this.name = jsonObject.string("name")
-        this.price = jsonObject.double("price")
-        this.units = jsonObject.int("units")
-        this.storeid = jsonObject.int("storeid")
-        this.date = jsonObject.string("date")
     }
+
 }
