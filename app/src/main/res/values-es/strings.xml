@@ -102,5 +102,14 @@
     <string name="srv_err_406_not_accepted">Petición inaceptable</string>
     <string name="srv_err_405_not_allowed">Metodo no permitido</string>
     <string name="srv_err_428_dup_precond">Duplicated operation</string>
+    <string name="exiting_units">Unidades exisitentes</string>
+    <string name="srv_err_409_conflict">Conflicto con datos enviados</string>
+    <string name="srv_err_412_precondition_failed">Precondicion de datos incumplida</string>
+    <string name="srv_err_400_bad_request">Peticion malformada</string>
+    <string name="service">Servicio</string>
+    <string name="add_service">Agregar servicio</string>
+    <string name="service_name">Nombre del servicio</string>
+    <string name="list_name">Listado de servicios</string>
+    <string name="service_code">Codigo de servicio</string>
 
 </resources>

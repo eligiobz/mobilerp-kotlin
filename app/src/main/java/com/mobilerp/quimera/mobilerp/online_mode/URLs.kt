@@ -25,24 +25,37 @@ class URLs protected constructor() {
 
     companion object {
 
-        // v1.0
-        val LOGIN = "api/v1.0/user/checkLogin/" //Done
-        val DAILY_SALES_REPORT = "api/v1.0/dailyReport/" //Done
-        val MONTHLY_SALES_REPORT = "api/v1.0/monthlyReport/" //Done
-        val DEPLETED_ITEMS_REPORT = "api/v1.0/listDepletedProducts/" //Done
-        val SALES_REPORT_PDF = "api/v1.0/getReport/salesreport.pdf" //Done
-        val DEPLETED_REPORT_PDF = "api/v1.0/getReport/depletedreport.pdf" //Done
-        val DB_BACKUP = "api/v1.0/dbBackup/" //Done
+        private const val ApiVersion = "v1.1"
 
-        // v1.1
-        val LIST_DRUGSTORES = "api/v1.1/listDrugstores/" //Done
-        val ADD_STORE = "api/v1.1/addDrugstore/" //Done
-        val LIST_PRODUCTS = "api/v1.1/listProducts/" //Done
-        val LIST_DEPLETED = "api/v1.1/listDepletedProducts/"
-        val FIND_PRODUCT = "api/v1.1/findProduct/" //Done
-        val NEW_PRODUCT = "api/v1.1/newProduct/" //Done
-        val UPDATE_PRODUCT = "api/v1.1/updateProduct/" //Done
-        val MAKE_SALE = "api/v1.1/makeSale/"
+        const val LOGIN = "api/$ApiVersion/user/check_login/" //Done
+
+        // Reports
+        const val DAILY_SALES_REPORT = "api/$ApiVersion/dailyReport/" //Done
+        const val MONTHLY_SALES_REPORT = "api/$ApiVersion/monthlyReport/" //Done
+        const val DEPLETED_ITEMS_REPORT = "api/$ApiVersion/list_depleted_products/" //Done
+        const val SALES_REPORT_PDF = "api/$ApiVersion/getReport/salesreport.pdf" //Done
+        const val DEPLETED_REPORT_PDF = "api/$ApiVersion/getReport/depletedreport.pdf" //Done
+        const val DB_BACKUP = "api/$ApiVersion/dbBackup/" //Done
+
+        // Stores
+        const val LIST_DRUGSTORES = "api/$ApiVersion/list_drugstores/" //Done
+        const val ADD_STORE = "api/$ApiVersion/add_drugstore/" //Done
+
+        // Products 
+        const val NEW_PRODUCT = "api/$ApiVersion/add_product/" //Done
+        const val UPDATE_PRODUCT = "api/$ApiVersion/update_product/" //Done
+        val FIND_PRODUCT = "api/$ApiVersion/find_product/" //Done
+        const val LIST_PRODUCTS = "api/$ApiVersion/list_products/" //Done
+        const val LIST_DEPLETED = "api/$ApiVersion/list_depleted_products/"
+
+        // Services
+        const val NEW_SERVICE = "api/$ApiVersion/add_service/" //Done
+        const val UPDATE_SERVICE = "api/$ApiVersion/update_service/" //Done
+        const val FIND_SERVICE = "api/$ApiVersion/find_service/" //Done
+        const val LIST_SERVICES = "api/$ApiVersion/list_services/" //Done
+
+        // Sales
+        const val MAKE_SALE = "api/$ApiVersion/make_sale/"
         var BASE_URL: String? = null
 
         private var instance: URLs? = null

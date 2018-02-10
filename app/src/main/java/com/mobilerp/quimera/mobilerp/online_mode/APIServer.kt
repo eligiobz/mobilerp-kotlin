@@ -64,12 +64,15 @@ class APIServer(internal var context: Context) {
     fun genericErrors(errorCode: Int) {
         val message: Int
         when (errorCode) {
+            400 -> message = R.string.srv_err_400_bad_request
             401 -> message = R.string.srv_err_401_access_denied
-            500 -> message = R.string.srv_err_500_server_error
             404 -> message = R.string.srv_err_404_not_found
             405 -> message = R.string.srv_err_405_not_allowed
             406 -> message = R.string.srv_err_406_not_accepted
+            409 -> message = R.string.srv_err_409_conflict
+            412 -> message = R.string.srv_err_412_precondition_failed
             428 -> message = R.string.srv_err_428_dup_precond
+            500 -> message = R.string.srv_err_500_server_error
             else -> message = R.string.srv_err_unknown
         }
 

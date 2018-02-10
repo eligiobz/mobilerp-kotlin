@@ -58,7 +58,11 @@
     <string name="drug_store_list">Drugstores list</string>
     <string name="drugstores">Drugstores</string>
     <string name="add_store">Add store</string>
-
+    <string name="service">Service</string>
+    <string name="add_service">Add service</string>
+    <string name="service_name">Service name</string>
+    <string name="list_services">Services list</string>
+    <string name="service_code">Service code</string>
 
     <!-- Misc -->
     <string name="database_name">mobilerp.db</string>
@@ -88,9 +92,16 @@
     <string name="error_saving_operation">Error saving operation for remote logging</string>
 
     <!-- Server Messages -->
+    <string name="srv_err_400_bad_request">Malformed data in request</string>
+    <string name="srv_err_401_access_denied">Access denied</string>
     <string name="srv_err_404_not_found">Item not found</string>
+    <string name="srv_err_405_not_allowed">Method not allowed</string>
+    <string name="srv_err_406_not_accepted">Unacceptable request</string>
+    <string name="srv_err_409_conflict">Data conflict</string>
+    <string name="srv_err_412_precondition_failed">Data precondition failed</string>
+
+    <string name="srv_err_428_dup_precond">Duplicated operation</string>
     <string name="srv_err_500_server_error">Server error</string>
-    <string name="srv_err_401_access_denied">Server error: Access denied</string>
     <string name="srv_err_unknown">Unknown server error</string>
     <string name="srv_op_success">Server Response :: Success</string>
     <string name="srv_op_fail">Server Response :: Failed</string>
@@ -103,10 +114,7 @@
     <string name="app_op_success">Operation Success</string>
     <string name="app_op_fail">Operation Failed</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="srv_err_405_not_allowed">Method not allowed</string>
-    <string name="srv_err_406_not_accepted">Unacceptable request</string>
-    <string name="srv_err_428_dup_precond">Duplicated operation</string>
+
+    <string name="exiting_units">Exisiting units</string>
 
 </resources>

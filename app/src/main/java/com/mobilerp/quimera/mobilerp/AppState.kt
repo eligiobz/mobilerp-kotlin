@@ -27,24 +27,29 @@ class AppState private constructor() {
     private var offlineMode: Boolean = false
     private var hasPendingOperations: Boolean = false
     private var current_store: Int = -1
+    private var set_manager: SettingsManager
 
     var currentStore: Int
-        get() = current_store
+        get() {
+            return set_manager.getInt("current_store")
+        }
         set(v) {
-            SettingsManager.getInstance(context!!).saveInt("current_store", v)
+            set_manager.saveInt("current_store", v)
             current_store = v
         }
 
     var isOfflineMode: Boolean
-        get() = offlineMode
+        get() {
+            return set_manager.getBoolean("Use offline mode")!!
+        }
         set(v) {
-            SettingsManager.getInstance(context!!).saveBoolean(context!!.getString(R.string
+            set_manager.saveBoolean(context!!.getString(R.string
                     .use_offline_mode), v)
             offlineMode = v
         }
 
     init {
-        val set_manager = SettingsManager.getInstance(context!!)
+        set_manager = SettingsManager.getInstance(context!!)
         offlineMode = set_manager.getBoolean(context!!.getString(R.string.use_offline_mode))!!
         hasPendingOperations = set_manager.getBoolean(context!!
                 .getString(R.string.has_pending_ops))!!

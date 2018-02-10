@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.offline_mode.Insert
 import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
 import com.mobilerp.quimera.mobilerp.offline_mode.Select
@@ -22,6 +23,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -56,7 +58,7 @@ class FinishSell : Fragment() {
     // Objects
     private var items: ArrayList<SalesItem>? = null
     private lateinit var itemListAdapter: ItemListAdapter
-    private lateinit var itemsListModel: ArrayList<ItemListModel>
+    private lateinit var itemsListModel: ArrayList<ProductModel>
     private lateinit var log: OperationsLog
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -164,13 +166,14 @@ class FinishSell : Fragment() {
         initUI()
         if (items != null) {
             var total_sale = 0.0
-            for (i in items!!.indices) {
-                itemsListModel.add(ItemListModel(items!![i].name, items!![i].price, items!![i].amount))
-                total_sale += items!![i].price!! * items!![i].amount
-            }
-            itemListAdapter = ItemListAdapter(context, itemsListModel, R.layout.item_sales_row)
-            itemSalesList.adapter = itemListAdapter
-            totalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
+//            for (i in items!!.indices) {
+//                itemsListModel.add(ItemListModel(items!![i].name, items!![i].price, items!![i]
+//                        .amount))
+//                total_sale += items!![i].price!! * items!![i].amount
+//            }
+//            itemListAdapter = ItemListAdapter(context, itemsListModel, R.layout.item_sales_row)
+//            itemSalesList.adapter = itemListAdapter
+//            totalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
         } else {
             totalSale.setText(R.string.data_fail)
         }

@@ -109,15 +109,14 @@ class AdminFragment : Fragment() {
     }
 
     private fun pharmacyTabSetup() {
-
         pharmacyList = view!!.findViewById(R.id.lvPharmacyOptions)
         pharmacyListAdapter = OptionListAdapter(context, pharmacyList())
         pharmacyList.adapter = pharmacyListAdapter
+        val manager = fragmentManager
         pharmacyList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             when (position) {
                 0 -> {
-                    val fragment: Fragment = StockUpdate()
-                    val manager = fragmentManager
+                    val fragment: Fragment = ManageProducts()
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
@@ -126,7 +125,13 @@ class AdminFragment : Fragment() {
                 1, 2 -> {
                     val fragment = ListItems.newInstance(pharmacyListAdapter
                             .getItem(position).endpoint!!)
-                    val manager = fragmentManager
+                    manager.beginTransaction()
+                            .replace(R.id.main_content, fragment)
+                            .addToBackStack("Admin")
+                            .commit()
+                }
+                3 -> {
+                    val fragment: Fragment = ManageServices()
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
@@ -145,7 +150,11 @@ class AdminFragment : Fragment() {
                 .string.stock_input), "UPDATESTOCK"))
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.drug_list), "LISTPRODUCTS"))
         models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.depleted_stock), "LISTDEPLETED"))
-
+        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.add_service),
+                "ADDSERVICE"))
+        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string
+                .list_services),
+                "LISTSERVICES"))
         return models
     }
 
