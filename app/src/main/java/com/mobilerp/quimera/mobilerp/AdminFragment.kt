@@ -66,7 +66,7 @@ class AdminFragment : Fragment() {
         salesList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
-                    val fragment: Fragment = today_statement()
+                    val fragment: Fragment = DisplayStatements()
                     val manager = fragmentManager
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)

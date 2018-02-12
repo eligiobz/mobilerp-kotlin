@@ -3,7 +3,7 @@ package com.mobilerp.quimera.mobilerp.online_mode
 import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
-import com.mobilerp.quimera.mobilerp.User
+import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -43,8 +43,8 @@ class DownloadFileFromURL(private val listener: FileDownloadListener) : AsyncTas
         try {
             val url = URL(f_url[0])
             val connection = url.openConnection() as HttpURLConnection
-            Log.d("AUTH/HEADER", User._getInstance().getAuthString())
-            connection.setRequestProperty("Authorization", User._getInstance().getAuthString())
+
+            connection.setRequestProperty("Authorization", "UserModel._getInstance().getAuthString()")
             val responseCode = connection.responseCode
             if (responseCode == 200) {
                 connection.connect()

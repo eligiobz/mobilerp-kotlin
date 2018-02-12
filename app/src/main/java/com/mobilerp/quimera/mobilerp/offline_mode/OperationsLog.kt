@@ -4,13 +4,8 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import com.android.volley.VolleyError
 import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.SettingsManager
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
-import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.util.*
@@ -40,7 +35,7 @@ class OperationsLog protected constructor() {
     internal var file: File
     internal lateinit var output: FileOutputStream
     internal var input: FileInputStream? = null
-    internal lateinit var apiServer: APIServer
+
 
     init {
         filename = context.getString(R.string.logfile)
@@ -98,25 +93,25 @@ class OperationsLog protected constructor() {
             Toast.makeText(context, "Nothing done", Toast.LENGTH_LONG).show()
             return
         }
-        apiServer = APIServer(context)
-        for (op in operations) {
-            val `object` = JSONObject()
-            val _op = op.split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            try {
-                apiServer.getResponse(Integer.valueOf(_op[0]), URLs.BASE_URL + _op[1], JSONObject(_op[2]), object : VolleyCallback {
-                    override fun onSuccessResponse(result: JSONObject) {
-                        Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_SHORT).show()
-                    }
+//        apiServer = APIServer(context)
+//        for (op in operations) {
+//            val `object` = JSONObject()
+//            val _op = op.split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+//            try {
+//                apiServer.getResponse(Integer.valueOf(_op[0]), URLs.BASE_URL + _op[1], JSONObject(_op[2]), object : VolleyCallback {
+//                    override fun onSuccessResponse(result: JSONObject) {
+//                        Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_SHORT).show()
+//                    }
+//
+//                    override fun onErrorResponse(error: VolleyError) {
+//                        Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
 
-                    override fun onErrorResponse(error: VolleyError) {
-                        Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_SHORT).show()
-                    }
-                })
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-
-        }
+//        }
     }
 
     private fun loadOperations(): ArrayList<String>? {

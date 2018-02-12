@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import kotlinx.android.synthetic.main.fragment_list_items.*
@@ -16,7 +15,6 @@ import java.util.*
 class ListItems : Fragment() {
 
     internal lateinit var items: ArrayList<ProductModel>
-    internal lateinit var apiServer: APIServer
     private var endpoint: String? = null
     internal lateinit var server: Server
 
@@ -25,7 +23,6 @@ class ListItems : Fragment() {
         if (arguments != null)
             endpoint = arguments.getString("ENDPOINT")
 
-        apiServer = APIServer(context)
         server = Server(context)
         items = ArrayList()
 

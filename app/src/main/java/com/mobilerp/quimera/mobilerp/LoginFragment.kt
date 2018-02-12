@@ -1,22 +1,16 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.support.v4.app.Fragment
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
+import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
+import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
-import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import kotlinx.android.synthetic.main.fragment_login.*
-import org.json.JSONException
-import org.json.JSONObject
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -38,10 +32,8 @@ import org.json.JSONObject
 
 class LoginFragment() : Fragment() {
 
-    internal lateinit var context: Context
-    internal lateinit var pd: ProgressDialog
-    internal lateinit var apiServer: APIServer
-    internal var user = User._getInstance()
+    private val server : Server by lazy { Server(context) }
+    internal val user : UserModel by lazy { UserModel._getInstance() }
     private lateinit var settingManager : SettingsManager
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -54,10 +46,7 @@ class LoginFragment() : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //setContentView(R.layout.fragment_login)
-        context = getContext()
-        pd = ProgressDialog(context, ProgressDialog.STYLE_SPINNER)
-        user = User._getInstance()
-        apiServer = APIServer(context)
+
         settingManager = SettingsManager.getInstance(context)
 
         val uname = settingManager.getString("username")
@@ -70,31 +59,21 @@ class LoginFragment() : Fragment() {
         btnLogin.setOnClickListener({
             user.name = etUserName.text.toString()
             user.pass = etUserPass.text.toString()
-            val url = URLs.BASE_URL + URLs.LOGIN
-            apiServer.getResponse(Request.Method.GET, url, null, object : VolleyCallback {
-                override fun onSuccessResponse(result: JSONObject) {
-                    try {
-                        if (result.getBoolean("logged")) {
-                            if (remember_user.isChecked){
-                                settingManager.saveString("username", user.name)
-                                settingManager.saveString("password", user.pass)
-                            }
-                            user.isLoginIn = true
-                            Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
-                            val intent = Intent(context, MainActivity::class.java)
-                            startActivity(intent)
-                        }
-                    } catch (e: JSONException) {
-                        Toast.makeText(context, R.string.srv_op_fail, Toast.LENGTH_LONG).show()
+            server.getRequest(URLs.LOGIN, success = {
+                if (it.string("logged") == "true"){
+                    if (remember_user.isChecked){
+                        settingManager.saveString("username", user.name!!)
+                        settingManager.saveString("password", user.pass!!)
+                        user.logged = true
+                        Toast.makeText(context, R.string.srv_op_success, Toast.LENGTH_LONG).show()
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
                     }
-
                 }
-
-                override fun onErrorResponse(error: VolleyError) {
-                    val response = error.networkResponse
-                    apiServer.genericErrors(response.statusCode)
-                }
+            }, failure = {
+                server.genericErrors(it.response.statusCode)
             })
+
         })
     }
 }

@@ -20,7 +20,7 @@ import com.beust.klaxon.JsonObject
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ProductModel {
+open class ProductModel {
 
     var barcode: String? = null
     var name: String? = null

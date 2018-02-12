@@ -5,11 +5,8 @@ import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import android.util.Log
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
 import com.mobilerp.quimera.mobilerp.R
 import com.mobilerp.quimera.mobilerp.SettingsManager
-import org.json.JSONObject
 import java.io.IOException
 import java.net.InetAddress
 import java.net.InetSocketAddress
@@ -36,22 +33,21 @@ import java.util.concurrent.TimeUnit
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ServiceDiscovery(internal val context: Context?) {
+class ServiceDiscovery(internal val context: Context) {
     internal val LOG_TAG = "NetScan"
     internal val prefsFile: String
     internal val server_addr: String
     internal val manager: SettingsManager
     internal var netPrefix: String
-    internal lateinit var wm: WifiManager
+    internal var wm: WifiManager
     internal var port: Int = 0
-    internal var apiServer: APIServer
     var isServerFound: Boolean = false
         internal set
 
     init {
         this.netPrefix = ""
         this.port = 5000
-        apiServer = APIServer(this.context!!)
+
         prefsFile = context.getString(R.string.preferences_file)
         server_addr = context.getString(R.string.server_addr)
         manager = SettingsManager.getInstance(context)
@@ -116,18 +112,7 @@ class ServiceDiscovery(internal val context: Context?) {
     }
 
     private fun testServer(url: String) {
-        Log.d(LOG_TAG, "Testing server response @ " + url)
-        apiServer.getResponse(false, Request.Method.GET, url, null, object : VolleyCallback {
-            override fun onSuccessResponse(result: JSONObject) {
-                Log.d(LOG_TAG, "VALID SERVER @ " + url)
-                val URL = URLs._getInstance()
-                URL.setBASE_URL(url)
-            }
 
-            override fun onErrorResponse(error: VolleyError) {
-                Log.d(LOG_TAG, "Why am I here? " + url)
-            }
-        })
     }
 
     private fun testPort(ip: InetAddress): Boolean {

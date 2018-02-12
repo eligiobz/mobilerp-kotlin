@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.VolleyError
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
@@ -16,12 +14,9 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
 import com.mobilerp.quimera.mobilerp.offline_mode.Select
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
+import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
-import com.mobilerp.quimera.mobilerp.online_mode.VolleyCallback
 import kotlinx.android.synthetic.main.fragment_sales.*
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 
 /**
@@ -49,11 +44,11 @@ class SalesFragment : Fragment() {
 
     private var totalSale: Double = 0.0
     internal var barcode: String = ""
+    val server : Server by lazy { Server(context) }
 
     private lateinit var items: ArrayList<SalesItem>
     private lateinit var appState: AppState
     private lateinit var settings: CameraSettings
-    internal lateinit var apiServer: APIServer
     internal lateinit var context: Context
     internal lateinit var beepManager: BeepManager
 
@@ -93,9 +88,6 @@ class SalesFragment : Fragment() {
         appState = AppState.getInstance(context)
         if (appState.isOfflineMode)
             Toast.makeText(context, R.string.offline_mode_enabled, Toast.LENGTH_LONG).show()
-
-        //Server init
-        apiServer = APIServer(context)
 
         // Init elements to display items
         addProduct.setOnClickListener { addProduct() }
@@ -152,23 +144,15 @@ class SalesFragment : Fragment() {
                 }
             }
             false -> {
-                apiServer.getResponse(Request.Method.GET, URLs.BASE_URL + URLs.FIND_PRODUCT + "${appState.currentStore}/$barcode", null, object : VolleyCallback {
-                    override fun onSuccessResponse(result: JSONObject) {
-                        try {
-                            val item_ = result.getJSONObject("mobilerp")
-                            etBarcode.setText(item_.getString("barcode"))
-                            etName.setText(item_.getString("name"))
-                            etPrice.setText(item_.getString("price"))
+                server.getRequest(URLs.FIND_PRODUCT + "${appState.currentStore}/$barcode",
+                        success = {
+                            val item = it.obj("mobilerp")!!
+                            etBarcode.setText(item.string("barcode"))
+                            etName.setText(item.string("name"))
+                            etPrice.setText(item.float("price").toString())
                             etTotalUnits.setText("1")
-                        } catch (e: JSONException) {
-                            Toast.makeText(context, R.string.srv_err_404_not_found, Toast.LENGTH_LONG).show()
-                            e.printStackTrace()
-                        }
-                    }
-
-                    override fun onErrorResponse(error: VolleyError) {
-                        apiServer.genericErrors(error.networkResponse.statusCode)
-                    }
+                        }, failure = {
+                    server.genericErrors(it.response.statusCode)
                 })
             }
         }

@@ -1,6 +1,8 @@
-package com.mobilerp.quimera.mobilerp
+package com.mobilerp.quimera.mobilerp.ApiModels
 
 import android.util.Base64
+import com.beust.klaxon.Json
+import com.beust.klaxon.JsonObject
 
 /**
  *  Created by Eligio Becerra on 04/01/2018.
@@ -20,40 +22,26 @@ import android.util.Base64
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-class User protected constructor() {
-    var isLoginIn = false
-    var name = ""
-        set(name) {
-            field = name
-            this.setAuthString()
-        }
-    var pass = ""
-        set(pass) {
-            field = pass
-            this.setAuthString()
-        }
+class UserModel protected constructor() {
 
-    private var authString = ""
+    var logged : Boolean = false
+    var name : String? = null
+    var pass : String? = null
+    var level : Int? = null
 
-    fun setAuthString() {
-        val loginEncoded = String(Base64.encode((this.name + ":" + this.pass).toByteArray(),
-                Base64.NO_WRAP))
-        authString = "Basic " + loginEncoded
-    }
-
-    fun getAuthString(): String {
-        if (authString.isEmpty())
-            this.setAuthString()
-        return authString
+    constructor(jsonObject: JsonObject) : this() {
+        this.name = jsonObject.string("name")
+        this.pass= jsonObject.string("pass")
+        this.level = jsonObject.int("level")
     }
 
     companion object {
 
-        private var instance: User? = null
+        private var instance: UserModel? = null
 
-        fun _getInstance(): User {
+        fun _getInstance(): UserModel {
             if (instance == null) {
-                instance = User()
+                instance = UserModel()
             }
             return instance!!
         }

@@ -15,7 +15,6 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.offline_mode.*
-import com.mobilerp.quimera.mobilerp.online_mode.APIServer
 import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 import kotlinx.android.synthetic.main.fragment_manage_products.*

@@ -1,20 +1,16 @@
 package com.mobilerp.quimera.mobilerp.online_mode
 
 import android.content.Context
-import android.util.Log
+import android.os.Environment
 import android.widget.Toast
-import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.rx.rx_object
-import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
+import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
 import com.mobilerp.quimera.mobilerp.R
-import com.mobilerp.quimera.mobilerp.User
-import io.reactivex.Single
+import java.io.File
 import java.nio.charset.Charset
 
 /**
@@ -37,7 +33,7 @@ import java.nio.charset.Charset
 
 class Server (val context: Context) {
 
-    private val user: User = User._getInstance()
+    private val user: UserModel = UserModel._getInstance()
 
     init{
         FuelManager.instance.basePath = URLs.BASE_URL
@@ -68,15 +64,9 @@ class Server (val context: Context) {
 
     }
 
-    private fun getProductsModel(data: String) : JsonArray<ProductModel>{
-        val parser = Parser()
-        val stringBuilder = StringBuilder(data)
-        return parser.parse(stringBuilder) as JsonArray<ProductModel>
-    }
-
     fun getRequest(url: String, success: (JsonObject) -> Unit, failure: (FuelError) -> Unit){
-        Fuel.get(url).authenticate(user.name, user.pass).responseString{
-            request, response, result ->
+        Fuel.get(url).authenticate(user.name!!, user.pass!!).responseString{
+            _, _, result ->
             val (data,error) = result
             when (error)
             {
@@ -93,11 +83,10 @@ class Server (val context: Context) {
     fun postRequest(url: String, data: JsonObject, success: (JsonObject) -> Unit, failure:
     (FuelError) -> Unit){
         Fuel.post(url)
-                .authenticate(user.name, user.pass)
+                .authenticate(user.name!!, user.pass!!)
                 .body(data.toJsonString(), Charset.forName("UTF-8"))
                 .responseString{
-                    request, response, result ->
-                    Log.d("REQUEST", request.toString())
+                    _, _, result ->
                     val (_response,error) = result
                     when (error){
                         null -> {
@@ -112,8 +101,9 @@ class Server (val context: Context) {
 
     fun putRequest(url: String, data: JsonObject, success: (JsonObject) -> Unit, failure:
     (FuelError) -> Unit){
-        Fuel.put(url).authenticate(user.name, user.pass).body(data.toJsonString()).responseString{
-            request, response, result ->
+        Fuel.put(url).authenticate(user.name!!, user.pass!!).body(data.toJsonString())
+        .responseString{
+            _, _, result ->
             val (data,error) = result
             when (error)
             {
@@ -125,5 +115,28 @@ class Server (val context: Context) {
                 }
             }
         }
+    }
+
+    fun downloadFile(url: String, saveFile: String, success: () -> Unit,
+                     failure: (FuelError) -> Unit) {
+        Fuel.download(url)
+                .authenticate(user.name!!, user.pass!!)
+                .destination { _, _ ->
+                    var SDCardRoot = Environment.getExternalStorageDirectory()
+                    SDCardRoot = File(SDCardRoot.absolutePath + "/MobilERP/")
+                    SDCardRoot.mkdir()
+                    File(SDCardRoot, saveFile)
+                }
+                .responseString { _, _, result ->
+                    val (data, error) = result
+                    when (error) {
+                        null -> {
+                            success()
+                        }
+                        else -> {
+                            failure(error)
+                        }
+                    }
+                }
     }
 }

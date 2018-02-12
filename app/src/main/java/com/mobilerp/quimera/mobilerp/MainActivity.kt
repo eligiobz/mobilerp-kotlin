@@ -11,12 +11,13 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
 import com.mobilerp.quimera.mobilerp.online_mode.ServiceDiscovery
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FinishSell.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    internal var user = User._getInstance()
+    internal var user = UserModel._getInstance()
     internal lateinit var ds1: ServiceDiscovery
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        if (!user.isLoginIn){
+        if (!user.logged){
             val uname = sett_manager.getString("username")
             when (uname) {
                 null -> {
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 else -> {
                     user.name = sett_manager.getString("username")!!
                     user.pass = sett_manager.getString("password")!!
-                    user.isLoginIn = true
+                    user.logged = true
                     Toast.makeText(applicationContext, "Welcome back", Toast.LENGTH_LONG).show()
                 }
             }
@@ -131,9 +132,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-
     }
 }
