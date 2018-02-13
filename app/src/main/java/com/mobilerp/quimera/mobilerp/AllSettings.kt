@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.TabHost
 import android.widget.Toast
 import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.StoreModel
 import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
 import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
@@ -140,17 +141,7 @@ class AllSettings : Fragment() {
         }
 
         btnBackupDB.setOnClickListener(View.OnClickListener {
-            Toast.makeText(context, "Download db started", Toast.LENGTH_LONG).show()
-            val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
-                override fun onFileDownloaded() {
-                    Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
-                }
-            })
-            fileDownloader.execute(URLs.BASE_URL + URLs.DB_BACKUP, getString(R.string.database_name))
-            if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-                Log.d("DOWN_ERR", "SD \n" + Environment.getExternalStorageState())
-                return@OnClickListener
-            }
+            Toast.makeText(context, "Not implemented", Toast.LENGTH_LONG).show()
         })
 
         cbOfflineMode.isChecked = use_offline_mode

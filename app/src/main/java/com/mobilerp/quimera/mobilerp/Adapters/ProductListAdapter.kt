@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp
+package com.mobilerp.quimera.mobilerp.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
+import com.mobilerp.quimera.mobilerp.R
 
 //depleted_items_layout
-//list_header_multi_items
-//list_header_depleted_items
+//products_multi_list_header
+//depleted_products_list_header
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -30,7 +31,7 @@ import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ItemListAdapter(context: Context, private val productList: ArrayList<ProductModel>, layout:
+class ProductListAdapter(context: Context, private val productList: ArrayList<ProductModel>, layout:
 Int) : ArrayAdapter<ProductModel>(context, layout, productList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -43,7 +44,7 @@ Int) : ArrayAdapter<ProductModel>(context, layout, productList) {
             true -> {
                 when (productList[position].date){
                     null -> {
-                        rowView = inflater.inflate(R.layout.item_row, parent, false)
+                        rowView = inflater.inflate(R.layout.product_row, parent, false)
 
                         val itemNameView = rowView.findViewById<TextView>(R.id.itemName)
                         val itemPriceView = rowView.findViewById<TextView>(R.id.itemPrice)
@@ -68,7 +69,7 @@ Int) : ArrayAdapter<ProductModel>(context, layout, productList) {
             false -> {
                 when (productList[position].name){
                     "title" -> {
-                        rowView = inflater.inflate(R.layout.list_header_multi_items, parent, false)
+                        rowView = inflater.inflate(R.layout.products_multi_list_header, parent, false)
                         val itemTitleView = rowView.findViewById<TextView>(R.id.itemName)
                         val itemPriceView = rowView.findViewById<TextView>(R.id.itemPrice)
                         val itemTotalView = rowView.findViewById<TextView>(R.id.itemTotal)
@@ -77,7 +78,7 @@ Int) : ArrayAdapter<ProductModel>(context, layout, productList) {
                         itemTotalView.setText(R.string.item_total)
                     }
                     else -> {
-                        rowView = inflater.inflate(R.layout.list_header_depleted_items, parent, false)
+                        rowView = inflater.inflate(R.layout.depleted_products_list_header, parent, false)
                         val itemTitleView = rowView.findViewById<TextView>(R.id.itemName)
                         val itemLastSaleDate = rowView.findViewById<TextView>(R.id.itemDate)
                         itemTitleView.setText(R.string.item_name)

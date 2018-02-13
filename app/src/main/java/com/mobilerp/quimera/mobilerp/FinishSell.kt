@@ -1,7 +1,5 @@
 package com.mobilerp.quimera.mobilerp
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.offline_mode.Insert
 import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
@@ -52,7 +51,7 @@ class FinishSell : Fragment() {
     internal lateinit var appState: AppState
     // Objects
     private lateinit var items: ArrayList<SalesItem>
-    private lateinit var itemListAdapter: ItemListAdapter
+    private lateinit var productListAdapter: ProductListAdapter
     private lateinit var itemsListModel: ArrayList<ProductModel>
     private lateinit var log: OperationsLog
 
@@ -173,8 +172,8 @@ class FinishSell : Fragment() {
 //                        .amount))
             total_sale += items!![i].price!! * items!![i].amount
         }
-        itemListAdapter = ItemListAdapter(context, itemsListModel, R.layout.item_sales_row)
-        itemSalesList.adapter = itemListAdapter
+        productListAdapter = ProductListAdapter(context, itemsListModel, R.layout.product_sale_check_row)
+        itemSalesList.adapter = productListAdapter
         totalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
     }
 

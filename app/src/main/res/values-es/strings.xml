@@ -89,6 +89,7 @@
     <string name="user_settings">Ajustes de usuario</string>
     <string name="finish_sale">Terminar venta</string>
     <string name="pdf_export">Exportar a PDF</string>
+    <string name="download_pdf_export">Descargar reporte completo</string>
     <string name="daily_sales_report_filename">reporte_ventas_</string>
     <string name="depleted_report_filename">reporte_productos_agotados_</string>
     <string name="last_sale_date">Última fecha de venta</string>
@@ -111,5 +112,8 @@
     <string name="service_name">Nombre del servicio</string>
     <string name="list_name">Listado de servicios</string>
     <string name="service_code">Codigo de servicio</string>
+    <string name="item_id_sale"># Venta</string>
+    <string name="total_earning">Ganacia</string>
+    <string name="total_products_sold">Total de artículos vendidos</string>
 
 </resources>

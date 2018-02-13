@@ -1,0 +1,113 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mobilerp.quimera.mobilerp.DisplayStatements">
+
+    <TextView
+        android:id="@+id/tvReportDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp"
+        android:text="@string/today_sales"
+        android:width="150dp"/>
+
+    <TextView
+        android:id="@+id/tvReportDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tvReportDate"
+        android:layout_alignStart="@id/tvReportDate"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:width="150dp"
+        app:layout_constraintStart_toEndOf="@+id/tvReportDate"
+        tools:layout_editor_absoluteY="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTotalEarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvReportDate"
+        android:layout_marginTop="36dp"
+        android:text="@string/total_earning"
+        android:width="150dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvReportDate"
+        tools:layout_editor_absoluteX="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTotalEarningValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvReportDate"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="36dp"
+        android:width="150dp"
+        app:layout_constraintStart_toEndOf="@+id/tvTotalEarning"
+        app:layout_constraintTop_toBottomOf="@+id/tvReportDateValue"/>
+
+    <TextView
+        android:id="@+id/tvTotalSales"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/pdf_download"
+        android:layout_below="@id/tvReportDate"
+        android:layout_marginTop="36dp"
+        android:text="@string/sales"
+        android:width="150dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalEarning"
+        tools:layout_editor_absoluteX="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTotalSalesValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="36dp"
+        android:width="150dp"
+        app:layout_constraintStart_toEndOf="@+id/tvTotalSales"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalEarningValue"/>
+
+    <TextView
+        android:id="@+id/tvTotalItemsSold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/total_products_sold"
+        android:width="150dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalSales"
+        tools:layout_editor_absoluteX="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTotalItemsSoldValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvReportDate"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="36dp"
+        android:width="150dp"
+        app:layout_constraintStart_toEndOf="@+id/tvTotalItemsSold"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalSalesValue"/>
+
+    <Button
+        android:id="@+id/pdf_download"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="@string/download_pdf_export"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

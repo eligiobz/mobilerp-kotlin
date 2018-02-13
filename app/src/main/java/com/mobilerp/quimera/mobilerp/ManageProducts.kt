@@ -114,7 +114,32 @@ class ManageProducts : Fragment(), View.OnClickListener {
                     .string.offline_mode_disabled), Toast.LENGTH_LONG).show()
         }
 
-        btnSave.setOnClickListener(this)
+        btnSave.setOnClickListener{
+            val data = prepareJSON()
+            when (isOfflineEnabled) {
+                true -> {
+
+                }
+                false -> {
+                    when (isNewProduct) {
+                        true -> {
+                            server.postRequest(URLs.NEW_PRODUCT, data, success = {
+                                cleanEntries()
+                            }, failure = {
+                                server.genericErrors(it.response.statusCode)
+                            })
+                            isNewProduct = false
+                        }
+                        false ->
+                            server.putRequest(URLs.UPDATE_PRODUCT + lastBarcode, data, success = {
+                                cleanEntries()
+                            }, failure = {
+                                server.genericErrors(it.response.statusCode)
+                            })
+                    }
+                }
+            }
+        }
 
         etBarcode.setOnKeyListener(View.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -169,76 +194,6 @@ class ManageProducts : Fragment(), View.OnClickListener {
                             isNewProduct = true
                             enableEntries()
                 })
-            }
-        }
-    }
-
-    override fun onClick(v: View) {
-        val data = prepareJSON()
-        when (isOfflineEnabled) {
-            true -> {
-//                when (isNewProduct) {
-//                    true -> {
-//                        log.add(Request.Method.POST, URLs.NEW_PRODUCT, data)
-//                        cleanEntries()
-//                        val insert = Insert(context)
-//                        try {
-//                            val q = String.format(Locale.getDefault(), "INSERT INTO ProductModel(barcode," +
-//                                    " name, " +
-//                                    "price, " +
-//                                    "units) " +
-//                                    "values('%s', '%s', %s, %s);", data.getString("barcode"),
-//                                    data.getString("name"), data.getString("price"), data
-//                                    .getString("units"))
-//                            insert.query = q
-//                            insert.execute()
-//                            Log.d("SQL Query :: ", insert.query)
-//                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-//                        } catch (e: JSONException) {
-//                            Log.d("JSON_EXEC", e.message)
-//                        }
-//                    }
-//                    false -> {
-//                        log.add(Request.Method.PUT, URLs
-//                                .UPDATE_PRODUCT + lastBarcode, data)
-//                        cleanEntries()
-//                        val update = Update(context)
-//                        try {
-//                            val q = String.format(Locale.getDefault(), "UPDATE ProductModel " +
-//                                    "SET name='%s', " +
-//                                    "price=%s, " +
-//                                    "units=%s " +
-//                                    "WHERE barcode='%s';",
-//                                    data.getString("name"),
-//                                    data.getString("price"),
-//                                    data.getString("units"),
-//                                    data.getString("barcode"))
-//                            update.query = q
-//                            update.execute()
-//                            Toast.makeText(context, R.string.app_op_success, Toast.LENGTH_LONG).show()
-//                        } catch (e: JSONException) {
-//                            Toast.makeText(context, R.string.app_op_fail, Toast.LENGTH_LONG).show()
-//                        }
-//                    }
-//                }
-            }
-            false -> {
-                when (isNewProduct) {
-                    true -> {
-                        server.postRequest(URLs.NEW_PRODUCT, data, success = {
-                            cleanEntries()
-                        }, failure = {
-                            server.genericErrors(it.response.statusCode)
-                        })
-                        isNewProduct = false
-                    }
-                    false ->
-                        server.putRequest(URLs.UPDATE_PRODUCT + lastBarcode, data, success = {
-                            cleanEntries()
-                        }, failure = {
-                            server.genericErrors(it.response.statusCode)
-                        })
-                }
             }
         }
     }

@@ -1,7 +1,9 @@
-package com.mobilerp.quimera.mobilerp.online_mode
+package com.mobilerp.quimera.mobilerp.ApiModels
+
+import com.beust.klaxon.JsonObject
 
 /**
- * Created by Eligio Becerra on 04/01/2018.
+ * Created by Eligio Becerra on 12/02/2018.
  * Copyright (C) 2017 Eligio Becerra
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +19,16 @@ package com.mobilerp.quimera.mobilerp.online_mode
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+class ProductSaleModel : ProductModel{
 
-interface FileDownloadListener {
-    fun onFileDownloaded()
+    var idsale: Int? = null
+    var total_earning: Float? = null
+
+    constructor(jsonObject: JsonObject) : super(jsonObject){
+        this.idsale = jsonObject.int("idsale")
+        this.total_earning = jsonObject.float("total_earning")
+
+    }
+
+    constructor(name: String): super(name)
 }

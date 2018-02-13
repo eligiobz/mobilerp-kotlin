@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp
+package com.mobilerp.quimera.mobilerp.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.mobilerp.quimera.mobilerp.OptionListModel
+import com.mobilerp.quimera.mobilerp.R
 import java.util.*
 
 /**

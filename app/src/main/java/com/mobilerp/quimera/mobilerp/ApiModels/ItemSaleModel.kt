@@ -27,7 +27,7 @@ class SaleReportModel {
     var totalEarnings : Float? = null
     var totalItemsSold : Int? = null
     var totalSales : Int? = null
-    var sales : ArrayList<ItemSaleReportModel>? = null
+    var sales : ArrayList<ProductSaleModel>? = null
 
     constructor(jsonObject: JsonObject){
         this.title = jsonObject.string("title")
@@ -36,18 +36,6 @@ class SaleReportModel {
         this.totalSales = jsonObject.int("totalSales")
         sales  = ArrayList()
         for(item in jsonObject.array<JsonObject>("sales")!!)
-            sales!!.add(ItemSaleReportModel(item))
-    }
-
-    class ItemSaleReportModel : ProductModel{
-
-        var idsale: Int? = null
-        var total_earning: Float? = null
-
-        constructor(jsonObject: JsonObject) : super(jsonObject){
-            this.idsale = jsonObject.int("idsale")
-            this.total_earning = jsonObject.float("total_earning")
-
-        }
+            sales!!.add(ProductSaleModel(item))
     }
 }

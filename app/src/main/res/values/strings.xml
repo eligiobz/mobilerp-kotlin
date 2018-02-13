@@ -116,5 +116,9 @@
 
 
     <string name="exiting_units">Exisiting units</string>
+    <string name="item_id_sale">Sale #</string>
+    <string name="total_earning">Earnings</string>
+    <string name="total_products_sold">Total products sold</string>
+    <string name="download_pdf_export">Download PDF report</string>
 
 </resources>

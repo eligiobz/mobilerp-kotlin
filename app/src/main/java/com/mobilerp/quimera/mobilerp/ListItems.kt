@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
 import com.mobilerp.quimera.mobilerp.online_mode.Server
 import com.mobilerp.quimera.mobilerp.online_mode.URLs
@@ -52,7 +53,7 @@ class ListItems : Fragment() {
                         items.add(ProductModel(item))
                     }
 
-                    itemList.adapter = ItemListAdapter(context, items, R.layout.item_row)
+                    itemList.adapter = ProductListAdapter(context, items, R.layout.product_row)
                 }, failure = { error ->
             server.genericErrors(error.response.statusCode)
         })
@@ -65,7 +66,7 @@ class ListItems : Fragment() {
                     for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
                         items.add(ProductModel(item))
                     }
-                    itemList.adapter = ItemListAdapter(context, items, R.layout.item_row)
+                    itemList.adapter = ProductListAdapter(context, items, R.layout.product_row)
                 }, failure = { error ->
             server.genericErrors(error.response.statusCode)
         })
