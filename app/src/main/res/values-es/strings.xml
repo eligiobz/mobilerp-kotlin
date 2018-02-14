@@ -115,5 +115,10 @@
     <string name="item_id_sale"># Venta</string>
     <string name="total_earning">Ganacia</string>
     <string name="total_products_sold">Total de artículos vendidos</string>
+    <string name="initial_period">Fecha de inicio</string>
+    <string name="end_period">Fecha final</string>
+    <string name="report_end_date">De la fecha</string>
+    <string name="report_start_date">A la fecha</string>
+    <string name="update_data">Actualizar datos</string>
 
 </resources>

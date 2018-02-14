@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp.offline_mode
+package com.mobilerp.quimera.mobilerp.OfflineMode
 
 import android.content.Context
 import android.database.Cursor

@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp.offline_mode
+package com.mobilerp.quimera.mobilerp.OfflineMode
 
 import android.content.Context
 
@@ -19,18 +19,22 @@ import android.content.Context
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+class Update(var context: Context) {
 
-class Insert(var context: Context) {
     var sqlHandler: SQLHandler
-    var query: String? = null
+    // TODO: Write update query builder
+    /*String... params*/ var query: String? = null
+    val isQueryReady: Boolean
 
     init {
         sqlHandler = SQLHandler.getInstance(this.context)
+        isQueryReady = false
     }
 
     fun execute(): Boolean {
-        if (query == null)
+        if (!isQueryReady) {
             return false
+        }
         sqlHandler.db.execSQL(this.query)
         return true
     }

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
-import com.mobilerp.quimera.mobilerp.online_mode.Server
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_list_items.*
 import java.util.*
 

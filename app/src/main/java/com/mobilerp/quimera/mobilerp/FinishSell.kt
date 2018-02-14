@@ -10,11 +10,11 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
-import com.mobilerp.quimera.mobilerp.offline_mode.Insert
-import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
-import com.mobilerp.quimera.mobilerp.offline_mode.Select
-import com.mobilerp.quimera.mobilerp.online_mode.Server
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OfflineMode.Insert
+import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
+import com.mobilerp.quimera.mobilerp.OfflineMode.Select
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_finish_sell.*
 import java.util.*
 import kotlin.collections.ArrayList

@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import com.beust.klaxon.JsonObject
-import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
-import com.mobilerp.quimera.mobilerp.online_mode.Server
+import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
 import com.mobilerp.quimera.mobilerp.ApiModels.ServiceModel
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_manage_services.*
 import java.util.*
 

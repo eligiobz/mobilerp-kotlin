@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
-import com.mobilerp.quimera.mobilerp.online_mode.Server
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_login.*
 
 /**

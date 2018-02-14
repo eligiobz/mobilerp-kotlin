@@ -14,9 +14,9 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
-import com.mobilerp.quimera.mobilerp.offline_mode.*
-import com.mobilerp.quimera.mobilerp.online_mode.Server
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OfflineMode.*
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_manage_products.*
 import java.util.*
 
@@ -41,15 +41,15 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  */
-class ManageProducts : Fragment(), View.OnClickListener {
+class ManageProducts : Fragment(){
 
-    internal var isNewProduct: Boolean = false
+    private var isNewProduct: Boolean = false
     internal var lastBarcode: String = ""
-    internal var isOfflineEnabled: Boolean = false
+    private var isOfflineEnabled: Boolean = false
     private val appState: AppState by lazy { AppState.getInstance(context) }
-    internal lateinit var log: OperationsLog
+    private lateinit var log: OperationsLog
     internal lateinit var beepManager: BeepManager
-    internal lateinit var settings: CameraSettings
+    private lateinit var settings: CameraSettings
     internal lateinit var server: Server
 
 

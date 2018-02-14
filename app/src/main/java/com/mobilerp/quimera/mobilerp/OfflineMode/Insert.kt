@@ -1,4 +1,6 @@
-package com.mobilerp.quimera.mobilerp.online_mode
+package com.mobilerp.quimera.mobilerp.OfflineMode
+
+import android.content.Context
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -18,6 +20,18 @@ package com.mobilerp.quimera.mobilerp.online_mode
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-interface ServiceFinderListener {
-    fun notifyOfServerCompleted(thread: Thread)
+class Insert(var context: Context) {
+    var sqlHandler: SQLHandler
+    var query: String? = null
+
+    init {
+        sqlHandler = SQLHandler.getInstance(this.context)
+    }
+
+    fun execute(): Boolean {
+        if (query == null)
+            return false
+        sqlHandler.db.execSQL(this.query)
+        return true
+    }
 }

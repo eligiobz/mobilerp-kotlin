@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp.online_mode
+package com.mobilerp.quimera.mobilerp.OnlineMode
 
 import android.content.Context
 import android.os.Environment

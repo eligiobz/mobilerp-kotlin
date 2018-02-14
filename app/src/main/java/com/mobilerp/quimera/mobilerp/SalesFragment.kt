@@ -12,10 +12,10 @@ import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
-import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
-import com.mobilerp.quimera.mobilerp.offline_mode.Select
-import com.mobilerp.quimera.mobilerp.online_mode.Server
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OfflineMode.SQLHandler
+import com.mobilerp.quimera.mobilerp.OfflineMode.Select
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_sales.*
 import java.util.*
 

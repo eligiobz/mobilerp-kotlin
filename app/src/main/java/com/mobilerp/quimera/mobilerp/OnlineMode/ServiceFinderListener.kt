@@ -1,6 +1,4 @@
-package com.mobilerp.quimera.mobilerp.offline_mode
-
-import android.content.Context
+package com.mobilerp.quimera.mobilerp.OnlineMode
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -19,23 +17,7 @@ import android.content.Context
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Update(var context: Context) {
 
-    var sqlHandler: SQLHandler
-    // TODO: Write update query builder
-    /*String... params*/ var query: String? = null
-    val isQueryReady: Boolean
-
-    init {
-        sqlHandler = SQLHandler.getInstance(this.context)
-        isQueryReady = false
-    }
-
-    fun execute(): Boolean {
-        if (!isQueryReady) {
-            return false
-        }
-        sqlHandler.db.execSQL(this.query)
-        return true
-    }
+interface ServiceFinderListener {
+    fun notifyOfServerCompleted(thread: Thread)
 }

@@ -1,6 +1,5 @@
 package com.mobilerp.quimera.mobilerp
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -12,8 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
-import com.mobilerp.quimera.mobilerp.online_mode.ServiceDiscovery
-import com.mobilerp.quimera.mobilerp.online_mode.URLs
+import com.mobilerp.quimera.mobilerp.OnlineMode.ServiceDiscovery
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

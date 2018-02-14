@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp.online_mode
+package com.mobilerp.quimera.mobilerp.OnlineMode
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -30,11 +30,12 @@ class URLs protected constructor() {
         const val LOGIN = "api/$ApiVersion/user/check_login/" //Done
 
         // Reports
-        const val DAILY_SALES_REPORT = "api/$ApiVersion/dailyReport/" //Done
-        const val MONTHLY_SALES_REPORT = "api/$ApiVersion/monthlyReport/" //Done
+        const val DAILY_SALES_REPORT = "api/$ApiVersion/daily_report/" //Done
+        const val MONTHLY_SALES_REPORT = "api/$ApiVersion/monthly_report/" //Done
+        const val CUSTOM_REPORT = "api/$ApiVersion/custom_report/"
         const val DEPLETED_ITEMS_REPORT = "api/$ApiVersion/list_depleted_products/" //Done
-        const val SALES_REPORT_PDF = "api/$ApiVersion/getReport/salesreport.pdf" //Done
-        const val DEPLETED_REPORT_PDF = "api/$ApiVersion/getReport/depletedreport.pdf" //Done
+        const val SALES_REPORT_PDF = "api/$ApiVersion/get_report/salesreport.pdf" //Done
+        const val DEPLETED_REPORT_PDF = "api/$ApiVersion/get_report/depletedreport.pdf" //Done
         const val DB_BACKUP = "api/$ApiVersion/dbBackup/" //Done
 
         // Stores

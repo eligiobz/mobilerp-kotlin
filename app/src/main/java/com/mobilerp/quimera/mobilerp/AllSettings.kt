@@ -3,10 +3,8 @@ package com.mobilerp.quimera.mobilerp
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.Fragment
 import android.text.InputType
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +18,9 @@ import android.widget.Toast
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.StoreModel
-import com.mobilerp.quimera.mobilerp.offline_mode.OperationsLog
-import com.mobilerp.quimera.mobilerp.offline_mode.SQLHandler
-import com.mobilerp.quimera.mobilerp.online_mode.*
+import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
+import com.mobilerp.quimera.mobilerp.OfflineMode.SQLHandler
+import com.mobilerp.quimera.mobilerp.OnlineMode.*
 import kotlinx.android.synthetic.main.fragment_all_settings.*
 import kotlinx.android.synthetic.main.fragment_drug_stores_settings.*
 import kotlinx.android.synthetic.main.fragment_server_settings.*
