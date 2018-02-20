@@ -37,14 +37,6 @@ import kotlin.collections.ArrayList
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FinishSell.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FinishSell.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FinishSell : Fragment() {
 
     internal val me: Fragment = this
@@ -65,12 +57,15 @@ class FinishSell : Fragment() {
             val data = JsonObject()
             val barcode = JsonArray<String>()
             val units = JsonArray<Int>()
+            val is_service = JsonArray<Int>()
             for (i in items.indices) {
                 barcode.add(i,items[i].barcode)
                 units.add(i, items[i].amount)
+                is_service.add(i, items[i].isService!!)
             }
             data.put("barcode", barcode)
             data.put("units", units)
+            data.put("is_service", is_service)
             data.put("token", Calendar.getInstance().time.toString())
             data.put("storeid", AppState.getInstance(context).currentStore)
 
@@ -167,10 +162,14 @@ class FinishSell : Fragment() {
         initUI()
 
         var total_sale = 0.0
-        for (i in items!!.indices) {
-//            itemsListModel.add(JsonObject(items!![i].name, items!![i].price, items!![i]
-//                        .amount))
-            total_sale += items!![i].price!! * items!![i].amount
+
+        for (item in items) {
+            val jsonObject = JsonObject()
+            jsonObject.put("name", item.name)
+            jsonObject.put("price", item.price)
+            jsonObject.put("units", item.amount)
+            itemsListModel.add(ProductModel(jsonObject))
+            total_sale += item.price!! * item.amount
         }
         productListAdapter = ProductListAdapter(context, itemsListModel, R.layout.product_sale_check_row)
         itemSalesList.adapter = productListAdapter

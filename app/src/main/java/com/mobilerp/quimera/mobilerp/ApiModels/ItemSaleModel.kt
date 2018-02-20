@@ -27,15 +27,11 @@ class SaleReportModel {
     var totalEarnings : Float? = null
     var totalItemsSold : Int? = null
     var totalSales : Int? = null
-    var sales : ArrayList<ProductSaleModel>? = null
 
     constructor(jsonObject: JsonObject){
         this.title = jsonObject.string("title")
         this.totalEarnings = jsonObject.float("totalEarnings")
         this.totalItemsSold =jsonObject.int("totalItemsSold")
         this.totalSales = jsonObject.int("totalSales")
-        sales  = ArrayList()
-        for(item in jsonObject.array<JsonObject>("sales")!!)
-            sales!!.add(ProductSaleModel(item))
     }
 }

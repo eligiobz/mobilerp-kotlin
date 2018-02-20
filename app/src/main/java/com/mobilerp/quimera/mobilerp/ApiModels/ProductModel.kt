@@ -43,5 +43,6 @@ open class ProductModel {
         this.units = jsonObject.int("units")
         this.storeid = jsonObject.int("storeid")
         this.date = jsonObject.string("date")
+
     }
 }

@@ -25,6 +25,13 @@ class ServiceModel {
     var name: String? = null
     var price: Double? = null
 
+    var isGroupHeader = false
+
+    constructor(title: String)  {
+        this.name = title
+        this.isGroupHeader = true
+    }
+
     constructor (jsonObject: JsonObject) {
         this.barcode = jsonObject.string("barcode")
         this.name = jsonObject.string("name")

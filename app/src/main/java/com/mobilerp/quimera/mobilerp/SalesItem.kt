@@ -27,6 +27,7 @@ class SalesItem : Parcelable {
     var barcode: String
     var name: String
     var price: Double? = null
+    var isService: Int? = null
 
     var TABLE_NAME = "ProductModel"
     var COLUMN_NAME_BARCODE = "barcode"
@@ -43,11 +44,12 @@ class SalesItem : Parcelable {
      * @param name
      */
 
-    constructor(barcode: String, amount: Int, price: Double?, name: String) {
+    constructor(barcode: String, amount: Int, price: Double?, name: String, isService: Int) {
         this.barcode = barcode
         this.amount = amount
         this.price = price
         this.name = name
+        this.isService = isService
     }
 
     protected constructor(`in`: Parcel) {

@@ -3,6 +3,7 @@ package com.mobilerp.quimera.mobilerp
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class SalesFragment : Fragment() {
     private lateinit var settings: CameraSettings
     internal lateinit var context: Context
     internal lateinit var beepManager: BeepManager
+    private var wasService = 0
 
     private val callback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult) {
@@ -89,12 +91,24 @@ class SalesFragment : Fragment() {
         if (appState.isOfflineMode)
             Toast.makeText(context, R.string.offline_mode_enabled, Toast.LENGTH_LONG).show()
 
-        // Init elements to display items
+        // Buttons
         addProduct.setOnClickListener { addProduct() }
         endSale.setOnClickListener { endSale() }
 
+        etBarcode.setOnKeyListener(View.OnKeyListener{ _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER){
+                barcode = etBarcode.text.toString()
+                findLastScannedProduct()
+                return@OnKeyListener true
+            }
+
+            return@OnKeyListener false
+        })
+
         items = ArrayList()
         totalSale = 0.0
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -107,7 +121,7 @@ class SalesFragment : Fragment() {
         val amount = Integer.parseInt(etTotalUnits.text.toString())
         val price = java.lang.Double.parseDouble(etPrice.text.toString())
         val name = etName.text.toString()
-        items.add(SalesItem(barcode, amount, price, name))
+        items.add(SalesItem(barcode, amount, price, name, wasService))
         totalSale += items[items.size - 1].price!! * amount
         etTotalSale.setText(totalSale.toString())
         cleanEntries()
@@ -144,13 +158,18 @@ class SalesFragment : Fragment() {
                 }
             }
             false -> {
-                server.getRequest(URLs.FIND_PRODUCT + "${appState.currentStore}/$barcode",
+                server.getRequest(URLs.FIND_ARTICLE + "$barcode/${appState.currentStore}",
                         success = {
                             val item = it.obj("mobilerp")!!
                             etBarcode.setText(item.string("barcode"))
                             etName.setText(item.string("name"))
                             etPrice.setText(item.float("price").toString())
                             etTotalUnits.setText("1")
+                            etTotalUnits.requestFocus()
+                            when (item.containsKey("units")){
+                                true -> wasService = 0
+                                false -> wasService = 1
+                            }
                         }, failure = {
                     server.genericErrors(it.response.statusCode)
                 })

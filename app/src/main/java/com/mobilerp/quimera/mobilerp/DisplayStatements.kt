@@ -25,11 +25,14 @@ class DisplayStatements : Fragment() {
     private val server : Server  by lazy { Server(context) }
     private lateinit var reportName : String
     private lateinit var initDate: String
-    private var endDate: String? = null
-
+    private lateinit var reportType : String
+    private lateinit var url : String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        val bundle = this.arguments
+        reportType = bundle.getString("reportType")
+
         // Inflate the layout for this fragment
         return inflater!!.inflate(R.layout.fragment_display_statement, container, false)
     }
@@ -37,31 +40,46 @@ class DisplayStatements : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        reportName = getString(com.mobilerp.quimera.mobilerp.R.string.daily_sales_report_filename)
+        when (reportType) {
+            "isDaily" ->{
+                reportName = getString(com.mobilerp.quimera.mobilerp.R.string.daily_sales_report_filename)
+                url = URLs.DAILY_SALES_REPORT
+            }
+            "isMonthly" -> {
+                reportName = getString(com.mobilerp.quimera.mobilerp.R.string.monthly_sales_report_filename)
+                url = URLs.MONTHLY_SALES_REPORT
+            }
+            "isCustom" -> {
+                reportName = getString(com.mobilerp.quimera.mobilerp.R.string
+                        .custom_sales_report_filename)
+                url = URLs.CUSTOM_REPORT
+            }
+        }
 
         prepareDatePickers()
 
-        server.getRequest(URLs.DAILY_SALES_REPORT, success = {
-            val salesReport = SaleReportModel(it["mobilerp"]!! as JsonObject)
-            if (salesReport.sales != null) {
+        if (url != URLs.CUSTOM_REPORT) {
+            server.getRequest(url, success = {
+                val salesReport = SaleReportModel(it["mobilerp"]!! as JsonObject)
                 tvReportDateValue.text = salesReport.title
                 tvTotalSalesValue.text = salesReport.totalSales.toString()
                 tvTotalItemsSoldValue.text = salesReport.totalItemsSold.toString()
                 tvTotalEarningValue.text = salesReport.totalEarnings.toString()
-            } else {
-                Toast.makeText(context, "No data!", Toast.LENGTH_LONG).show()
-            }
 
-        }, failure = {
-            server.genericErrors(it.response.statusCode)
+            }, failure = {
+                if (it.response.statusCode == 500)
+                    Toast.makeText(context, R.string.no_data_in_report, Toast.LENGTH_LONG).show()
+                else
+                    server.genericErrors(it.response.statusCode)
 
-        })
+            })
+        }
 
         pdf_download.setOnClickListener {
             val date = SimpleDateFormat("dd-MM-yy")
             val now = Date()
             initDate = date.format(now)
-            server.downloadFile(URLs.SALES_REPORT_PDF, reportName + initDate,
+            server.downloadFile(URLs.SALES_REPORT_PDF, reportName + initDate +".pdf",
                     success = {
                 Toast.makeText(context, R.string.finish, Toast.LENGTH_LONG).show()
             },failure = {

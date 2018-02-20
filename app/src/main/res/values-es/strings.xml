@@ -120,5 +120,8 @@
     <string name="report_end_date">De la fecha</string>
     <string name="report_start_date">A la fecha</string>
     <string name="update_data">Actualizar datos</string>
+    <string name="no_data_in_report">¡El reporte esta vacio!</string>
+    <string name="list_services">Lista de servicios</string>
+    <string name="custom_sales_report_filename">reporte_ventas</string>
 
 </resources>

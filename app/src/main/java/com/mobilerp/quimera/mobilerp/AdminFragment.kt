@@ -42,9 +42,6 @@ class AdminFragment : Fragment() {
     private lateinit var salesList: ListView
     private lateinit var pharmacyListAdapter: OptionListAdapter
     private lateinit var salesListAdapter: OptionListAdapter
-    private lateinit var reportURL: String
-    private lateinit var reportName: String
-    private lateinit var genUrl: String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -68,6 +65,9 @@ class AdminFragment : Fragment() {
             when (position) {
                 0 -> {
                     val fragment: Fragment = DisplayStatements()
+                    val bundle = Bundle()
+                    bundle.putString("reportType", "isDaily")
+                    fragment.arguments = bundle
                     val manager = fragmentManager
                     manager.beginTransaction()
                             .replace(R.id.main_content, fragment)
@@ -75,37 +75,28 @@ class AdminFragment : Fragment() {
                             .commit()
                 }
                 1 -> {
-                    genUrl = URLs.BASE_URL + URLs.MONTHLY_SALES_REPORT
-                    reportURL = URLs.BASE_URL + URLs.SALES_REPORT_PDF
-                    reportName = getString(R.string.daily_sales_report_filename)
+                    val fragment: Fragment = DisplayStatements()
+                    val bundle = Bundle()
+                    bundle.putString("reportType", "isMonthly")
+                    fragment.arguments = bundle
+                    val manager = fragmentManager
+                    manager.beginTransaction()
+                            .replace(R.id.main_content, fragment)
+                            .addToBackStack("Admin")
+                            .commit()
                 }
-                2 -> {
-                    genUrl = URLs.BASE_URL + URLs.DEPLETED_ITEMS_REPORT
-                    reportURL = URLs.BASE_URL + URLs.DEPLETED_REPORT_PDF
-                    reportName = getString(R.string.depleted_report_filename)
+                4 -> {
+                    val fragment: Fragment = DisplayStatements()
+                    val bundle = Bundle()
+                    bundle.putString("reportType", "isCustom")
+                    fragment.arguments = bundle
+                    val manager = fragmentManager
+                    manager.beginTransaction()
+                            .replace(R.id.main_content, fragment)
+                            .addToBackStack("Admin")
+                            .commit()
                 }
             }
-//            val apiServer = APIServer(context)
-//            apiServer.getResponse(Request.Method.GET, genUrl, null, object : VolleyCallback {
-//                override fun onSuccessResponse(result: JSONObject) {
-//                    Toast.makeText(context, "Download started", Toast.LENGTH_LONG).show()
-//                    val date = SimpleDateFormat("dd-MM-yy")
-//                    val now = Date()
-//                    val fileDownloader = DownloadFileFromURL(object : FileDownloadListener {
-//                        override fun onFileDownloaded() {
-//                            Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show()
-//                        }
-//                    })
-//                    fileDownloader.execute(reportURL, reportName + date.format(now) + ".pdf")
-//                    if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-//                        Log.d("DOWN_ERR", "SD \n" + Environment.getExternalStorageState())
-//                    }
-//                }
-//
-//                override fun onErrorResponse(error: VolleyError) {
-//                    apiServer.genericErrors(error.networkResponse.statusCode)
-//                }
-//            })
         }
     }
 
@@ -123,7 +114,7 @@ class AdminFragment : Fragment() {
                             .addToBackStack("Admin")
                             .commit()
                 }
-                1, 2 -> {
+                1, 2, 4 -> {
                     val fragment = ListItems.newInstance(pharmacyListAdapter
                             .getItem(position).endpoint!!)
                     manager.beginTransaction()

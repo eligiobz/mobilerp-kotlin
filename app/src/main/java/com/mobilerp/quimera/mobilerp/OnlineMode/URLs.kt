@@ -45,7 +45,7 @@ class URLs protected constructor() {
         // Products 
         const val NEW_PRODUCT = "api/$ApiVersion/add_product/" //Done
         const val UPDATE_PRODUCT = "api/$ApiVersion/update_product/" //Done
-        val FIND_PRODUCT = "api/$ApiVersion/find_product/" //Done
+        const val FIND_PRODUCT = "api/$ApiVersion/find_product/" //Done
         const val LIST_PRODUCTS = "api/$ApiVersion/list_products/" //Done
         const val LIST_DEPLETED = "api/$ApiVersion/list_depleted_products/"
 
@@ -57,6 +57,8 @@ class URLs protected constructor() {
 
         // Sales
         const val MAKE_SALE = "api/$ApiVersion/make_sale/"
+        const val FIND_ARTICLE = "api/$ApiVersion/find_article/"
+
         var BASE_URL: String? = null
 
         private var instance: URLs? = null

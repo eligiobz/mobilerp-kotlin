@@ -35,8 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".product_sale_header">
-        </activity>
+
     </application>
 
 </manifest>

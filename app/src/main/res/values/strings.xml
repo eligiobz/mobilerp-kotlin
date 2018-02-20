@@ -123,5 +123,7 @@
     <string name="report_end_date">To date</string>
     <string name="report_start_date">From date</string>
     <string name="update_data">Update data</string>
+    <string name="no_data_in_report">Report data was empty!</string>
+    <string name="custom_sales_report_filename">sales_report</string>
 
 </resources>
