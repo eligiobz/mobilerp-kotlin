@@ -84,22 +84,27 @@ class AllSettings : Fragment() {
     }
 
     private fun loadList(){
-        server.getRequest(URLs.LIST_DRUGSTORES, success = { model ->
-            val storeList : ArrayList<OptionListModel> = ArrayList()
-            for (store_data : JsonObject in model.array<JsonObject>("mobilerp")!!){
-                val store = StoreModel(store_data)
-                var icon: Int = -1
-                when (store.id) {
-                    appState.currentStore -> icon = R.mipmap.ic_launcher_round
-                    else -> icon = R.mipmap.ic_launcher
-                }
-                storeList.add(OptionListModel(icon, store.name!!, store.id.toString()))
+        when (URLs.BASE_URL){
+            null -> Unit
+            else -> {
+                server.getRequest(URLs.LIST_DRUGSTORES, success = { model ->
+                    val storeList : ArrayList<OptionListModel> = ArrayList()
+                    for (store_data : JsonObject in model.array<JsonObject>("mobilerp")!!){
+                        val store = StoreModel(store_data)
+                        var icon: Int = -1
+                        when (store.id) {
+                            appState.currentStore -> icon = R.mipmap.ic_launcher_round
+                            else -> icon = R.mipmap.ic_launcher
+                        }
+                        storeList.add(OptionListModel(icon, store.name!!, store.id.toString()))
 
-                drug_store_list.adapter = OptionListAdapter(context, storeList)
+                        drug_store_list.adapter = OptionListAdapter(context, storeList)
+                    }
+                }, failure = {
+                    server.genericErrors(it.response.statusCode)
+                })
             }
-        }, failure = {
-            server.genericErrors(it.response.statusCode)
-        })
+        }
     }
 
     private fun prepareUsersTab(){

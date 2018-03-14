@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="end"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/relativeLayout4">
 
     <TextView
         android:id="@+id/tvBarcode"
@@ -15,73 +17,81 @@
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="30dp"
-        android:text="@string/service_code"/>
+        android:text="@string/service_code"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/etBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvBarcode"
-        android:layout_marginEnd="15dp"
+        android:layout_width="219dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginLeft="55dp"
-        android:layout_marginRight="15dp"
         android:layout_marginStart="55dp"
-        android:layout_toEndOf="@+id/tvBarcode"
-        android:layout_toRightOf="@+id/tvBarcode"
         android:inputType="text"
-        android:textAlignment="viewEnd"/>
+        android:textAlignment="viewEnd"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvBarcode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tvBarcode"
+        app:layout_constraintStart_toEndOf="@+id/tvBarcode"/>
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBarcode"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="30dp"
-        android:text="@string/item_name"/>
+        android:text="@string/item_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBarcode"/>
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvName"
-        android:layout_alignLeft="@+id/etBarcode"
-        android:layout_alignStart="@+id/etBarcode"
-        android:layout_below="@+id/etBarcode"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:inputType="textPersonName"/>
+        android:layout_width="219dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="8dp"
+        android:inputType="textPersonName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="@+id/etBarcode"
+        app:layout_constraintStart_toStartOf="@+id/etBarcode"
+        app:layout_constraintTop_toBottomOf="@+id/etBarcode"/>
 
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="30dp"
-        android:text="@string/item_price"/>
+        android:text="@string/item_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"/>
 
     <EditText
         android:id="@+id/etPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tvPrice"
-        android:layout_alignLeft="@+id/etName"
-        android:layout_alignStart="@+id/etName"
-        android:layout_below="@+id/etName"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_width="219dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:inputType="numberDecimal"
-        android:textAlignment="viewEnd"/>
+        android:textAlignment="viewEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/etName"
+        app:layout_constraintStart_toStartOf="@+id/etName"
+        app:layout_constraintTop_toBottomOf="@+id/etName"/>
 
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/save"/>
+        android:text="@string/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

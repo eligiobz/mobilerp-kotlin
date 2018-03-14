@@ -1,6 +1,7 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
+import android.support.constraint.ConstraintSet
 import android.support.v4.app.Fragment
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -102,6 +103,9 @@ class ManageProducts : Fragment(){
         etName.isEnabled = false
         etPrice.isEnabled = false
         etNewUnits.isEnabled = false
+
+//        val set = ConstraintSet()
+//        set.clone(this)
 
         // ----- END OF INIT -----
 
