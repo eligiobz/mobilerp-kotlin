@@ -11,7 +11,6 @@ import android.widget.ListView
 import android.widget.TabHost
 import android.widget.Toast
 import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
-import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import java.util.*
 
 /**
@@ -32,9 +31,6 @@ import java.util.*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * A simple [Fragment] subclass.
- */
 class AdminFragment : Fragment() {
 
     private lateinit var host: TabHost
@@ -138,13 +134,13 @@ class AdminFragment : Fragment() {
     private fun pharmacyList(): ArrayList<OptionListModel> {
         val models = ArrayList<OptionListModel>()
         //models.add(new OptionListModel("Acciones"));
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R
+        models.add(OptionListModel(R.mipmap.ic_store_list_no_bg, this.resources.getString(R
                 .string.stock_input), "UPDATESTOCK"))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.drug_list), "LISTPRODUCTS"))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.depleted_stock), "LISTDEPLETED"))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.add_service),
+        models.add(OptionListModel(R.mipmap.ic_item_list, this.resources.getString(R.string.drug_list), "LISTPRODUCTS"))
+        models.add(OptionListModel(R.mipmap.ic_depleted_items, this.resources.getString(R.string.depleted_stock), "LISTDEPLETED"))
+        models.add(OptionListModel(R.mipmap.ic_add_service, this.resources.getString(R.string.add_service),
                 "ADDSERVICE"))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string
+        models.add(OptionListModel(R.mipmap.ic_service_list, this.resources.getString(R.string
                 .list_services),
                 "LISTSERVICES"))
         return models
@@ -153,14 +149,12 @@ class AdminFragment : Fragment() {
     private fun salesList(): ArrayList<OptionListModel> {
         val models = ArrayList<OptionListModel>()
         //models.add(new OptionListModel("Acciones"));
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.today_sales), ""))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.month_sales), ""))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.depleted_stock),
-                ""))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R
+        models.add(OptionListModel(R.mipmap.ic_daily_report, this.resources.getString(R.string.today_sales), ""))
+        models.add(OptionListModel(R.mipmap.ic_monthly_report, this.resources.getString(R.string.month_sales), ""))
+        models.add(OptionListModel(R.mipmap.ic_most_sold_items, this.resources.getString(R
                 .string.most_sold_products), ""))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.least_sold_products), ""))
-        models.add(OptionListModel(R.mipmap.ic_launcher, this.resources.getString(R.string.custom_statement), ""))
+        models.add(OptionListModel(R.mipmap.ic_least_sold_items, this.resources.getString(R.string.least_sold_products), ""))
+        models.add(OptionListModel(R.mipmap.ic_custom_report_, this.resources.getString(R.string.custom_statement), ""))
 
         return models
     }

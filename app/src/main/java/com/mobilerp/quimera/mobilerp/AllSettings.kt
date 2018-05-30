@@ -20,7 +20,9 @@ import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.StoreModel
 import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
 import com.mobilerp.quimera.mobilerp.OfflineMode.SQLHandler
-import com.mobilerp.quimera.mobilerp.OnlineMode.*
+import com.mobilerp.quimera.mobilerp.OnlineMode.Server
+import com.mobilerp.quimera.mobilerp.OnlineMode.ServiceDiscovery
+import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_all_settings.*
 import kotlinx.android.synthetic.main.fragment_drug_stores_settings.*
 import kotlinx.android.synthetic.main.fragment_server_settings.*
@@ -93,8 +95,8 @@ class AllSettings : Fragment() {
                         val store = StoreModel(store_data)
                         var icon: Int = -1
                         when (store.id) {
-                            appState.currentStore -> icon = R.mipmap.ic_launcher_round
-                            else -> icon = R.mipmap.ic_launcher
+                            appState.currentStore -> icon = R.mipmap.ic_store_list_round
+                            else -> icon = R.mipmap.ic_store_list
                         }
                         storeList.add(OptionListModel(icon, store.name!!, store.id.toString()))
 

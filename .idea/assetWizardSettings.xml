@@ -18,12 +18,23 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="foregroundClipArt">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundImage">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="69" />
+                                                <entry key="scalingPercent" value="92" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -34,11 +45,14 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="E:\Artwork\ERPace\Exports\d-SERVICIOS.png" />
-                                      <entry key="foregroundLayerName" value="ic_service_list_icon" />
-                                      <entry key="outputName" value="ic_service_list" />
+                                      <entry key="backgroundColor" value="d0d0d0" />
+                                      <entry key="backgroundImage" value="E:\Artwork\ERPace\Exports\nobg.png" />
+                                      <entry key="backgroundLayerName" value="ic_daily_report_no_bg" />
+                                      <entry key="foregroundImage" value="C:\Users\maste\Google Drive\Quimera\Proyecto - ERPace\PNG - Exports\cortedia.png" />
+                                      <entry key="foregroundLayerName" value="ic_daily_report_icon" />
+                                      <entry key="legacyIconShape" value="NONE" />
+                                      <entry key="outputName" value="ic_daily_report" />
+                                      <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>
                                 </PersistentState>
