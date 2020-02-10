@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mobilerp-kotlin.iml" filepath="$PROJECT_DIR$/mobilerp-kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ERPace-mobilerp-kotlin.iml" filepath="$PROJECT_DIR$/ERPace-mobilerp-kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../warehouse/repos/ERPace/mobilerp-kotlin/app/app.iml" filepath="$PROJECT_DIR$/../../../../../warehouse/repos/ERPace/mobilerp-kotlin/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../warehouse/repos/ERPace/mobilerp-kotlin/mobilerp-kotlin.iml" filepath="$PROJECT_DIR$/../../../../../warehouse/repos/ERPace/mobilerp-kotlin/mobilerp-kotlin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/mobilerp-kotlin-app.iml" filepath="$PROJECT_DIR$/app/mobilerp-kotlin-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/repos-ERPace-mobilerp-kotlin.iml" filepath="$PROJECT_DIR$/repos-ERPace-mobilerp-kotlin.iml" />
     </modules>
   </component>
 </project>

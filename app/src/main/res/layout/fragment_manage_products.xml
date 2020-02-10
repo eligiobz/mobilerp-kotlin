@@ -1,15 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?><!-- TODO: Change to table layout -->
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="end">
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/constraintLayout">
@@ -50,6 +47,7 @@
             android:layout_marginTop="12dp"
             android:inputType="text"
             android:textAlignment="viewEnd"
+            android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/tvBarcode"
             app:layout_constraintStart_toEndOf="@+id/tvBarcode"
@@ -106,6 +104,7 @@
             android:layout_marginTop="12dp"
             android:inputType="numberDecimal"
             android:textAlignment="viewEnd"
+            android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.906"
             app:layout_constraintLeft_toLeftOf="@+id/etName"
@@ -136,6 +135,7 @@
             android:focusable="false"
             android:inputType="number"
             android:textAlignment="viewEnd"
+            android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.757"
             app:layout_constraintLeft_toLeftOf="@+id/etPrice"
@@ -165,6 +165,7 @@
             android:layout_marginTop="12dp"
             android:inputType="number"
             android:textAlignment="viewEnd"
+            android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.829"
             app:layout_constraintLeft_toLeftOf="@+id/etTotalUnits"

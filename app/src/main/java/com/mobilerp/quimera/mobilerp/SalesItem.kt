@@ -72,15 +72,13 @@ class SalesItem : Parcelable {
 
     }
 
-    companion object {
-        val CREATOR: Parcelable.Creator<SalesItem> = object : Parcelable.Creator<SalesItem> {
-            override fun createFromParcel(`in`: Parcel): SalesItem {
-                return SalesItem(`in`)
-            }
+    companion object CREATOR : Parcelable.Creator<SalesItem> {
+        override fun createFromParcel(parcel: Parcel): SalesItem {
+            return SalesItem(parcel)
+        }
 
-            override fun newArray(size: Int): Array<SalesItem?> {
-                return arrayOfNulls(size)
-            }
+        override fun newArray(size: Int): Array<SalesItem?> {
+            return arrayOfNulls(size)
         }
     }
 }

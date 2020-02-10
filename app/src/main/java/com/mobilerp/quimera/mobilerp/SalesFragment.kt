@@ -117,6 +117,9 @@ class SalesFragment : Fragment() {
         return inflater!!.inflate(R.layout.fragment_sales, container, false)
     }
 
+    /**
+     * Adds product to sale
+     */
     private fun addProduct() {
         val amount = Integer.parseInt(etTotalUnits.text.toString())
         val price = java.lang.Double.parseDouble(etPrice.text.toString())

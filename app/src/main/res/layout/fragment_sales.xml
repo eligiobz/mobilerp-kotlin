@@ -1,217 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_gravity="end">
+    android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/constraintLayout">
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <com.journeyapps.barcodescanner.DecoratedBarcodeView
             android:id="@+id/barcodePreview"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintTop_creator="1"/>
+            android:layout_span="2"
+            android:layout_weight="1" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvBarcode"
-            app:layout_constraintTop_toBottomOf="@+id/barcodePreview"
-            android:text="@string/item_barcode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/item_barcode" />
 
         <EditText
             android:id="@+id/etBarcode"
-            android:layout_width="232dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="0dp"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
             android:inputType="text"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/tvBarcode"
-            app:layout_constraintStart_toEndOf="@+id/tvBarcode"
-            app:layout_constraintTop_toBottomOf="@+id/barcodePreview"/>
+            android:textAlignment="viewEnd" />
+    </TableRow>
 
-
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvName"
-            android:text="@string/item_name"
-            app:layout_constraintTop_toBottomOf="@+id/tvBarcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:gravity="center_vertical"
+            android:text="@string/item_name" />
 
         <EditText
             android:id="@+id/etName"
-            android:layout_width="232dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="12dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
             android:enabled="false"
             android:inputType="textPersonName"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.783"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toLeftOf="@+id/etBarcode"
-            app:layout_constraintStart_toEndOf="@+id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/etBarcode"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:textAlignment="viewEnd" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvPrice"
-            android:text="@string/item_price"
-            app:layout_constraintTop_toBottomOf="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:gravity="center_vertical"
+            android:text="@string/item_price" />
 
         <EditText
             android:id="@+id/etPrice"
-            android:layout_width="232dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
             android:enabled="false"
             android:inputType="numberDecimal"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toLeftOf="@+id/etName"
-            app:layout_constraintStart_toEndOf="@+id/tvPrice"
-            app:layout_constraintTop_toBottomOf="@+id/etName"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:textAlignment="viewEnd" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvTotalUnits"
-            android:text="@string/item_total"
-            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:gravity="center_vertical"
+            android:text="@string/item_total" />
 
         <EditText
             android:id="@+id/etTotalUnits"
-            android:layout_width="232dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="64dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="16dp"
-            android:enabled="false"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:enabled="true"
             android:inputType="number"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/tvTotalUnits"
-            app:layout_constraintTop_toBottomOf="@+id/etPrice"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:textAlignment="viewEnd" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvTotalSale"
-            android:text="@string/total_sale"
-            app:layout_constraintTop_toBottomOf="@+id/tvTotalUnits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:gravity="center_vertical"
+            android:text="@string/total_sale" />
 
         <EditText
             android:id="@+id/etTotalSale"
-            android:layout_width="232dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginLeft="64dp"
-            android:layout_marginTop="16dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
             android:enabled="false"
             android:inputType="number"
-            android:textAlignment="viewEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/tvTotalSale"
-            app:layout_constraintTop_toBottomOf="@+id/etTotalUnits"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:textAlignment="viewEnd" />
+    </TableRow>
+
+    <TableRow>
 
         <Button
             android:id="@+id/addProduct"
-            android:text="@string/add_to_sale"
-            app:layout_constraintTop_toBottomOf="@+id/tvTotalSale"
-            android:layout_width="361dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:layout_span="2"
+            android:layout_weight="1"
+            android:text="@string/add_to_sale" />
+    </TableRow>
+
+    <TableRow>
 
         <Button
             android:id="@+id/endSale"
-            android:text="@string/finish"
-            app:layout_constraintTop_toBottomOf="@id/addProduct"
-            android:layout_width="361dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_chainStyle="spread"/>
+            android:layout_span="2"
+            android:layout_weight="1"
+            android:text="@string/finish" />
+    </TableRow>
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</TableLayout>
