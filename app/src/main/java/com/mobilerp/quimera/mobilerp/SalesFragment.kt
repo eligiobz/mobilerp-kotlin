@@ -13,6 +13,7 @@ import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import com.mobilerp.quimera.mobilerp.ApiModels.SalesItemModel
 import com.mobilerp.quimera.mobilerp.OfflineMode.SQLHandler
 import com.mobilerp.quimera.mobilerp.OfflineMode.Select
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
@@ -47,7 +48,7 @@ class SalesFragment : Fragment() {
     internal var barcode: String = ""
     val server : Server by lazy { Server(context) }
 
-    private lateinit var items: ArrayList<SalesItem>
+    private lateinit var items: ArrayList<SalesItemModel>
     private lateinit var appState: AppState
     private lateinit var settings: CameraSettings
     internal lateinit var context: Context
@@ -124,8 +125,8 @@ class SalesFragment : Fragment() {
         val amount = Integer.parseInt(etTotalUnits.text.toString())
         val price = java.lang.Double.parseDouble(etPrice.text.toString())
         val name = etName.text.toString()
-        items.add(SalesItem(barcode, amount, price, name, wasService))
-        totalSale += items[items.size - 1].price!! * amount
+        items.add(SalesItemModel(barcode, amount, price, name, wasService))
+        totalSale += items[items.size - 1].price * amount
         etTotalSale.setText(totalSale.toString())
         cleanEntries()
         Toast.makeText(context, tvName.text.toString() + " " + getString(R.string.added), Toast.LENGTH_LONG).show()

@@ -1,4 +1,4 @@
-package com.mobilerp.quimera.mobilerp
+package com.mobilerp.quimera.mobilerp.ApiModels
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -21,19 +21,19 @@ import android.os.Parcelable
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class SalesItem : Parcelable {
+class SalesItemModel : Parcelable {
 
-    var amount: Int = 0
+    var units: Int = 0
     var barcode: String
     var name: String
-    var price: Double? = null
-    var isService: Int? = null
+    var price: Double
+    var isService: Int
 
-    var TABLE_NAME = "ProductModel"
-    var COLUMN_NAME_BARCODE = "barcode"
-    var COLUMN_NAME_AMOUNT = "amount"
-    var COLUMN_NAME_PRICE = "price"
-    var COLUMN_NAME_NAME = "name"
+//    var TABLE_NAME = "ProductModel"
+//    var COLUMN_NAME_BARCODE = "barcode"
+//    var COLUMN_NAME_AMOUNT = "amount"
+//    var COLUMN_NAME_PRICE = "price"
+//    var COLUMN_NAME_NAME = "name"
 
     /**
      * Basic constructor
@@ -44,19 +44,20 @@ class SalesItem : Parcelable {
      * @param name
      */
 
-    constructor(barcode: String, amount: Int, price: Double?, name: String, isService: Int) {
+    constructor(barcode: String, amount: Int, price: Double, name: String, isService: Int) {
         this.barcode = barcode
-        this.amount = amount
+        this.units = amount
         this.price = price
         this.name = name
         this.isService = isService
     }
 
-    protected constructor(`in`: Parcel) {
+    constructor(`in`: Parcel) {
         barcode = `in`.readString()
-        amount = `in`.readInt()
+        units = `in`.readInt()
         price = `in`.readDouble()
         name = `in`.readString()
+        isService = `in`.readInt()
     }
 
     override fun describeContents(): Int {
@@ -65,19 +66,15 @@ class SalesItem : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(barcode)
-        dest.writeInt(amount)
+        dest.writeInt(units)
     }
 
-    fun InsertItem() {
-
-    }
-
-    companion object CREATOR : Parcelable.Creator<SalesItem> {
-        override fun createFromParcel(parcel: Parcel): SalesItem {
-            return SalesItem(parcel)
+    companion object CREATOR : Parcelable.Creator<SalesItemModel> {
+        override fun createFromParcel(parcel: Parcel): SalesItemModel {
+            return SalesItemModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<SalesItem?> {
+        override fun newArray(size: Int): Array<SalesItemModel?> {
             return arrayOfNulls(size)
         }
     }

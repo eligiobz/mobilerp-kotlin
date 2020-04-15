@@ -1,8 +1,6 @@
 package com.mobilerp.quimera.mobilerp.ApiModels
 
-import android.accessibilityservice.GestureDescription
 import com.beust.klaxon.JsonObject
-import com.beust.klaxon.json
 
 /**
  * Created by Eligio Becerra on 10/02/2018.

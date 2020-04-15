@@ -1,15 +1,13 @@
 package com.mobilerp.quimera.mobilerp.Adapters
 
-import android.content.Context
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductSaleModel
 import com.mobilerp.quimera.mobilerp.R
-import kotlinx.android.synthetic.main.product_sale_header.view.*
-import kotlinx.android.synthetic.main.product_sale_row.view.*
+import kotlinx.android.synthetic.main.fragment_finish_sell.view.*
+import kotlinx.android.synthetic.main.product_sale_check_row.view.*
 
 
 /**
@@ -30,35 +28,35 @@ import kotlinx.android.synthetic.main.product_sale_row.view.*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ProductSaleListAdapter(context: Context, private val productList: ArrayList<ProductSaleModel>,
-                             layout:
-Int) : ArrayAdapter<ProductSaleModel>(context, layout, productList) {
+//class ProductSaleListAdapter(context: Context, itemView: View, price: Double, earning: Double, productName: String, total_items: Int) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+class ProductSaleListAdapter(val itemList: ArrayList<ProductSaleModel>) : RecyclerView.Adapter<ProductSaleListAdapter.UserViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = context!!.getSystemService(Context
-                .LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    fun updateItems(newItems: List<ProductSaleModel>) {
+        itemList.clear()
+        itemList.addAll(newItems)
+        notifyDataSetChanged()
+    }
 
-        val rowView: View
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int) = UserViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.product_sale_check_row, parent, false)
+    )
 
-        when (productList[position].isGroupHeader) {
-            true -> {
-                rowView = inflater.inflate(R.layout.product_sale_header, parent, false)
+    override fun onBindViewHolder(holder: ProductSaleListAdapter.UserViewHolder, position: Int) {
+        holder.bind(itemList[position])
+    }
 
-                rowView.tvProductSaleIdHeader.setText(R.string.item_id_sale)
-                rowView.tvProductSaleNameHeader.setText(R.string.item_name)
-                rowView.tvProductSalePriceHeader.setText(R.string.item_price)
-                rowView.tvProductSaleTotalEarningHeader.setText(R.string.total_earning)
-            }
-            false -> {
-                rowView = inflater.inflate(R.layout.product_sale_row, parent, false)
+    override fun getItemCount() = itemList.size
 
-                rowView.tvProductSaleId.text = productList[position].idsale.toString()
-                rowView.tvProductSaleName.text = productList[position].name
-                rowView.tvProductSalePrice.text = productList[position].price.toString()
-                rowView.tvProductSaleTotalEarning.text = productList[position].units.toString()
-            }
+    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val name = itemView.itemName
+        private val itemTotal = itemView.itemTotal
+        private val totalSale = itemView.totalSale
+        //private val removebtn = itemView.remove_btn
+
+        fun bind(data: ProductSaleModel) {
+            name.text = data.name
+            itemTotal.text = data.units.toString()
+            totalSale.text = data.total_earning.toString()
         }
-
-        return rowView
     }
 }

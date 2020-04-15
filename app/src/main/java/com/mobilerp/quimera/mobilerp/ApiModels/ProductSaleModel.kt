@@ -21,11 +21,9 @@ import com.beust.klaxon.JsonObject
  */
 class ProductSaleModel : ProductModel{
 
-    var idsale: Int? = null
     var total_earning: Float? = null
 
     constructor(jsonObject: JsonObject) : super(jsonObject){
-        this.idsale = jsonObject.int("idsale")
         this.total_earning = jsonObject.float("total_earning")
 
     }

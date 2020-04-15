@@ -1,190 +1,179 @@
 <!-- TODO: Change to table layout -->
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mobilerp.quimera.mobilerp.DisplayStatements">
 
-    <TextView
-        android:id="@+id/tvReportDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="150dp"
-        android:text="@string/today_sales"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp"/>
+    <TableRow>
 
-    <TextView
-        android:id="@+id/tvReportDateValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tvReportDate"
-        android:layout_alignStart="@id/tvReportDate"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:width="150dp"
-        app:layout_constraintStart_toEndOf="@+id/tvReportDate"
-        tools:layout_editor_absoluteY="16dp"/>
+        <TextView
+            android:id="@+id/tvReportDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp"
+            android:text="@string/today_sales"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/tvTotalEarning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvReportDate"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        android:text="@string/total_earning"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@+id/tvReportDate"
-        tools:layout_editor_absoluteX="16dp"/>
+        <TextView
+            android:id="@+id/tvReportDateValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
 
-    <TextView
-        android:id="@+id/tvTotalEarningValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvReportDate"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        app:layout_constraintStart_toEndOf="@+id/tvTotalEarning"
-        app:layout_constraintTop_toBottomOf="@+id/tvReportDateValue"/>
+    <TableRow>
 
-    <TextView
-        android:id="@+id/tvTotalSales"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/pdf_download"
-        android:layout_below="@id/tvReportDate"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        android:text="@string/sales"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalEarning"
-        tools:layout_editor_absoluteX="16dp"/>
+        <TextView
+            android:id="@+id/tvTotalEarning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp"
+            android:text="@string/total_earning"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/tvTotalSalesValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        app:layout_constraintStart_toEndOf="@+id/tvTotalSales"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalEarningValue"/>
+        <TextView
+            android:id="@+id/tvTotalEarningValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp" />
+    </TableRow>
 
-    <TextView
-        android:id="@+id/tvTotalItemsSold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        android:text="@string/total_products_sold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalSales"
-        tools:layout_editor_absoluteX="16dp"/>
+    <TableRow>
 
-    <TextView
-        android:id="@+id/tvTotalItemsSoldValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvReportDate"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="36dp"
-        android:width="150dp"
-        app:layout_constraintStart_toEndOf="@+id/tvTotalItemsSold"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalSalesValue"/>
+        <TextView
+            android:id="@+id/tvTotalSales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp"
+            android:text="@string/sales"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/tvTotalSalesValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvTotalItemsSold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="150dp"
+            android:text="@string/total_products_sold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/tvTotalItemsSoldValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvReportDate"
+            android:layout_marginStart="52dp"
+            android:layout_marginLeft="52dp"
+            android:layout_marginTop="36dp"
+            android:width="150dp"
+            app:layout_constraintStart_toEndOf="@+id/tvTotalItemsSold"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalSalesValue" />
+    </TableRow>
 
 
-    <TextView
-        android:id="@+id/tvInitialDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:width="150dp"
-        android:text="@string/report_start_date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalItemsSold"
-        tools:layout_editor_absoluteX="16dp"/>
+    <TableRow>
 
-    <EditText
-        android:id="@+id/tvDate1"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="true"
-        android:inputType="date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toEndOf="@+id/tvInitialDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvTotalItemsSoldValue"/>
+        <TextView
+            android:id="@+id/tvInitialDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:width="150dp"
+            android:text="@string/report_start_date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalItemsSold"
+            tools:layout_editor_absoluteX="16dp" />
 
-    <TextView
-        android:id="@+id/tvEndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:width="150dp"
-        android:text="@string/report_end_date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintTop_toBottomOf="@+id/tvInitialDate"
-        tools:layout_editor_absoluteX="16dp"/>
+        <EditText
+            android:id="@+id/tvDate1"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="true"
+            android:inputType="date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.84"
+            app:layout_constraintStart_toEndOf="@+id/tvInitialDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvTotalItemsSoldValue" />
+    </TableRow>
 
-    <EditText
-        android:id="@+id/tvDate2"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="true"
-        android:inputType="date"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toEndOf="@+id/tvEndDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvDate1"/>
+    <TableRow>
 
-    <Button
-        android:id="@+id/update_data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/update_data"
-        app:layout_constraintBottom_toTopOf="@+id/pdf_download"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:width="150dp"
+            android:text="@string/report_end_date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintTop_toBottomOf="@+id/tvInitialDate"
+            tools:layout_editor_absoluteX="16dp" />
 
-    <Button
-        android:id="@+id/pdf_download"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="@string/download_pdf_export"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        <EditText
+            android:id="@+id/tvDate2"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="true"
+            android:inputType="date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.84"
+            app:layout_constraintStart_toEndOf="@+id/tvEndDate"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate1" />
+    </TableRow>
 
-</android.support.constraint.ConstraintLayout>
+    <TableRow>
+
+        <Button
+            android:id="@+id/update_data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/update_data"
+            app:layout_constraintBottom_toTopOf="@+id/pdf_download"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/pdf_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/download_pdf_export"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </TableRow>
+
+</TableLayout>

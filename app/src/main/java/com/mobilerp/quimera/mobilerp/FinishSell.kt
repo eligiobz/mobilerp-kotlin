@@ -2,14 +2,17 @@ package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
-import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
-import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
+import com.mobilerp.quimera.mobilerp.Adapters.SalesItemAdapter
+import com.mobilerp.quimera.mobilerp.ApiModels.SalesItemModel
 import com.mobilerp.quimera.mobilerp.OfflineMode.Insert
 import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
 import com.mobilerp.quimera.mobilerp.OfflineMode.Select
@@ -42,16 +45,24 @@ class FinishSell : Fragment() {
     internal val me: Fragment = this
     internal lateinit var appState: AppState
     // Objects
-    private lateinit var items: ArrayList<SalesItem>
-    private lateinit var productListAdapter: ProductListAdapter
-    private lateinit var itemsListModel: ArrayList<ProductModel>
+    private lateinit var items: ArrayList<SalesItemModel>
+    private lateinit var salesItemAdapter: SalesItemAdapter
+    private lateinit var itemsListModel: ArrayList<SalesItemModel>
     private lateinit var log: OperationsLog
+
+    private fun itemSaleClicked(item: SalesItemModel) {
+        Log.d("DATA_CLICKED_LOG", "${item.name} ${item.units}")
+        val data = item.name
+        Toast.makeText(context, "clicked: $data", Toast.LENGTH_LONG).show()
+    }
 
     private fun initUI() {
         activity.setTitle(R.string.finish_sale)
         appState = AppState.getInstance(context)
         log = OperationsLog.getInstance(context)
         itemsListModel = ArrayList()
+        itemSalesList.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
+        itemSalesList.adapter = salesItemAdapter
 
         finish_sale.setOnClickListener {
             val data = JsonObject()
@@ -60,8 +71,8 @@ class FinishSell : Fragment() {
             val is_service = JsonArray<Int>()
             for (i in items.indices) {
                 barcode.add(i,items[i].barcode)
-                units.add(i, items[i].amount)
-                is_service.add(i, items[i].isService!!)
+                units.add(i, items[i].units)
+                is_service.add(i, items[i].isService)
             }
             data.put("barcode", barcode)
             data.put("units", units)
@@ -83,12 +94,12 @@ class FinishSell : Fragment() {
                             lastID = select.results.getInt(0)
                 }
                 if (lastID != -1) {
-                    for (i in items!!.indices) {
+                    for (i in items.indices) {
                         q = String.format("INSERT INTO " +
                                 "SaleDetails(idSale, " +
                                 "idProduct," +
                                 " " +
-                                "productPrice, units) VALUES (%d, '%s', %f, %d);", lastID, items!![i].barcode, items!![i].price, items!![i].amount)
+                                "productPrice, units) VALUES (%d, '%s', %f, %d);", lastID, items[i].barcode, items[i].price, items[i].units)
                         insert.query = q
                         insert.execute()
                     }
@@ -117,28 +128,6 @@ class FinishSell : Fragment() {
                 }, failure = {
                     server.genericErrors(it.response.statusCode)
                 })
-                // -- ONLINE OPERATION --
-//                val apiServer = APIServer(context)
-//
-//                apiServer.getResponse(Request.Method.POST, URLs.BASE_URL + URLs.MAKE_SALE,
-//                        data, object : VolleyCallback {
-//                    override fun onSuccessResponse(result: JSONObject) {
-//                        appState.flushContext()
-//                        Toast.makeText(context, R.string.srv_op_success, Toast
-//                                .LENGTH_LONG).show()
-//                        activity.setTitle(R.string.manager)
-//                        activity.supportFragmentManager
-//                                .beginTransaction()
-//                                .remove(me)
-//                                .commit()
-//
-//                    }
-//
-//                    override fun onErrorResponse(error: VolleyError) {
-//                        Toast.makeText(context, R.string.srv_op_fail, Toast
-//                                .LENGTH_LONG).show()
-//                    }
-//                })
             }
         }
 
@@ -148,6 +137,7 @@ class FinishSell : Fragment() {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
             items = arguments.getParcelableArrayList("SalesData")
+            salesItemAdapter = SalesItemAdapter(items) { item: SalesItemModel -> itemSaleClicked(item) }
         }
     }
 
@@ -167,18 +157,20 @@ class FinishSell : Fragment() {
             val jsonObject = JsonObject()
             jsonObject.put("name", item.name)
             jsonObject.put("price", item.price)
-            jsonObject.put("units", item.amount)
-            itemsListModel.add(ProductModel(jsonObject))
-            total_sale += item.price!! * item.amount
+            jsonObject.put("units", item.units)
+            itemsListModel.add(SalesItemModel(item.barcode, item.units, item.price, item.name, 0))
+            total_sale += item.price * item.units
         }
-        productListAdapter = ProductListAdapter(context, itemsListModel, R.layout.product_sale_check_row)
-        itemSalesList.adapter = productListAdapter
+
+        itemSalesList.adapter = salesItemAdapter
+
         totalSale.text = getString(R.string.total_sale) + " : " + total_sale.toString()
+        itemSalesList.setHasFixedSize(true)
     }
 
     companion object {
 
-        fun newInstance(_items: ArrayList<SalesItem>): FinishSell {
+        fun newInstance(_items: ArrayList<SalesItemModel>): FinishSell {
             val fragment = FinishSell()
             val args = Bundle()
             args.putParcelableArrayList("SalesData", _items)
@@ -186,4 +178,4 @@ class FinishSell : Fragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}
