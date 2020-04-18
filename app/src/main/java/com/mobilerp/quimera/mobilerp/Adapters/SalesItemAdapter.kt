@@ -1,9 +1,9 @@
 package com.mobilerp.quimera.mobilerp.Adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.mobilerp.quimera.mobilerp.ApiModels.SalesItemModel
 import com.mobilerp.quimera.mobilerp.R
 import kotlinx.android.synthetic.main.product_sale_check_row.view.*
@@ -11,9 +11,11 @@ import kotlinx.android.synthetic.main.product_sale_check_row.view.*
 class SalesItemAdapter(val itemList: ArrayList<SalesItemModel>, val clickListener: (SalesItemModel) -> Unit) : RecyclerView.Adapter<SalesItemAdapter.UserViewHolder>() {
 //class SalesItemAdapter (val itemList : ArrayList<SalesItemModel>) : RecyclerView.Adapter<SalesItemAdapter.UserViewHolder> (){
 
-    fun updateItems(newItems: List<SalesItemModel>) {
+    fun updateItems(newItems: ArrayList<SalesItemModel>, is_new: Boolean = false) {
+        if (is_new) {
         itemList.clear()
         itemList.addAll(newItems)
+        }
         notifyDataSetChanged()
     }
 

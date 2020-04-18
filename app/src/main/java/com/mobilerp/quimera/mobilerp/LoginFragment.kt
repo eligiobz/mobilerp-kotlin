@@ -1,12 +1,12 @@
 package com.mobilerp.quimera.mobilerp
 
-import android.support.v4.app.Fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.mobilerp.quimera.mobilerp.ApiModels.UserModel
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
 import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
@@ -30,24 +30,24 @@ import kotlinx.android.synthetic.main.fragment_login.*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class LoginFragment() : Fragment() {
+class LoginFragment : Fragment() {
 
-    private val server : Server by lazy { Server(context) }
+    private val server: Server by lazy { Server(context!!) }
     internal val user : UserModel by lazy { UserModel._getInstance() }
     private lateinit var settingManager : SettingsManager
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_login, container, false)
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //setContentView(R.layout.fragment_login)
 
-        settingManager = SettingsManager.getInstance(context)
+        settingManager = SettingsManager.getInstance(context!!)
 
         val uname = settingManager.getString("username")
         val upass = settingManager.getString("password")

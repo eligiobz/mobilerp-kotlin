@@ -126,4 +126,8 @@
     <string name="no_data_in_report">Report data was empty!</string>
     <string name="custom_sales_report_filename">sales_report</string>
 
+    <!-- Update Sale Dialog -->
+    <string name="edit_article">Edit article</string>
+    <string name="this_sale">This sale</string>
+    <string name="edit_canceled">Edit cancelled</string>
 </resources>

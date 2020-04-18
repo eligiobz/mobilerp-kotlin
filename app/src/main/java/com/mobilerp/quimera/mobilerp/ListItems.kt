@@ -1,10 +1,10 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.ProductListAdapter
 import com.mobilerp.quimera.mobilerp.Adapters.ServiceListAdapter
@@ -23,42 +23,42 @@ class ListItems : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null)
-            endpoint = arguments.getString("ENDPOINT")
+            endpoint = arguments!!.getString("ENDPOINT")
 
-        server = Server(context)
+        server = Server(context!!)
 
         when (endpoint) {
             "LISTPRODUCTS" -> {
                 listProducts()
-                activity.setTitle(R.string.drug_list)
+                activity!!.setTitle(R.string.drug_list)
             }
             "LISTDEPLETED" -> {
                 listDepleted()
-                activity.setTitle(R.string.depleted_stock)
+                activity!!.setTitle(R.string.depleted_stock)
             }
             "LISTSERVICES" -> {
                 listServices()
-                activity.setTitle(R.string.depleted_stock)
+                activity!!.setTitle(R.string.depleted_stock)
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_list_items, container, false)
+        return inflater.inflate(R.layout.fragment_list_items, container, false)
     }
 
     private fun listProducts() {
         var items = ArrayList<ProductModel>()
-        server.getRequest(URLs.LIST_PRODUCTS + AppState.getInstance(context).currentStore,
+        server.getRequest(URLs.LIST_PRODUCTS + AppState.getInstance(context!!).currentStore,
                 success = { response ->
                     items.add(ProductModel("title"))
                     for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
                         items.add(ProductModel(item))
                     }
 
-                    itemList.adapter = ProductListAdapter(context, items, R.layout.product_row)
+                    itemList.adapter = ProductListAdapter(context!!, items, R.layout.product_row)
                 }, failure = { error ->
             server.genericErrors(error.response.statusCode)
         })
@@ -66,13 +66,13 @@ class ListItems : Fragment() {
 
     private fun listDepleted() {
         var items = ArrayList<ProductModel>()
-        server.getRequest(URLs.LIST_DEPLETED + AppState.getInstance(context).currentStore,
+        server.getRequest(URLs.LIST_DEPLETED + AppState.getInstance(context!!).currentStore,
                 success = { response ->
                     items.add(ProductModel("title"))
                     for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
                         items.add(ProductModel(item))
                     }
-                    itemList.adapter = ProductListAdapter(context, items, R.layout.product_row)
+                    itemList.adapter = ProductListAdapter(context!!, items, R.layout.product_row)
                 }, failure = { error ->
             server.genericErrors(error.response.statusCode)
         })
@@ -86,7 +86,7 @@ class ListItems : Fragment() {
                     for (item: JsonObject in response.array<JsonObject>("mobilerp")!!) {
                         items.add(ServiceModel(item))
                     }
-                    itemList.adapter = ServiceListAdapter(context, items, R.layout.product_row)
+                    itemList.adapter = ServiceListAdapter(context!!, items, R.layout.product_row)
                 }, failure = { error ->
             server.genericErrors(error.response.statusCode)
         })

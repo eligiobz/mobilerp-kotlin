@@ -1,13 +1,12 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
-import android.support.v4.app.Fragment
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.beust.klaxon.JsonObject
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
@@ -15,7 +14,9 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import com.mobilerp.quimera.mobilerp.ApiModels.ProductModel
-import com.mobilerp.quimera.mobilerp.OfflineMode.*
+import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
+import com.mobilerp.quimera.mobilerp.OfflineMode.SQLHandler
+import com.mobilerp.quimera.mobilerp.OfflineMode.Select
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
 import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_manage_products.*
@@ -47,7 +48,7 @@ class ManageProducts : Fragment(){
     private var isNewProduct: Boolean = false
     internal var lastBarcode: String = ""
     private var isOfflineEnabled: Boolean = false
-    private val appState: AppState by lazy { AppState.getInstance(context) }
+    private val appState: AppState by lazy { AppState.getInstance(context!!) }
     private lateinit var log: OperationsLog
     internal lateinit var beepManager: BeepManager
     private lateinit var settings: CameraSettings
@@ -71,13 +72,13 @@ class ManageProducts : Fragment(){
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_manage_products, container, false)
+        return inflater.inflate(R.layout.fragment_manage_products, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstance: Bundle?) {
+    override fun onViewCreated(view: View, savedInstance: Bundle?) {
         // Offline Mode
         isOfflineEnabled = appState.isOfflineMode
 
@@ -92,7 +93,7 @@ class ManageProducts : Fragment(){
         beepManager = BeepManager(activity)
 
         //Server init
-        server = Server(context)
+        server = Server(context!!)
 
         // -- INIT elements to display items
 
@@ -112,7 +113,7 @@ class ManageProducts : Fragment(){
         if (isOfflineEnabled) {
             Toast.makeText(context, getString(R
                     .string.offline_mode_enabled), Toast.LENGTH_LONG).show()
-            log = OperationsLog.getInstance(context)
+            log = OperationsLog.getInstance(context!!)
         } else {
             Toast.makeText(context, getString(R
                     .string.offline_mode_disabled), Toast.LENGTH_LONG).show()
@@ -161,9 +162,9 @@ class ManageProducts : Fragment(){
         when (isOfflineEnabled) {
             true -> {
                 isNewProduct = false
-                val db = SQLHandler.getInstance(context)
+                val db = SQLHandler.getInstance(context!!)
                 if (db.isDatabaseOpen) {
-                    val select = Select(context)
+                    val select = Select(context!!)
                     select.query = "SELECT name, price FROM ProductModel WHERE barcode='$barcode'"
                     if (select.execute()) {
                         if (select.results.count > 0) {
@@ -208,7 +209,7 @@ class ManageProducts : Fragment(){
         data.put("price", etPrice.text.toString())
         data.put("units", etNewUnits.text.toString())
         data.put("token", Calendar.getInstance().time.toString())
-        data.put("storeid", AppState.getInstance(context).currentStore)
+        data.put("storeid", AppState.getInstance(context!!).currentStore)
         if (isNewProduct)
             data.put("barcode", lastBarcode)
         return data

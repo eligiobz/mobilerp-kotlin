@@ -2,12 +2,12 @@ package com.mobilerp.quimera.mobilerp
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.BarcodeCallback
@@ -72,11 +72,12 @@ class SalesFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        context = getContext()
-        activity.setTitle(R.string.new_sale)
+        context = activity!!.applicationContext!!
+
+        activity!!.setTitle(R.string.new_sale)
 
         // Camera settings
         settings = CameraSettings()
@@ -112,10 +113,10 @@ class SalesFragment : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_sales, container, false)
+        return inflater.inflate(R.layout.fragment_sales, container, false)
     }
 
     /**
@@ -135,7 +136,7 @@ class SalesFragment : Fragment() {
     private fun endSale() {
         appState.flushContext()
         val fragment = FinishSell.newInstance(items)
-        val manager = activity.supportFragmentManager
+        val manager = activity!!.supportFragmentManager
         manager.beginTransaction()
                 .replace(R.id.main_content, fragment)
                 .addToBackStack("Sales")
@@ -146,9 +147,9 @@ class SalesFragment : Fragment() {
         // -- OFFLINE SEARCH --
         when (appState.isOfflineMode) {
             true -> {
-                val db = SQLHandler.getInstance(getContext())
+                val db = SQLHandler.getInstance(context)
                 if (db.isDatabaseOpen) {
-                    val select = Select(getContext())
+                    val select = Select(context)
                     select.query = "SELECT name, price FROM ProductModel WHERE barcode='$barcode'"
                     if (select.execute()) {
                         if (select.results.count > 0) {

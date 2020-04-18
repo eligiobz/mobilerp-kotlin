@@ -2,16 +2,16 @@ package com.mobilerp.quimera.mobilerp
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.beust.klaxon.JsonObject
+import com.mobilerp.quimera.mobilerp.ApiModels.ServiceModel
 import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
-import com.mobilerp.quimera.mobilerp.ApiModels.ServiceModel
 import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
 import kotlinx.android.synthetic.main.fragment_manage_services.*
 import java.util.*
@@ -27,22 +27,22 @@ class ManageServices : Fragment() {
     internal lateinit var log: OperationsLog
 
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_manage_services, container, false)
+        return inflater.inflate(R.layout.fragment_manage_services, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstance: Bundle?) {
+    override fun onViewCreated(view: View, savedInstance: Bundle?) {
 
-        server = Server(context)
+        server = Server(context!!)
 
         tvBarcode.setText(R.string.item_barcode)
         tvPrice.setText(R.string.item_price)
         etName.isEnabled = false
         etPrice.isEnabled = false
 
-        activity.setTitle(R.string.add_service)
+        activity!!.setTitle(R.string.add_service)
 
         btnSave.setOnClickListener {
             sendData()

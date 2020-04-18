@@ -1,7 +1,6 @@
 package com.mobilerp.quimera.mobilerp
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TabHost
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
 import java.util.*
 
@@ -39,23 +39,23 @@ class AdminFragment : Fragment() {
     private lateinit var pharmacyListAdapter: OptionListAdapter
     private lateinit var salesListAdapter: OptionListAdapter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_admin, container, false)
+        return inflater.inflate(R.layout.fragment_admin, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         tabsSetup()
         pharmacyTabSetup()
         salesTabSetup()
-        activity.setTitle(R.string.title_activity_admin)
+        activity!!.setTitle(R.string.title_activity_admin)
     }
 
     private fun salesTabSetup() {
         // Sales list setup
         salesList = view!!.findViewById(R.id.lvSalesOptions)
-        salesListAdapter = OptionListAdapter(context, salesList())
+        salesListAdapter = OptionListAdapter(context!!, salesList())
         salesList.adapter = salesListAdapter
         salesList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when (position) {
@@ -65,7 +65,7 @@ class AdminFragment : Fragment() {
                     bundle.putString("reportType", "isDaily")
                     fragment.arguments = bundle
                     val manager = fragmentManager
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
@@ -76,7 +76,7 @@ class AdminFragment : Fragment() {
                     bundle.putString("reportType", "isMonthly")
                     fragment.arguments = bundle
                     val manager = fragmentManager
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
@@ -87,7 +87,7 @@ class AdminFragment : Fragment() {
                     bundle.putString("reportType", "isCustom")
                     fragment.arguments = bundle
                     val manager = fragmentManager
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
@@ -98,14 +98,14 @@ class AdminFragment : Fragment() {
 
     private fun pharmacyTabSetup() {
         pharmacyList = view!!.findViewById(R.id.lvPharmacyOptions)
-        pharmacyListAdapter = OptionListAdapter(context, pharmacyList())
+        pharmacyListAdapter = OptionListAdapter(context!!, pharmacyList())
         pharmacyList.adapter = pharmacyListAdapter
         val manager = fragmentManager
         pharmacyList.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             when (position) {
                 0 -> {
                     val fragment: Fragment = ManageProducts()
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
@@ -113,14 +113,14 @@ class AdminFragment : Fragment() {
                 1, 2, 4 -> {
                     val fragment = ListItems.newInstance(pharmacyListAdapter
                             .getItem(position).endpoint!!)
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()
                 }
                 3 -> {
                     val fragment: Fragment = ManageServices()
-                    manager.beginTransaction()
+                    manager!!.beginTransaction()
                             .replace(R.id.main_content, fragment)
                             .addToBackStack("Admin")
                             .commit()

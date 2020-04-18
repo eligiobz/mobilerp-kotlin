@@ -3,12 +3,12 @@ package com.mobilerp.quimera.mobilerp
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.ApiModels.SaleReportModel
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
@@ -18,26 +18,25 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
 class DisplayStatements : Fragment() {
 
     private val datetime = Calendar.getInstance()
-    private val server : Server  by lazy { Server(context) }
+    private val server: Server by lazy { Server(context!!) }
     private lateinit var reportName : String
     private lateinit var initDate: String
     private lateinit var reportType : String
     private lateinit var url : String
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val bundle = this.arguments
-        reportType = bundle.getString("reportType")
+        reportType = bundle!!.getString("reportType")
 
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_display_statement, container, false)
+        return inflater.inflate(R.layout.fragment_display_statement, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         when (reportType) {
@@ -117,8 +116,8 @@ class DisplayStatements : Fragment() {
         val datePicker = DatePickerDialog(context, DatePickerDialog.OnDateSetListener {
             _, year, monthOfYear, dayOfMonth ->
 
-            tv.setText( dayOfMonth.toString() + "-" + (monthOfYear+1).toString() +
-                    "-" + year.toString())
+            tv.text = dayOfMonth.toString() + "-" + (monthOfYear + 1).toString() +
+                    "-" + year.toString()
         }, datetime.get(Calendar.YEAR),
                 datetime.get(Calendar.MONTH),
                 datetime.get(Calendar.DAY_OF_MONTH))

@@ -1,14 +1,15 @@
 package com.mobilerp.quimera.mobilerp
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.SalesItemAdapter
@@ -18,9 +19,10 @@ import com.mobilerp.quimera.mobilerp.OfflineMode.OperationsLog
 import com.mobilerp.quimera.mobilerp.OfflineMode.Select
 import com.mobilerp.quimera.mobilerp.OnlineMode.Server
 import com.mobilerp.quimera.mobilerp.OnlineMode.URLs
+import kotlinx.android.synthetic.main.activity_dialog_update_item.view.*
 import kotlinx.android.synthetic.main.fragment_finish_sell.*
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * Created by Eligio Becerra on 04/01/2018.
@@ -47,21 +49,60 @@ class FinishSell : Fragment() {
     // Objects
     private lateinit var items: ArrayList<SalesItemModel>
     private lateinit var salesItemAdapter: SalesItemAdapter
-    private lateinit var itemsListModel: ArrayList<SalesItemModel>
     private lateinit var log: OperationsLog
 
+    private val negativeClickButton = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(context, R.string.edit_canceled, Toast.LENGTH_SHORT).show()
+    }
+
     private fun itemSaleClicked(item: SalesItemModel) {
-        Log.d("DATA_CLICKED_LOG", "${item.name} ${item.units}")
-        val data = item.name
-        Toast.makeText(context, "clicked: $data", Toast.LENGTH_LONG).show()
+        val dialog = AlertDialog.Builder(context)
+        val inflater = layoutInflater
+        with(dialog) {
+            setTitle("Edit Article")
+            val dialogLayout = inflater.inflate(R.layout.activity_dialog_update_item, null)
+            setView(dialogLayout)
+            // Access ui
+            val name = dialogLayout.item_name
+            val price = dialogLayout.item_price
+            val units = dialogLayout.item_units
+            val name_str = item.name
+            val price_str = getString((R.string.item_price)) + "\t" + item.price.toString()
+            name.text = name_str
+            price.text = price_str
+            units.setText(item.units.toString())
+
+            // btn_handler
+            setNegativeButton("Cancelar", negativeClickButton)
+            setPositiveButton(R.string.save) { dialogInterface, i ->
+                val u = Integer.parseInt(units.text.toString())
+                if (u <= 0) {
+                    items.remove(item)
+                    Toast.makeText(context, "Removed unit ${item.name}", Toast.LENGTH_SHORT).show()
+                } else {
+                    item.units = u
+                    //salesItemAdapter.updateItems(items)
+                }
+                var ns = 0.0
+                for (i in items) {
+                    ns += i.price * i.units
+                }
+
+                salesItemAdapter.updateItems(items)
+                totalSale.text = ns.toString()
+                itemSalesList.setHasFixedSize(true)
+            }
+        }
+        Toast.makeText(context, "clicked: ${item.name}", Toast.LENGTH_LONG).show()
+        dialog.show()
+
     }
 
     private fun initUI() {
-        activity.setTitle(R.string.finish_sale)
-        appState = AppState.getInstance(context)
-        log = OperationsLog.getInstance(context)
-        itemsListModel = ArrayList()
-        itemSalesList.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
+        activity!!.setTitle(R.string.finish_sale)
+        appState = AppState.getInstance(context!!)
+        log = OperationsLog.getInstance(context!!)
+        itemSalesList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         itemSalesList.adapter = salesItemAdapter
 
         finish_sale.setOnClickListener {
@@ -78,16 +119,16 @@ class FinishSell : Fragment() {
             data.put("units", units)
             data.put("is_service", is_service)
             data.put("token", Calendar.getInstance().time.toString())
-            data.put("storeid", AppState.getInstance(context).currentStore)
+            data.put("storeid", AppState.getInstance(context!!).currentStore)
 
             if (appState.isOfflineMode) {
                 // -- OFFLINE OPERATION --
                 var q = "INSERT INTO Sale(date) values(DATETIME('now','localtime'));"
-                val insert = Insert(context)
+                val insert = Insert(context!!)
                 insert.query = q
                 var lastID = -1
                 if (insert.execute()) {
-                    val select = Select(context)
+                    val select = Select(context!!)
                     select.query = "SELECT MAX(id) FROM Sale;"
                     if (select.execute())
                         if (select.results.count > 0)
@@ -107,21 +148,21 @@ class FinishSell : Fragment() {
                     appState.flushContext()
                     Toast.makeText(context, R.string.app_op_success, Toast
                             .LENGTH_LONG).show()
-                    activity.setTitle(R.string.manager)
-                    activity.supportFragmentManager
+                    activity!!.setTitle(R.string.manager)
+                    activity!!.supportFragmentManager
                             .beginTransaction()
                             .remove(me)
                             .commit()
                 }
 
             } else {
-                val server = Server(context)
+                val server = Server(context!!)
                 server.postRequest(URLs.MAKE_SALE, data, success = {
                     appState.flushContext()
                     Toast.makeText(context, R.string.srv_op_success, Toast
                             .LENGTH_LONG).show()
-                    activity.setTitle(R.string.manager)
-                    activity.supportFragmentManager
+                    activity!!.setTitle(R.string.manager)
+                    activity!!.supportFragmentManager
                             .beginTransaction()
                             .remove(me)
                             .commit()
@@ -136,29 +177,24 @@ class FinishSell : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            items = arguments.getParcelableArrayList("SalesData")
+            items = arguments!!.getParcelableArrayList("SalesData")
             salesItemAdapter = SalesItemAdapter(items) { item: SalesItemModel -> itemSaleClicked(item) }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_finish_sell, container, false)
+        return inflater.inflate(R.layout.fragment_finish_sell, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
 
         var total_sale = 0.0
 
         for (item in items) {
-            val jsonObject = JsonObject()
-            jsonObject.put("name", item.name)
-            jsonObject.put("price", item.price)
-            jsonObject.put("units", item.units)
-            itemsListModel.add(SalesItemModel(item.barcode, item.units, item.price, item.name, 0))
             total_sale += item.price * item.units
         }
 

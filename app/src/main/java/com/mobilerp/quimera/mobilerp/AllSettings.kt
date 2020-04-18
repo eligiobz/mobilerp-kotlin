@@ -3,7 +3,6 @@ package com.mobilerp.quimera.mobilerp
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.text.InputType
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.TabHost
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.beust.klaxon.JsonObject
 import com.mobilerp.quimera.mobilerp.Adapters.OptionListAdapter
 import com.mobilerp.quimera.mobilerp.ApiModels.StoreModel
@@ -30,19 +30,19 @@ import kotlinx.android.synthetic.main.fragment_users_settings.*
 
 class AllSettings : Fragment() {
 
-    private val set_manager : SettingsManager by lazy { SettingsManager.getInstance(context) }
-    private val server: Server by lazy { Server(context) }
-    private val appState: AppState by lazy { AppState.getInstance(context) }
+    private val set_manager: SettingsManager by lazy { SettingsManager.getInstance(context!!) }
+    private val server: Server by lazy { Server(context!!) }
+    private val appState: AppState by lazy { AppState.getInstance(context!!) }
     private var server_address: String? = null
     private var use_offline_mode: Boolean = false
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_all_settings, container, false)
+        return inflater.inflate(R.layout.fragment_all_settings, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         server_address = set_manager.getString(getString(R.string.server_addr))
         use_offline_mode = set_manager.getBoolean(getString(R.string.use_offline_mode))!!
@@ -100,7 +100,7 @@ class AllSettings : Fragment() {
                         }
                         storeList.add(OptionListModel(icon, store.name!!, store.id.toString()))
 
-                        drug_store_list.adapter = OptionListAdapter(context, storeList)
+                        drug_store_list.adapter = OptionListAdapter(context!!, storeList)
                     }
                 }, failure = {
                     server.genericErrors(it.response.statusCode)
@@ -138,7 +138,7 @@ class AllSettings : Fragment() {
 
         btnScanServer.setOnClickListener {
             Toast.makeText(context, R.string.searching_server, Toast.LENGTH_LONG).show()
-            val ds = ServiceDiscovery(context)
+            val ds = ServiceDiscovery(context!!)
             ds.doScan()
             server_address = set_manager.getString(getString(R.string.server_addr))
             URLs.BASE_URL = server_address
@@ -152,10 +152,10 @@ class AllSettings : Fragment() {
         cbOfflineMode.isChecked = use_offline_mode
         Toast.makeText(context, if (use_offline_mode) getString(R.string.offline_mode_enabled) else getString(R.string.offline_mode_disabled), Toast.LENGTH_LONG).show()
         cbOfflineMode.setOnClickListener {
-            val manager = SettingsManager.getInstance(context)
+            val manager = SettingsManager.getInstance(context!!)
             use_offline_mode = cbOfflineMode.isChecked
             if (use_offline_mode) {
-                val handler = SQLHandler.getInstance(context)
+                val handler = SQLHandler.getInstance(context!!)
                 if (handler.isDatabaseOpen)
                     Toast.makeText(context, if (use_offline_mode) R.string.offline_mode_enabled else R.string.offline_mode_disabled, Toast.LENGTH_LONG).show()
                 else {
@@ -170,7 +170,7 @@ class AllSettings : Fragment() {
         }
 
         btnUploadPendingOps.setOnClickListener {
-            val log = OperationsLog.getInstance(context)
+            val log = OperationsLog.getInstance(context!!)
             log.pushOperations()
         }
     }
